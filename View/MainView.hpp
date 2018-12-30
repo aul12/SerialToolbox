@@ -17,6 +17,13 @@ namespace view {
         MainView(const std::string &uiFile, Glib::RefPtr<Gtk::Application> app);
     private:
         Gtk::Window *window;
+
+        // Top bar
+        Gtk::ComboBoxText *portCombo;
+        Gtk::SpinButton *baudSpin;
+        Gtk::Button *connectButton;
+        Gtk::SpinButton *dataBitsSpin;
+        Gtk::SpinButton *stopBitsSpin;
     };
 }
 

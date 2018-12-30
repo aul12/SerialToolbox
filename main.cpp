@@ -1,5 +1,5 @@
 #include <gtkmm.h>
-#include "Util/Serial/Interface.hpp"
+#include "Util/Serial/InterfacePosix.hpp"
 #include "View/MainView.hpp"
 
 using namespace Gtk;
