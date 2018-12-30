@@ -19,8 +19,10 @@ namespace view {
         void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
 
         auto getWindow() -> Gtk::Window&;
+
+        void registerConnectButtonListener(std::function<void()> listener);
     private:
-        Gtk::Window *window;
+        Gtk::Window *mainWindow;
 
         // Top bar
         Gtk::ComboBoxText *portCombo;
@@ -28,6 +30,9 @@ namespace view {
         Gtk::Button *connectButton;
         Gtk::SpinButton *dataBitsSpin;
         Gtk::SpinButton *stopBitsSpin;
+
+        void connectButtonHandler();
+        std::optional<std::function<void()>> connectButtonListener;
     };
 }
 

@@ -36,7 +36,7 @@
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">Test</property>
   </object>
-  <object class="GtkWindow" id="MainWindow">
+  <object class="GtkWindow" id="mainWindow">
     <property name="can_focus">False</property>
     <child>
       <placeholder/>

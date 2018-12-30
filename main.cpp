@@ -12,7 +12,9 @@ int main(int argc, char *argv[]) {
 
     view::MainView mainView{"Res/ui.glade"};
     mainView.setPorts(ports);
-
+    mainView.registerConnectButtonListener([](){
+       std::cout << "Clicked" << std::endl;
+    });
     app->run(mainView.getWindow());
 
     return 0;
