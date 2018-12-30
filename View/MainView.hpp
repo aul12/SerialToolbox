@@ -14,7 +14,11 @@
 namespace view {
     class MainView {
     public:
-        MainView(const std::string &uiFile, Glib::RefPtr<Gtk::Application> app);
+        explicit MainView(const std::string &uiFile);
+
+        void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
+
+        auto getWindow() -> Gtk::Window&;
     private:
         Gtk::Window *window;
 

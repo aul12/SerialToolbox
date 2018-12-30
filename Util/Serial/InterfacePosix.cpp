@@ -14,10 +14,12 @@
 #include <cassert>
 #include <vector>
 #include <mutex>
+#include <filesystem>
+#include <regex>
 
 namespace util::serial {
-    template<size_t BUF_SIZE>
-    InterfacePosix<BUF_SIZE>::InterfacePosix(const std::string &port, int baud) {
+
+    InterfacePosix::InterfacePosix(const std::string &port, int baud) {
         this->setPort(port);
         this->setBaud(baud);
         this->setParity(Parity::NONE);
@@ -47,12 +49,10 @@ namespace util::serial {
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
         }
-
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::readerThread() {
-        std::array<uint8_t, BUF_SIZE> buffer;
+    void InterfacePosix::readerThread() {
+        std::array<uint8_t, BUF_SIZE> buffer{};
 
         while (this->readClose.try_lock()) { // @TODO maybe should use notify
             this->readClose.unlock();
@@ -62,20 +62,20 @@ namespace util::serial {
             if (readed < 0) {
                 throw std::runtime_error(strerror(errno));
             } else if (readed > 0) {
-                this->callback({buffer, buffer + readed});
+                if (this->callback.has_value()) {
+                    this->callback.value()({buffer.data(), buffer.data() + readed});
+                }
             }
         }
     }
 
-    template<size_t BUF_SIZE>
-    InterfacePosix<BUF_SIZE>::~InterfacePosix() {
+    InterfacePosix::~InterfacePosix() {
         this->readClose.lock();
         close(this->fd);
         this->readerThreadHandle.wait();
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::send(const std::vector<uint8_t> &buffer) const {
+    void InterfacePosix::send(const std::vector<uint8_t> &buffer) const {
         std::size_t written = 0;
         do {
             auto result = write(this->fd, buffer.data() + written, buffer.size() - written);
@@ -87,14 +87,13 @@ namespace util::serial {
         } while (written < buffer.size());
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::registerCallback(const std::function<void(std::vector<uint8_t>)> &callback) {
+
+    void InterfacePosix::registerCallback(const std::function<void(std::vector<uint8_t>)> &callback) {
         Interface::registerCallback(callback);
         this->readerThreadHandle = std::async(std::launch::async, &InterfacePosix::readerThread, this);
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::setBaud(int baud) {
+    void InterfacePosix::setBaud(int baud) {
         termios tty{};
         memset(&tty, 0, sizeof tty);
         if (tcgetattr(fd, &tty) != 0) {
@@ -108,8 +107,7 @@ namespace util::serial {
         }
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::setPort(const std::string &port) {
+    void InterfacePosix::setPort(const std::string &port) {
         if (this->fd >= 0) {
             close(this->fd);
         }
@@ -120,8 +118,7 @@ namespace util::serial {
         }
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::setParity(Parity parity) {
+    void InterfacePosix::setParity(Parity parity) {
         termios tty{};
         memset(&tty, 0, sizeof tty);
         if (tcgetattr(fd, &tty) != 0) {
@@ -155,8 +152,7 @@ namespace util::serial {
         }
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::setDataBits(int dataBits) {
+    void InterfacePosix::setDataBits(int dataBits) {
 
         termios tty{};
         memset(&tty, 0, sizeof tty);
@@ -186,11 +182,9 @@ namespace util::serial {
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
         }
-
     }
 
-    template<size_t BUF_SIZE>
-    void InterfacePosix<BUF_SIZE>::setStopBits(int stopBits) {
+    void InterfacePosix::setStopBits(int stopBits) {
         termios tty{};
         memset(&tty, 0, sizeof tty);
         if (tcgetattr(fd, &tty) != 0) {
@@ -208,5 +202,20 @@ namespace util::serial {
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
         }
+    }
+
+    auto InterfacePosix::getAvailablePorts() -> std::vector<std::string> {
+        std::string path = "/dev/";
+        std::regex deviceRegex{"tty[a-zA-Z]+[0-9]+"};
+        std::vector<std::string> results;
+        for (const auto & entry : std::filesystem::directory_iterator(path)) {
+            if (entry.is_character_file()) {
+                std::string fileName = entry.path().filename();
+                if (std::regex_match(fileName, deviceRegex)) {
+                    results.push_back(entry.path());
+                }
+            }
+        }
+        return results;
     }
 }
