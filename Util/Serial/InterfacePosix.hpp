@@ -32,8 +32,6 @@ namespace util::serial {
 
         void setStopBits(int stopBits) override;
 
-        void registerCallback(const std::function<void(std::vector < uint8_t > )> &callback) override;
-
         ~InterfacePosix();
 
         static auto getAvailablePorts() -> std::vector<std::string>;
@@ -42,7 +40,7 @@ namespace util::serial {
         void readerThread();
         int fd;
         std::future<void> readerThreadHandle;
-        std::mutex readClose;
+        std::mutex readLock;
         static constexpr std::size_t BUF_SIZE = 4096;
     };
 }

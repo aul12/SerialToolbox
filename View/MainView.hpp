@@ -10,6 +10,7 @@
 
 
 #include <gtkmm.h>
+#include "../Util/Listener.hpp"
 
 namespace view {
     class MainView {
@@ -20,11 +21,12 @@ namespace view {
 
         auto getWindow() -> Gtk::Window&;
 
-        void registerConnectButtonListener(std::function<void()> listener);
-        void registerPortComboListener(std::function<void(std::string)> listener);
-        void registerBaudSpinListener(std::function<void(int)> listener);
-        void registerDataBitsSpinListener(std::function<void(int)> listener);
-        void registerStopBitsSpinListener(std::function<void(int)> listener);
+        const util::Listener<> registerConnectButtonListener;
+        const util::Listener<std::string> registerPortComboListener;
+        const util::Listener<int> registerBaudSpinListener;
+        const util::Listener<int> registerDataBitsSpinListener;
+        const util::Listener<int> registerStopBitsSpinListener;
+
     private:
         Gtk::Window *mainWindow;
 
@@ -36,16 +38,11 @@ namespace view {
         Gtk::SpinButton *stopBitsSpin;
 
         void connectButtonHandler();
-        std::optional<std::function<void()>> connectButtonListener;
         void portComboHandler();
-        std::optional<std::function<void(std::string)>> portComboListener;
         void baudSpinHandler();
-        std::optional<std::function<void(int)>> baudSpinListener;
         void dataBitsSpinHandler();
-        std::optional<std::function<void(int)>> dataBitsSpinListener;
         void stopBitsSpinHandler();
-        std::optional<std::function<void(int)>> stopBitsSpinListener;
     };
 }
 
-#endif //HTERMCLONE_MAINVIEW_HPP
+#endif

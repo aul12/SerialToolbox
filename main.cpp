@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <gtkmm.h>
 #include "Util/Serial/InterfacePosix.hpp"
 #include "View/MainView.hpp"
@@ -9,12 +10,14 @@ int main(int argc, char *argv[]) {
 
     auto ports = util::serial::InterfacePosix::getAvailablePorts();
 
-    view::MainView mainView{"Res/ui.glade"};
-    mainView.setPorts(ports);
-    mainView.registerConnectButtonListener([](){
-       std::cout << "Clicked" << std::endl;
-    });
-    app->run(mainView.getWindow());
+    auto mainView = std::make_shared<view::MainView>("Res/ui.glade");
+    mainView->setPorts(util::serial::InterfacePosix::getAvailablePorts());
+    std::function<void()> test = [](){
+        std::cout << "Btn" << std::endl;
+    };
+    mainView->registerConnectButtonListener(test);
+    mainView->registerConnectButtonListener(test);
+    app->run(mainView->getWindow());
 
     return 0;
 }

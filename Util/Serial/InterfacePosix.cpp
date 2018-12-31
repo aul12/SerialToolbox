@@ -37,8 +37,8 @@ namespace util::serial {
         tty.c_iflag &= ~IGNBRK;         // disable break processing
         tty.c_lflag = 0;                // no signaling chars, no echo, no canonical processing
         tty.c_oflag = 0;                // no remapping, no delays
-        tty.c_cc[VMIN] = 0;            // read doesn't block
-        tty.c_cc[VTIME] = 1;            // 0.1 seconds read timeout
+        tty.c_cc[VMIN] = 1;            // read requires at least one character
+        tty.c_cc[VTIME] = 0;            // read is  blocking
         tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
         tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls, enable reading
 
@@ -49,15 +49,17 @@ namespace util::serial {
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
         }
+
+        this->readerThreadHandle = std::async(std::launch::async, &InterfacePosix::readerThread, this);
     }
 
     void InterfacePosix::readerThread() {
         std::array<uint8_t, BUF_SIZE> buffer{};
 
-        while (this->readClose.try_lock()) { // @TODO maybe should use notify
-            this->readClose.unlock();
+        while (this->readLock.try_lock()) { // @TODO maybe should use notify
+            this->readLock.unlock();
 
-            auto readed = read(this->fd, buffer.data(), BUF_SIZE);
+            auto readed = read(this->fd, buffer.data(), BUF_SIZE); // go fix your language, read needs to be written as red
 
             if (readed < 0) {
                 throw std::runtime_error(strerror(errno));
@@ -70,7 +72,7 @@ namespace util::serial {
     }
 
     InterfacePosix::~InterfacePosix() {
-        this->readClose.lock();
+        this->readLock.lock();
         close(this->fd);
         this->readerThreadHandle.wait();
     }
@@ -87,11 +89,6 @@ namespace util::serial {
         } while (written < buffer.size());
     }
 
-
-    void InterfacePosix::registerCallback(const std::function<void(std::vector<uint8_t>)> &callback) {
-        Interface::registerCallback(callback);
-        this->readerThreadHandle = std::async(std::launch::async, &InterfacePosix::readerThread, this);
-    }
 
     void InterfacePosix::setBaud(int baud) {
         speed_t baudBits;

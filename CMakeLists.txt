@@ -14,6 +14,8 @@ link_directories(${GTKMM_LIBRARY_DIRS})
 add_definitions(${GTKMM_CFLAGS_OTHER})
 
 add_executable(${PROJECT_NAME} main.cpp
-        Util/Serial/InterfacePosix.cpp View/MainView.cpp Util/Serial/Interface.cpp)
+        Util/Serial/Interface.cpp Util/Serial/InterfacePosix.cpp
+        View/MainView.cpp
+        Controller/UiController.cpp Controller/SerialProxy.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} stdc++fs pthread)
