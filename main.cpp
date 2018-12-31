@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
     std::function<void()> test = [](){
         std::cout << "Btn" << std::endl;
     };
-    mainView->registerConnectButtonListener(test);
-    mainView->registerConnectButtonListener(test);
+    mainView->connectButtonListener(test);
+    mainView->connectButtonListener(test);
     app->run(mainView->getWindow());
 
     return 0;

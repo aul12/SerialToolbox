@@ -21,11 +21,11 @@ namespace view {
 
         auto getWindow() -> Gtk::Window&;
 
-        const util::Listener<> registerConnectButtonListener;
-        const util::Listener<std::string> registerPortComboListener;
-        const util::Listener<int> registerBaudSpinListener;
-        const util::Listener<int> registerDataBitsSpinListener;
-        const util::Listener<int> registerStopBitsSpinListener;
+        const util::Listener<> connectButtonListener;
+        const util::Listener<std::string> portComboListener;
+        const util::Listener<int> baudSpinListener;
+        const util::Listener<int> dataBitsSpinListener;
+        const util::Listener<int> stopBitsSpinListener;
 
     private:
         Gtk::Window *mainWindow;

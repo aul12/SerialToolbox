@@ -11,7 +11,7 @@
 #define WIDGET_MAP(x) #x, x
 
 namespace view {
-    MainView::MainView(const std::string &uiFile) : registerConnectButtonListener{} {
+    MainView::MainView(const std::string &uiFile) : connectButtonListener{} {
         Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file(uiFile);
 
         builder->get_widget(WIDGET_MAP(mainWindow));
@@ -41,22 +41,22 @@ namespace view {
     }
 
     void MainView::connectButtonHandler() {
-        this->registerConnectButtonListener();
+        this->connectButtonListener();
     }
 
     void MainView::portComboHandler() {
-        this->registerPortComboListener(this->portCombo->get_active_text());
+        this->portComboListener(this->portCombo->get_active_text());
     }
 
     void MainView::baudSpinHandler() {
-        registerBaudSpinListener(this->baudSpin->get_value_as_int());
+        baudSpinListener(this->baudSpin->get_value_as_int());
     }
 
     void MainView::dataBitsSpinHandler() {
-        registerDataBitsSpinListener(this->dataBitsSpin->get_value_as_int());
+        dataBitsSpinListener(this->dataBitsSpin->get_value_as_int());
     }
 
     void MainView::stopBitsSpinHandler() {
-        registerStopBitsSpinListener(this->stopBitsSpin->get_value_as_int());
+        stopBitsSpinListener(this->stopBitsSpin->get_value_as_int());
     }
 }
