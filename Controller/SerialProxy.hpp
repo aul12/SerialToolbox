@@ -9,25 +9,30 @@
 #define HTERMCLONE_SERIALPROXY_HPP
 
 #include <memory>
-#include <unordered_map>
+#include <map>
+#include <deque>
 #include "../Util/Serial/Interface.hpp"
+#include "../Util/Listener.hpp"
 
 namespace controller {
     enum class Representation {
         ASCII, HEX, DEC, BIN
     };
 
+    struct Representations {
+        std::string ascii, hex, dec, bin;
+    };
+
     class SerialProxy {
     public:
         SerialProxy(const std::shared_ptr<util::serial::Interface> &interface);
 
-        void registerReceiveListener(
-                std::function<void(std::vector<std::unordered_map<Representation, std::string>>)> listener);
-
         void send(std::vector<std::string> bytes, Representation representation);
-    private:
 
-        std::optional<std::function<void(std::vector<std::unordered_map<Representation, std::string>>)>> listener;
+        const util::Listener<std::deque<Representations>> receiveListener;
+    private:
+        void readCallback(std::vector<uint8_t>  data);
+
         std::shared_ptr<util::serial::Interface> interface;
     };
 }
