@@ -193,8 +193,8 @@ namespace util::serial {
         if (tcgetattr(fd, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
         }
-        cfsetospeed(&tty, static_cast<speed_t>(baud));
-        cfsetispeed(&tty, static_cast<speed_t>(baud));
+        cfsetospeed(&tty, static_cast<speed_t>(baudBits));
+        cfsetispeed(&tty, static_cast<speed_t>(baudBits));
 
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
