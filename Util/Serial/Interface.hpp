@@ -74,7 +74,7 @@ namespace util::serial {
          * Register an callback which gets called when new data is available
          * @param callback
          */
-        void registerReceiveListenerA(const std::function<void(std::vector<uint8_t>)> &callback);
+        void registerReceiveCallback(const std::function<void(std::vector<uint8_t>)> &callback);
     protected:
         /**
          * Send a buffer via the serial interface, needs to be implemented by the spec

@@ -8,7 +8,7 @@
 #include "Interface.hpp"
 
 namespace util::serial {
-    void Interface::registerReceiveListener(const std::function<void(std::vector<uint8_t>)> &callback) {
+    void Interface::registerReceiveCallback(const std::function<void(std::vector<uint8_t>)> &callback) {
         if (this->callback.has_value()) {
             throw std::logic_error("You can only set one callback");
         }
