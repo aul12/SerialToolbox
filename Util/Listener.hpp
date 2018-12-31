@@ -23,6 +23,7 @@ namespace util {
 
         auto getSubscribed() const -> std::size_t;
 
+        using type = std::function<void(Args...)>;
     private:
         mutable std::list<std::function<void(Args...)>> listeners;
     };

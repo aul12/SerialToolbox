@@ -4,7 +4,12 @@ enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 
-add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
+set(TEST_SOURCES
+        ${CMAKE_SOURCE_DIR}/Tests/Util/Listener.cpp)
+
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_executable(${PROJECT_NAME} main.cpp ${SOURCES} ${TEST_SOURCES})
 
 target_link_libraries(${PROJECT_NAME} ${GTEST_LIBS} ${GTKMM_LIBRARIES} stdc++fs gtest pthread)
 
