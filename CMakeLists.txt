@@ -13,9 +13,14 @@ link_directories(${GTKMM_LIBRARY_DIRS})
 
 add_definitions(${GTKMM_CFLAGS_OTHER})
 
-add_executable(${PROJECT_NAME} main.cpp
-        Util/Serial/Interface.cpp Util/Serial/InterfacePosix.cpp
-        View/MainView.cpp
-        Controller/UiController.cpp Controller/SerialProxy.cpp)
+set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
+        ${CMAKE_SOURCE_DIR}/Util/Serial/InterfacePosix.cpp
+        ${CMAKE_SOURCE_DIR}/View/MainView.cpp
+        ${CMAKE_SOURCE_DIR}/Controller/UiController.cpp
+        ${CMAKE_SOURCE_DIR}/Controller/SerialProxy.cpp)
+
+add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} stdc++fs pthread)
+
+add_subdirectory(Tests)
