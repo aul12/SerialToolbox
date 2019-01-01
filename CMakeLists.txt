@@ -19,8 +19,10 @@ set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/Controller/UiController.cpp
         ${CMAKE_SOURCE_DIR}/Controller/SerialProxy.cpp)
 
+set(LIBS stdc++fs pthread ${GTKMM_LIBRARIES})
+
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} stdc++fs pthread)
+target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LIBS})
 
 add_subdirectory(Tests)
