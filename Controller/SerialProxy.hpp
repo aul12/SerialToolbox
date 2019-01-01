@@ -33,6 +33,8 @@ namespace controller {
     private:
         void readCallback(std::vector<uint8_t>  data);
 
+        static auto convert(std::string string, Representation representation) -> uint8_t;
+
         std::shared_ptr<util::serial::Interface> interface;
     };
 }

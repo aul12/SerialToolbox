@@ -9,6 +9,7 @@
 
 #include <sstream>
 #include <bitset>
+#include <cassert>
 
 namespace controller {
 
@@ -19,7 +20,14 @@ namespace controller {
     }
 
     void SerialProxy::send(std::vector<std::string> bytes, Representation representation) {
+        std::vector<uint8_t> buf;
+        buf.reserve(bytes.size());
 
+        for (const auto &byteString : bytes) {
+            buf.push_back(convert(byteString, representation));
+        }
+
+        interface->send(buf.begin(), buf.end());
     }
 
     void SerialProxy::readCallback(std::vector<uint8_t> data) {
@@ -41,5 +49,40 @@ namespace controller {
 
             representations.ascii = static_cast<char>(dat);
         }
+    }
+
+    auto SerialProxy::convert(std::string string, Representation representation) -> uint8_t {
+        assert(string.length() > 0);
+
+        int base = 0;
+        switch (representation) {
+            case Representation::ASCII:
+                if (string.length() != 1) {
+                    throw std::runtime_error("Not valid ascii");
+                }
+                return static_cast<uint8_t>(string.at(0));
+            case Representation::HEX:
+                base = 16;
+                break;
+            case Representation::DEC:
+                base = 10;
+                break;
+            case Representation::BIN:
+                base = 2;
+                break;
+        }
+
+        int val = 0;
+        try {
+            val = std::stoi(string, nullptr, base);
+        } catch (std::invalid_argument &e) {
+            throw std::runtime_error(e.what());
+        }
+
+        if (val < 0 || val > 255) {
+            throw std::runtime_error("Not one byte");
+        }
+
+        return val;
     }
 }

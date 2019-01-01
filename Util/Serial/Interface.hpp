@@ -15,6 +15,7 @@
 #include <mutex>
 #include <future>
 #include <cstdint>
+#include <cassert>
 
 namespace util::serial {
     enum class Parity {
