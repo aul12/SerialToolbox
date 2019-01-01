@@ -14,6 +14,7 @@
 #include <vector>
 #include <mutex>
 #include <future>
+#include <cstdint>
 
 namespace util::serial {
     enum class Parity {
@@ -75,16 +76,52 @@ namespace util::serial {
          * @param callback
          */
         void registerReceiveCallback(const std::function<void(std::vector<uint8_t>)> &callback);
+
+        /**
+         * Default destructor, necessary when destructing a derived class from a base pointer.
+         */
+        virtual ~Interface() = default;
     protected:
         /**
          * Send a buffer via the serial interface, needs to be implemented by the spec
          * @param send
          */
-        virtual void send(const std::vector<uint8_t> &buffer) const = 0;
+        virtual void sendBuff(const std::vector<uint8_t> &buffer) const = 0;
 
+        /**
+         * Checks if a callback is set and calls it if available
+         * @param data the data to send to the callback
+         */
+        void callbackIfAvailable(const std::vector<uint8_t> &data);
+
+    private:
         std::optional<std::function<void(std::vector<uint8_t>)>> callback;
         mutable std::mutex writeLock;
     };
+
+    template<typename IT>
+    void Interface::send(const IT &begin, const IT &end) const {
+        using T = typename std::iterator_traits<IT>::value_type;
+        static_assert(sizeof(T) == 1, "send requires an container of byte sized objects");
+
+        auto size = std::distance(begin, end);
+        assert(size >= 0);
+        std::vector<uint8_t> buffer{};
+        buffer.reserve(static_cast<unsigned long>(size));
+
+        for (auto it = begin; it != end; it++) {
+            buffer.push_back(static_cast<uint8_t >(*it));
+        }
+
+        writeLock.lock();
+        try {
+            this->sendBuff(buffer);
+        } catch (std::runtime_error &e) {
+            writeLock.unlock();
+            throw e;
+        }
+        writeLock.unlock();
+    }
 }
 
 #endif //HTERMCLONE_INTERFACE_HPP

@@ -64,9 +64,7 @@ namespace util::serial {
             if (readed < 0) {
                 throw std::runtime_error(strerror(errno));
             } else if (readed > 0) {
-                if (this->callback.has_value()) {
-                    this->callback.value()({buffer.data(), buffer.data() + readed});
-                }
+                this->callbackIfAvailable({buffer.data(), buffer.data() + readed});
             }
         }
     }
@@ -77,12 +75,11 @@ namespace util::serial {
         this->readerThreadHandle.wait();
     }
 
-    void InterfacePosix::send(const std::vector<uint8_t> &buffer) const {
+    void InterfacePosix::sendBuff(const std::vector<uint8_t> &buffer) const {
         std::size_t written = 0;
         do {
             auto result = write(this->fd, buffer.data() + written, buffer.size() - written);
             if (result < 0) {
-                writeLock.unlock();
                 throw std::runtime_error(strerror(errno));
             }
             written += static_cast<std::size_t>(result);

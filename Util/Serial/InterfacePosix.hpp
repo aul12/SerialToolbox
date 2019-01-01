@@ -32,11 +32,11 @@ namespace util::serial {
 
         void setStopBits(int stopBits) override;
 
-        ~InterfacePosix();
+        ~InterfacePosix() override;
 
         static auto getAvailablePorts() -> std::vector<std::string>;
     private:
-        void send(const std::vector<uint8_t> &buffer) const override;
+        void sendBuff(const std::vector<uint8_t> &buffer) const override;
         void readerThread();
         int fd;
         std::future<void> readerThreadHandle;

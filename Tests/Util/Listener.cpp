@@ -28,7 +28,7 @@ TEST(Listener, AddCall) {
     EXPECT_EQ(i, 3);
 }
 
-TEST(Listner, Args) {
+TEST(Listener, Args) {
     util::Listener<int> listener{};
     volatile int i = 0;
 
