@@ -55,9 +55,9 @@ TEST(Interface, Callback) {
     EXPECT_TRUE(v.empty());
     EXPECT_NO_THROW(iface.registerReceiveCallback(f));
     EXPECT_NO_THROW(iface.doCallback(a));
-    EXPECT_TRUE(std::equal(a.begin(), a.end(), v.begin()));
-    EXPECT_FALSE(std::equal(b.begin(), b.end(), v.begin()));
+    EXPECT_EQ(a, v);
+    EXPECT_NE(b, v);
     EXPECT_NO_THROW(iface.doCallback(b));
-    EXPECT_TRUE(std::equal(b.begin(), b.end(), v.begin()));
-    EXPECT_FALSE(std::equal(a.begin(), a.end(), v.begin()));
+    EXPECT_EQ(b, v);
+    EXPECT_NE(a, v);
 }
