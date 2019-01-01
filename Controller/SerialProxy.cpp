@@ -31,7 +31,7 @@ namespace controller {
     }
 
     void SerialProxy::readCallback(std::vector<uint8_t> data) {
-        std::deque<std::unordered_map<Representation, std::string>> ret;
+        std::deque<Representations> ret;
         for (const auto &dat : data) {
             std::stringstream stringstream;
             Representations representations{};
@@ -48,12 +48,14 @@ namespace controller {
             representations.bin = bitset.to_string();
 
             representations.ascii = static_cast<char>(dat);
+
+            ret.push_back(representations);
         }
+
+        receiveListener(ret);
     }
 
     auto SerialProxy::convert(std::string string, Representation representation) -> uint8_t {
-        assert(string.length() > 0);
-
         int base = 0;
         switch (representation) {
             case Representation::ASCII:
@@ -83,6 +85,6 @@ namespace controller {
             throw std::runtime_error("Not one byte");
         }
 
-        return val;
+        return static_cast<uint8_t>(val);
     }
 }

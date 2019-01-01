@@ -107,6 +107,9 @@ namespace util::serial {
 
         auto size = std::distance(begin, end);
         assert(size >= 0);
+        if (size == 0) {
+            return;
+        }
         std::vector<uint8_t> buffer{};
         buffer.reserve(static_cast<unsigned long>(size));
 
