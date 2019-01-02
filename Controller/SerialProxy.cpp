@@ -36,13 +36,12 @@ namespace controller {
             std::stringstream stringstream;
             Representations representations{};
 
-            stringstream << std::hex << static_cast<int>(dat);
+            stringstream << std::hex << std::uppercase << static_cast<int>(dat);
             representations.hex = stringstream.str();
-            stringstream.clear();
 
+            stringstream.str({});
             stringstream << std::dec << static_cast<int>(dat);
             representations.dec = stringstream.str();
-            stringstream.clear();
 
             std::bitset<8> bitset(static_cast<unsigned long>(dat));
             representations.bin = bitset.to_string();

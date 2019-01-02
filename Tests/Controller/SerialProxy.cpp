@@ -81,12 +81,92 @@ TEST(SerialProxy, Receive) {
     controller::SerialProxy serialProxy{iface};
     bool called = false;
 
-    decltype(serialProxy.receiveListener)::type f = [&called](std::deque<controller::Representations> repr){
+    decltype(serialProxy.receiveListener)::type f = [&called](std::deque<controller::Representations>){
         called = true;
     };
 
+    EXPECT_FALSE(called);
     EXPECT_NO_THROW(serialProxy.receiveListener(f));
     EXPECT_NO_THROW(iface->doCallback({}));
-
     EXPECT_TRUE(called);
+}
+
+TEST(SerialProxy, ReceiveBin) {
+    auto iface = std::make_shared<InterfaceImpl>();
+    controller::SerialProxy serialProxy{iface};
+    std::deque<controller::Representations> recv;
+    std::vector<uint8_t> send{0,1,2,3,127,255};
+    std::deque<std::string> recvBin{"00000000", "00000001", "00000010", "00000011", "01111111", "11111111"};
+
+    decltype(serialProxy.receiveListener)::type f = [&recv](std::deque<controller::Representations> data){
+        recv = data;
+    };
+
+    EXPECT_NO_THROW(serialProxy.receiveListener(f));
+    EXPECT_NO_THROW(iface->doCallback(send));
+    EXPECT_TRUE(std::equal(recvBin.begin(), recvBin.end(), recv.begin(), [](const auto &rb, const auto &r){
+        return rb == r.bin;
+    }));
+}
+
+TEST(SerialProxy, ReceiveHex) {
+    auto iface = std::make_shared<InterfaceImpl>();
+    controller::SerialProxy serialProxy{iface};
+    std::deque<controller::Representations> recv;
+    std::vector<uint8_t> send{0,1,2,3,127,255};
+    std::deque<std::string> recvHex{"0", "1", "2", "3", "7F", "FF"};
+
+    decltype(serialProxy.receiveListener)::type f = [&recv](std::deque<controller::Representations> data){
+        recv = data;
+    };
+
+    EXPECT_NO_THROW(serialProxy.receiveListener(f));
+    EXPECT_NO_THROW(iface->doCallback(send));
+    EXPECT_TRUE(std::equal(recvHex.begin(), recvHex.end(), recv.begin(), [](const auto &rb, const auto &r){
+        return rb == r.hex;
+    }));
+}
+
+TEST(SerialProxy, ReceiveDec) {
+    auto iface = std::make_shared<InterfaceImpl>();
+    controller::SerialProxy serialProxy{iface};
+    std::deque<controller::Representations> recv;
+    std::vector<uint8_t> send{0,1,2,3,127,255};
+    std::deque<std::string> recvDec{"0", "1", "2", "3", "127", "255"};
+
+    decltype(serialProxy.receiveListener)::type f = [&recv](std::deque<controller::Representations> data){
+        recv = data;
+    };
+
+    EXPECT_NO_THROW(serialProxy.receiveListener(f));
+    EXPECT_NO_THROW(iface->doCallback(send));
+    EXPECT_TRUE(std::equal(recvDec.begin(), recvDec.end(), recv.begin(), [](const auto &rb, const auto &r){
+        return rb == r.dec;
+    }));
+}
+
+TEST(SerialProxy, ReceiveAscii) {
+    auto iface = std::make_shared<InterfaceImpl>();
+    controller::SerialProxy serialProxy{iface};
+    std::deque<controller::Representations> recv;
+    std::vector<uint8_t> send{0,1,2,3,'a', ';', 127,255};
+    std::deque<std::string> recvAscii{
+            {static_cast<char>(0)},
+            {static_cast<char>(1)},
+            {static_cast<char>(2)},
+            {static_cast<char>(3)},
+            "a", ";",
+            {static_cast<char>(127)},
+            {static_cast<char>(255)},
+    };
+
+    decltype(serialProxy.receiveListener)::type f = [&recv](std::deque<controller::Representations> data){
+        recv = data;
+    };
+
+    EXPECT_NO_THROW(serialProxy.receiveListener(f));
+    EXPECT_NO_THROW(iface->doCallback(send));
+    EXPECT_TRUE(std::equal(recvAscii.begin(), recvAscii.end(), recv.begin(), [](const auto &rb, const auto &r){
+        return rb == r.ascii;
+    }));
 }
