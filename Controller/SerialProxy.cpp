@@ -21,18 +21,15 @@ namespace controller {
 
     void SerialProxy::send(std::vector<std::string> bytes, Representation representation) {
         std::vector<uint8_t> buf;
-        buf.reserve(bytes.size());
-
-        for (const auto &byteString : bytes) {
-            buf.push_back(convert(byteString, representation));
-        }
+        std::transform(bytes.begin(), bytes.end(), std::back_inserter(buf),
+                       [&representation] (const auto &b) { return convert(b, representation); });
 
         interface->send(buf.begin(), buf.end());
     }
 
     void SerialProxy::readCallback(std::vector<uint8_t> data) {
         std::deque<Representations> ret;
-        for (const auto &dat : data) {
+        std::transform(data.begin(), data.end(), std::back_inserter(ret), [](const uint8_t &dat) -> Representations {
             std::stringstream stringstream;
             Representations representations{};
 
@@ -47,10 +44,8 @@ namespace controller {
             representations.bin = bitset.to_string();
 
             representations.ascii = static_cast<char>(dat);
-
-            ret.push_back(representations);
-        }
-
+            return representations;
+        });
         receiveListener(ret);
     }
 
