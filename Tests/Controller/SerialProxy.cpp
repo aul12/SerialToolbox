@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "../Util/Serial/InterfaceImpl.hpp"
+#include "Tests/Util/Serial/InterfaceMock.hpp"
 #include "Controller/SerialProxy.hpp"
 
 TEST(SerialProxy, SendBin) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
 
     std::vector<uint8_t> bin{0,1,2,3,2};
@@ -14,7 +14,7 @@ TEST(SerialProxy, SendBin) {
 }
 
 TEST(SerialProxy, SendHex) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
 
     std::vector<uint8_t> hex{0,1,16,17,16};
@@ -24,7 +24,7 @@ TEST(SerialProxy, SendHex) {
 }
 
 TEST(SerialProxy, SendDec) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
 
     std::vector<uint8_t> dec{0,1,10,11,10};
@@ -34,7 +34,7 @@ TEST(SerialProxy, SendDec) {
 }
 
 TEST(SerialProxy, SendBinFail) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     EXPECT_THROW(serialProxy.send({""}, controller::Representation::BIN), std::runtime_error);
     EXPECT_THROW(serialProxy.send({"-1"}, controller::Representation::BIN), std::runtime_error);
@@ -45,7 +45,7 @@ TEST(SerialProxy, SendBinFail) {
 }
 
 TEST(SerialProxy, SendHexFail) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     EXPECT_THROW(serialProxy.send({""}, controller::Representation::HEX), std::runtime_error);
     EXPECT_THROW(serialProxy.send({"-AF"}, controller::Representation::HEX), std::runtime_error);
@@ -56,7 +56,7 @@ TEST(SerialProxy, SendHexFail) {
 }
 
 TEST(SerialProxy, SendDecFail) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     EXPECT_THROW(serialProxy.send({""}, controller::Representation::DEC), std::runtime_error);
     EXPECT_THROW(serialProxy.send({"-1"}, controller::Representation::DEC), std::runtime_error);
@@ -67,7 +67,7 @@ TEST(SerialProxy, SendDecFail) {
 }
 
 TEST(SerialProxy, SendAsciiFail) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     EXPECT_THROW(serialProxy.send({""}, controller::Representation::ASCII), std::runtime_error);
     EXPECT_THROW(serialProxy.send({"AA"}, controller::Representation::ASCII), std::runtime_error);
@@ -77,7 +77,7 @@ TEST(SerialProxy, SendAsciiFail) {
 }
 
 TEST(SerialProxy, Receive) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     bool called = false;
 
@@ -92,7 +92,7 @@ TEST(SerialProxy, Receive) {
 }
 
 TEST(SerialProxy, ReceiveBin) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     std::deque<controller::Representations> recv;
     std::vector<uint8_t> send{0,1,2,3,127,255};
@@ -110,7 +110,7 @@ TEST(SerialProxy, ReceiveBin) {
 }
 
 TEST(SerialProxy, ReceiveHex) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     std::deque<controller::Representations> recv;
     std::vector<uint8_t> send{0,1,2,3,127,255};
@@ -128,7 +128,7 @@ TEST(SerialProxy, ReceiveHex) {
 }
 
 TEST(SerialProxy, ReceiveDec) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     std::deque<controller::Representations> recv;
     std::vector<uint8_t> send{0,1,2,3,127,255};
@@ -146,7 +146,7 @@ TEST(SerialProxy, ReceiveDec) {
 }
 
 TEST(SerialProxy, ReceiveAscii) {
-    auto iface = std::make_shared<InterfaceImpl>();
+    auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
     std::deque<controller::Representations> recv;
     std::vector<uint8_t> send{0,1,2,3,'a', ';', 127,255};

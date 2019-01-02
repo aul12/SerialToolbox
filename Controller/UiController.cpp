@@ -6,10 +6,11 @@
  */
 
 #include "UiController.hpp"
+#include "Util/Serial/InterfaceImplemenation.hpp"
 
 namespace controller {
     UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView} {
-        mainView->setPorts(UsedInterface::getAvailablePorts());
+        mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts());
 
         decltype(mainView->baudSpinListener)::type baudSpinEvent = [this](int baud) {
             this->interface->setBaud(baud);
@@ -29,7 +30,8 @@ namespace controller {
 
         decltype(mainView->connectButtonListener)::type connectButtonEvent = [&]() {
             if (this->interface == nullptr) {
-                this->interface = std::make_shared<UsedInterface>(mainView->getPort(), mainView->getBaud());
+                this->interface = std::make_shared<util::serial::InterfaceImplementation>
+                        (mainView->getPort(), mainView->getBaud());
                 this->serialProxy = std::make_shared<SerialProxy>(this->interface);
                 mainView->baudSpinListener(baudSpinEvent);
                 mainView->portComboListener(portComboEvent);

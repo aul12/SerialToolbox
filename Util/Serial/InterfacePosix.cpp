@@ -307,9 +307,6 @@ namespace util::serial {
                 }
             }
         }
-#warning "Just for testing needs some rework"
-        results.emplace_back("/dev/pts/1");
-        results.emplace_back("/dev/pts/2");
         return results;
     }
 }

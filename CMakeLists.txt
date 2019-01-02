@@ -20,6 +20,7 @@ set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
 
 if(UNIX)
     set(SOURCES ${SOURCES} ${CMAKE_SOURCE_DIR}/Util/Serial/InterfacePosix.cpp)
+    add_definitions(-DPOSIX)
 else()
     message(FATAL_ERROR "Windows not supported, maybe try using cygwin (or a proper POSIX compliant system)")
 endif()

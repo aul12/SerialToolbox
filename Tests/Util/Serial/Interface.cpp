@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "InterfaceImpl.hpp"
+#include "InterfaceMock.hpp"
 
 TEST(Interface, Send) {
-    InterfaceImpl iface{};
+    InterfaceMock iface{};
     std::vector<uint8_t> a{1,2,3};
     std::vector<char> b{'a','b','c'};
 
@@ -17,7 +17,7 @@ TEST(Interface, Send) {
 }
 
 TEST(Interface, OrderCheck) {
-    InterfaceImpl iface{};
+    InterfaceMock iface{};
     std::vector<uint8_t> a{1,2,3};
     std::vector<char> b{'a','b','c'};
 
@@ -28,13 +28,13 @@ TEST(Interface, OrderCheck) {
 }
 
 TEST(Interface, CallbackNotAvailable) {
-    InterfaceImpl iface{};
+    InterfaceMock iface{};
     EXPECT_NO_THROW(iface.doCallback({1,2,3}));
     EXPECT_NO_THROW(iface.doCallback({1,2}));
 }
 
 TEST(Interface, DuplicateCallback) {
-    InterfaceImpl iface{};
+    InterfaceMock iface{};
 
     std::function<void(std::vector<uint8_t>)> f = [](std::vector<uint8_t>){};
 
@@ -43,7 +43,7 @@ TEST(Interface, DuplicateCallback) {
 }
 
 TEST(Interface, Callback) {
-    InterfaceImpl iface{};
+    InterfaceMock iface{};
     std::vector<uint8_t> a{1,2,3};
     std::vector<uint8_t> b{4,5,6};
     std::vector<uint8_t> v;

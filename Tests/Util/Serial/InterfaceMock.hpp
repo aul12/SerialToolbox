@@ -10,7 +10,7 @@
 
 #include "Util/Serial/Interface.hpp"
 
-class InterfaceImpl : public util::serial::Interface {
+class InterfaceMock : public util::serial::Interface {
 public:
     void setBaud(int baud) override {
         this->baud = baud;
