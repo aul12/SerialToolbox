@@ -14,10 +14,15 @@ link_directories(${GTKMM_LIBRARY_DIRS})
 add_definitions(${GTKMM_CFLAGS_OTHER})
 
 set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
-        ${CMAKE_SOURCE_DIR}/Util/Serial/InterfacePosix.cpp
         ${CMAKE_SOURCE_DIR}/View/MainView.cpp
         ${CMAKE_SOURCE_DIR}/Controller/UiController.cpp
         ${CMAKE_SOURCE_DIR}/Controller/SerialProxy.cpp)
+
+if(UNIX)
+    set(SOURCES ${SOURCES} ${CMAKE_SOURCE_DIR}/Util/Serial/InterfacePosix.cpp)
+else()
+    message(FATAL_ERROR "Windows not supported, maybe try using cygwin (or a proper POSIX compliant system)")
+endif()
 
 set(LIBS stdc++fs pthread ${GTKMM_LIBRARIES})
 

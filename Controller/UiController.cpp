@@ -8,7 +8,39 @@
 #include "UiController.hpp"
 
 namespace controller {
-    UiController::UiController(std::shared_ptr<view::MainView> mainView) : mainView{mainView} {
+    UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView} {
+        mainView->setPorts(UsedInterface::getAvailablePorts());
 
+        decltype(mainView->baudSpinListener)::type baudSpinEvent = [this](int baud) {
+            this->interface->setBaud(baud);
+        };
+
+        decltype(mainView->portComboListener)::type portComboEvent = [this](std::string port) {
+            this->interface->setPort(port);
+        };
+
+        decltype(mainView->stopBitsSpinListener)::type stopBitsEvent = [this](int bits) {
+            this->interface->setStopBits(bits);
+        };
+
+        decltype(mainView->dataBitsSpinListener)::type dataBitsEvent = [this](int bits) {
+            this->interface->setDataBits(bits);
+        };
+
+        decltype(mainView->connectButtonListener)::type connectButtonEvent = [&]() {
+            if (this->interface == nullptr) {
+                this->interface = std::make_shared<UsedInterface>(mainView->getPort(), mainView->getBaud());
+                this->serialProxy = std::make_shared<SerialProxy>(this->interface);
+                mainView->baudSpinListener(baudSpinEvent);
+                mainView->portComboListener(portComboEvent);
+                mainView->stopBitsSpinListener(stopBitsEvent);
+                mainView->dataBitsSpinListener(dataBitsEvent);
+            } else {
+                this->interface->setPort(this->mainView->getPort());
+                this->interface->setBaud(this->mainView->getBaud());
+            }
+        };
+
+        mainView->connectButtonListener(connectButtonEvent);
     }
 }

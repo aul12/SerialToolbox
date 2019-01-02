@@ -27,6 +27,10 @@ namespace view {
         const util::Listener<int> dataBitsSpinListener;
         const util::Listener<int> stopBitsSpinListener;
 
+        auto getPort() const -> std::string;
+        auto getBaud() const -> int;
+        auto getDataBits() const -> int;
+        auto getStopBits() const -> int;
     private:
         Gtk::Window *mainWindow;
 

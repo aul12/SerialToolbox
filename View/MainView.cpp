@@ -59,4 +59,20 @@ namespace view {
     void MainView::stopBitsSpinHandler() {
         stopBitsSpinListener(this->stopBitsSpin->get_value_as_int());
     }
+
+    auto MainView::getPort() const -> std::string {
+        return this->portCombo->get_active_text();
+    }
+
+    auto MainView::getBaud() const -> int {
+        return this->baudSpin->get_value_as_int();
+    }
+
+    auto MainView::getDataBits() const -> int {
+        return this->dataBitsSpin->get_value_as_int();
+    }
+
+    auto MainView::getStopBits() const -> int {
+        return this->stopBitsSpin->get_value_as_int();
+    }
 }

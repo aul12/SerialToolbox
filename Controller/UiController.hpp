@@ -8,15 +8,18 @@
 #ifndef HTERMCLONE_UICONTROLLER_HPP
 #define HTERMCLONE_UICONTROLLER_HPP
 
+#include "SerialProxy.hpp"
 #include "../View/MainView.hpp"
 
 namespace controller {
     class UiController {
     public:
-        UiController(std::shared_ptr<view::MainView> mainView);
+        explicit UiController(const std::shared_ptr<view::MainView> &mainView);
 
     private:
         std::shared_ptr<view::MainView> mainView;
+        std::shared_ptr<util::serial::Interface> interface;
+        std::shared_ptr<controller::SerialProxy> serialProxy;
     };
 }
 

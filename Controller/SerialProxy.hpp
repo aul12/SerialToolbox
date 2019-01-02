@@ -14,6 +14,12 @@
 #include "../Util/Serial/Interface.hpp"
 #include "../Util/Listener.hpp"
 
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#include "../Util/Serial/InterfacePosix.hpp"
+#else
+#error "Cannot build on Windows"
+#endif
+
 namespace controller {
     enum class Representation {
         ASCII, HEX, DEC, BIN
@@ -23,9 +29,16 @@ namespace controller {
         std::string ascii, hex, dec, bin;
     };
 
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+    using UsedInterface = util::serial::InterfacePosix;
+#else
+    using UsedInterface = util::serial::ImACompilerError
+#endif
+
+
     class SerialProxy {
     public:
-        SerialProxy(const std::shared_ptr<util::serial::Interface> &interface);
+        explicit SerialProxy(const std::shared_ptr<util::serial::Interface> &interface);
 
         void send(std::vector<std::string> bytes, Representation representation);
 
