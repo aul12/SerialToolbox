@@ -1,12 +1,15 @@
-# HTermClone
-A serial port terminal similar to HTerm.
+# SerialToolbox
+A serial port terminal and debugger, inspired by HTerm
 
-# Testing
-## Linux
-Using 'socat' an virtual terminal port can be created.
-See: 
-[https://stackoverflow.com/a/19733677/5530363](https://stackoverflow.com/a/19733677/5530363)
-
+# Development
+## Compiling SerialToolbox
+Dependencies:
+ * A C++17 compatible Compiler (e.g. GCC 8)
+ * CMake (>= 3.10)
+ * GTest and GMock
+ * Address Sanitizer (LibASan)
+ * gtkmm 3
+ 
 # Nomenclature
 * Callback: one or zero receivers
 * Listener: arbitrary many receivers
