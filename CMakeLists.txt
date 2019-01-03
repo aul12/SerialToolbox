@@ -1,16 +1,22 @@
 cmake_minimum_required(VERSION 3.10)
 project(SerialToolbox)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+endif ()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTKMM REQUIRED gtkmm-3.0)
 
 include_directories(SYSTEM ${GTKMM_INCLUDE_DIRS})
 link_directories(${GTKMM_LIBRARY_DIRS})
-message(STATUS ${GTKMM_INCLUDE_DIRS})
 
 add_definitions(${GTKMM_CFLAGS_OTHER})
 
