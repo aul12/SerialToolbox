@@ -10,6 +10,10 @@ before_install:
     - sudo cmake CMakeLists.txt
     - sudo make
     - sudo cp *.a /usr/lib
+    - cd /usr/src/gmock
+    - sudo cmake CMakeLists.txt
+    - sudo make
+    - sudo cp *.a /usr/lib
     - sudo ldconfig
     - cd $TRAVIS_BUILD_DIR
 
