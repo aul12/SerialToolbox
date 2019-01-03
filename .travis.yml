@@ -20,7 +20,7 @@ before_install:
 script:
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
     - make -j8
     - cd ..
     - ./build/Tests --gtest_repeat=10 --gtest_shuffle --gtest_color=yes
