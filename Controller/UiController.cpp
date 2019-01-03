@@ -6,7 +6,7 @@
  */
 
 #include "UiController.hpp"
-#include "Util/Serial/InterfaceImplemenation.hpp"
+#include "../Util/Serial/InterfaceImplemenation.hpp"
 
 namespace controller {
     UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView} {
