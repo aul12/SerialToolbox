@@ -1,0 +1,23 @@
+sudo: required
+dist: bionic
+
+before_install:
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt update -y -q
+    - sudo apt install -y libgtest-dev cmake valgrind gcc-8 g++-8 libasan5
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+    - cd /usr/src/gtest
+    - sudo cmake CMakeLists.txt
+    - sudo make
+    - sudo cp *.a /usr/lib
+    - sudo ldconfig
+    - cd $TRAVIS_BUILD_DIR
+
+script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make -j8
+    - cd ..
+    - ./build/Tests --gtest_repeat=10 --gtest_shuffle --gtest_color=yes
+
