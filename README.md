@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/aul12/SerialToolbox.svg?branch=master)](https://travis-ci.org/aul12/SerialToolbox)
 # SerialToolbox
 A serial port terminal and debugger, inspired by HTerm
 
