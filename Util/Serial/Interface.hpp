@@ -106,8 +106,9 @@ namespace util::serial {
         static_assert(sizeof(T) == 1, "send requires an container of byte sized objects");
 
         auto size = std::distance(begin, end);
-        assert(size >= 0);
-        if (size == 0) {
+        if (size < 0) {
+            throw std::runtime_error("Invalid size");
+        } else if (size == 0) {
             return;
         }
         std::vector<uint8_t> buffer{};

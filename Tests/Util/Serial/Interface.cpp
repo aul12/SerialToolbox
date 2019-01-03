@@ -21,10 +21,10 @@ TEST(Interface, OrderCheck) {
     std::vector<uint8_t> a{1,2,3};
     std::vector<char> b{'a','b','c'};
 
-    EXPECT_NO_FATAL_FAILURE(iface.send(a.begin(), a.end()));
-    EXPECT_NO_FATAL_FAILURE(iface.send(a.begin(), a.end()));
-    EXPECT_DEATH(iface.send(a.end(), a.begin()), "");
-    EXPECT_DEATH(iface.send(b.end(), b.begin()), "");
+    EXPECT_NO_THROW(iface.send(a.begin(), a.end()));
+    EXPECT_NO_THROW(iface.send(b.begin(), b.end()));
+    EXPECT_THROW(iface.send(a.end(), a.begin()), std::runtime_error);
+    EXPECT_THROW(iface.send(b.end(), b.begin()), std::runtime_error);
 }
 
 TEST(Interface, CallbackNotAvailable) {

@@ -1,8 +1,5 @@
 FROM ubuntu:18.04
 
-
-
-
 RUN apt-get update -y && apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && apt-get update -y
 RUN apt-get install -y libgtest-dev cmake valgrind gcc-8 g++-8 libasan5 libgtk-3-dev libgtkmm-3.0-dev google-mock
@@ -22,11 +19,7 @@ COPY . /src/
 RUN rm -rf /src/build
 RUN mkdir -p /src/build
 
-
 WORKDIR /src/build
-
-RUN ls /src/
-RUN ls /src/Tests/
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release .. && make -j2
 
