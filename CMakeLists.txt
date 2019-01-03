@@ -10,6 +10,7 @@ pkg_check_modules(GTKMM REQUIRED gtkmm-3.0)
 
 include_directories(SYSTEM ${GTKMM_INCLUDE_DIRS})
 link_directories(${GTKMM_LIBRARY_DIRS})
+message(STATUS ${GTKMM_INCLUDE_DIRS})
 
 add_definitions(${GTKMM_CFLAGS_OTHER})
 

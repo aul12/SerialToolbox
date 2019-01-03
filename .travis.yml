@@ -1,10 +1,11 @@
 sudo: required
 dist: bionic
 
-# We first need to install an ancient GCC to compile GTest and GMock, then we are able to upgrade GCC-8
 before_install:
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     - sudo apt-get update -y -q
-    - sudo apt-get install -y build-essential libgtest-dev cmake google-mock
+    - sudo apt-get install -y libgtest-dev cmake valgrind gcc-8 g++-8 libasan5 libgtkmm-3.0-dev google-mock
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
     - cd /usr/src/gtest
     - sudo cmake CMakeLists.txt
     - sudo make
@@ -15,10 +16,6 @@ before_install:
     - sudo cp *.a /usr/lib
     - sudo ldconfig
     - cd $TRAVIS_BUILD_DIR
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    - sudo apt-get update -y -q
-    - sudo apt-get install gcc-8 g++-8 libgtkmm-3.0-dev libgstreamermm-1.0-dev libasan5
-    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
 script:
     - mkdir build
