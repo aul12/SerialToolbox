@@ -21,7 +21,6 @@ namespace view {
 
         auto getWindow() -> Gtk::Window&;
 
-        const util::Listener<> connectButtonListener;
         const util::Listener<std::string> portComboListener;
         const util::Listener<int> baudSpinListener;
         const util::Listener<int> dataBitsSpinListener;
@@ -31,17 +30,26 @@ namespace view {
         auto getBaud() const -> int;
         auto getDataBits() const -> int;
         auto getStopBits() const -> int;
+        auto getAsciiEnabled() const -> bool;
+        auto getHexEnabled() const -> bool;
+        auto getDecEnabled() const -> bool;
+        auto getBinEnabled() const -> bool;
+
     private:
         Gtk::Window *mainWindow;
 
         // Top bar
-        Gtk::Button *connectButton;
         Gtk::ComboBoxText *portCombo;
         Gtk::SpinButton *baudSpin;
         Gtk::SpinButton *dataBitsSpin;
         Gtk::SpinButton *stopBitsSpin;
 
-        void connectButtonHandler();
+        // Sidebar
+        Gtk::CheckButton *checkAscii;
+        Gtk::CheckButton *checkHex;
+        Gtk::CheckButton *checkDec;
+        Gtk::CheckButton *checkBin;
+
         void portComboHandler();
         void baudSpinHandler();
         void dataBitsSpinHandler();
