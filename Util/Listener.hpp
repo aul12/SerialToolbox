@@ -5,8 +5,8 @@
  * @brief Listener @TODO
  */
 
-#ifndef HTERMCLONE_LISTENER_HPP
-#define HTERMCLONE_LISTENER_HPP
+#ifndef SERIALTOOLBOX_LISTENER_HPP
+#define SERIALTOOLBOX_LISTENER_HPP
 
 #include <list>
 #include <functional>
@@ -46,4 +46,4 @@ namespace util {
     }
 }
 
-#endif //HTERMCLONE_LISTENER_HPP
+#endif //SERIALTOOLBOX_LISTENER_HPP

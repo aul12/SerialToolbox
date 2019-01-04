@@ -5,8 +5,8 @@
  * @brief Declaration of the abstract Interface class
  */
 
-#ifndef HTERMCLONE_INTERFACE_HPP
-#define HTERMCLONE_INTERFACE_HPP
+#ifndef SERIALTOOLBOX_INTERFACE_HPP
+#define SERIALTOOLBOX_INTERFACE_HPP
 
 #include <string>
 #include <optional>
@@ -129,4 +129,4 @@ namespace util::serial {
     }
 }
 
-#endif //HTERMCLONE_INTERFACE_HPP
+#endif //SERIALTOOLBOX_INTERFACE_HPP

@@ -5,8 +5,8 @@
  * @brief SerialProxy @TODO
  */
 
-#ifndef HTERMCLONE_SERIALPROXY_HPP
-#define HTERMCLONE_SERIALPROXY_HPP
+#ifndef SERIALTOOLBOX_SERIALPROXY_HPP
+#define SERIALTOOLBOX_SERIALPROXY_HPP
 
 #include <memory>
 #include <map>

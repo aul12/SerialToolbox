@@ -5,8 +5,8 @@
  * @brief MainView @TODO
  */
 
-#ifndef HTERMCLONE_MAINVIEW_HPP
-#define HTERMCLONE_MAINVIEW_HPP
+#ifndef SERIALTOOLBOX_MAINVIEW_HPP
+#define SERIALTOOLBOX_MAINVIEW_HPP
 
 
 #include <gtkmm.h>

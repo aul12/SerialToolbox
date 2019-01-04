@@ -5,8 +5,8 @@
  * @brief UiController @TODO
  */
 
-#ifndef HTERMCLONE_UICONTROLLER_HPP
-#define HTERMCLONE_UICONTROLLER_HPP
+#ifndef SERIALTOOLBOX_UICONTROLLER_HPP
+#define SERIALTOOLBOX_UICONTROLLER_HPP
 
 #include "SerialProxy.hpp"
 #include "../View/MainView.hpp"
