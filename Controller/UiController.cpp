@@ -13,36 +13,72 @@ namespace controller {
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts());
 
         decltype(mainView->baudSpinListener)::type baudSpinEvent = [this](int baud) {
-            this->interface->setBaud(baud);
+            try {
+                this->interface->setBaud(baud);
+            } catch (std::runtime_error &e) {
+                Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error setting baud",
+                                          false, Gtk::MESSAGE_ERROR};
+                dialog.set_secondary_text(e.what());
+                dialog.run();
+            }
         };
 
         decltype(mainView->portComboListener)::type portComboEvent = [this](std::string port) {
-            this->interface->setPort(port);
+            try {
+                this->interface->setPort(port);
+            } catch (std::runtime_error &e) {
+                Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error setting port",
+                                          false, Gtk::MESSAGE_ERROR};
+                dialog.set_secondary_text(e.what());
+                dialog.run();
+            }
         };
 
         decltype(mainView->stopBitsSpinListener)::type stopBitsEvent = [this](int bits) {
-            this->interface->setStopBits(bits);
+            try {
+                this->interface->setStopBits(bits);
+            } catch (std::runtime_error &e) {
+                Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error setting stop bits",
+                                          false, Gtk::MESSAGE_ERROR};
+                dialog.set_secondary_text(e.what());
+                dialog.run();
+            }
         };
 
         decltype(mainView->dataBitsSpinListener)::type dataBitsEvent = [this](int bits) {
-            this->interface->setDataBits(bits);
+            try {
+                this->interface->setDataBits(bits);
+            } catch (std::runtime_error &e) {
+                Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error setting data bits",
+                                          false, Gtk::MESSAGE_ERROR};
+                dialog.set_secondary_text(e.what());
+                dialog.run();
+            }
         };
 
         decltype(mainView->connectButtonListener)::type connectButtonEvent = [&]() {
-            if (this->interface == nullptr) {
-                this->interface = std::make_shared<util::serial::InterfaceImplementation>
-                        (mainView->getPort(), mainView->getBaud());
-                this->serialProxy = std::make_shared<SerialProxy>(this->interface);
-                mainView->baudSpinListener(baudSpinEvent);
-                mainView->portComboListener(portComboEvent);
-                mainView->stopBitsSpinListener(stopBitsEvent);
-                mainView->dataBitsSpinListener(dataBitsEvent);
-            } else {
-                this->interface->setPort(this->mainView->getPort());
-                this->interface->setBaud(this->mainView->getBaud());
+            try {
+                if (this->interface == nullptr) {
+                    this->interface = std::make_shared<util::serial::InterfaceImplementation>
+                            (mainView->getPort(), mainView->getBaud());
+                    this->serialProxy = std::make_shared<SerialProxy>(this->interface);
+                } else {
+                    this->interface->setPort(this->mainView->getPort());
+                    this->interface->setBaud(this->mainView->getBaud());
+                }
+            } catch (std::runtime_error &e) {
+                Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error connecting",
+                                          false, Gtk::MESSAGE_ERROR};
+                dialog.set_secondary_text(e.what());
+                dialog.run();
             }
         };
 
         mainView->connectButtonListener(connectButtonEvent);
+
+        mainView->baudSpinListener(baudSpinEvent);
+        mainView->portComboListener(portComboEvent);
+        mainView->stopBitsSpinListener(stopBitsEvent);
+        mainView->dataBitsSpinListener(dataBitsEvent);
     }
 }
