@@ -26,6 +26,13 @@ namespace view {
         builder->get_widget(WIDGET_MAP(checkBin));
         builder->get_widget(WIDGET_MAP(stopBitsLabel));
         builder->get_widget(WIDGET_MAP(dataBitsLabel));
+        builder->get_widget(WIDGET_MAP(receiveFlowBox));
+        builder->get_widget(WIDGET_MAP(sendFlowBox));
+        builder->get_widget(WIDGET_MAP(encodingSendCombo));
+        builder->get_widget(WIDGET_MAP(toSendEntry));
+        builder->get_widget(WIDGET_MAP(repetitionsSpin));
+        builder->get_widget(WIDGET_MAP(periodSpin));
+        builder->get_widget(WIDGET_MAP(sendButton));
 
         this->portCombo->signal_changed().connect(sigc::mem_fun(this, &MainView::portComboHandler));
         this->baudSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::baudSpinHandler));

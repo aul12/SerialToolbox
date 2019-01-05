@@ -54,6 +54,17 @@ namespace view {
         Gtk::CheckButton *checkDec;
         Gtk::CheckButton *checkBin;
 
+        // Receive
+        Gtk::FlowBox *receiveFlowBox;
+
+        // Send
+        Gtk::FlowBox *sendFlowBox;
+        Gtk::ComboBoxText *encodingSendCombo;
+        Gtk::Entry *toSendEntry;
+        Gtk::SpinButton *repetitionsSpin;
+        Gtk::SpinButton *periodSpin;
+        Gtk::Button *sendButton;
+
         void portComboHandler();
         void baudSpinHandler();
         void dataBitsSpinHandler();
