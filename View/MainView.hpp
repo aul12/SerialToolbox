@@ -35,14 +35,18 @@ namespace view {
         auto getDecEnabled() const -> bool;
         auto getBinEnabled() const -> bool;
 
+        void setSerialOptionsVisibility(bool visible);
     private:
         Gtk::Window *mainWindow;
 
         // Top bar
         Gtk::ComboBoxText *portCombo;
+        Gtk::ComboBoxText *parityCombo;
         Gtk::SpinButton *baudSpin;
         Gtk::SpinButton *dataBitsSpin;
         Gtk::SpinButton *stopBitsSpin;
+        Gtk::Label *stopBitsLabel;
+        Gtk::Label *dataBitsLabel;
 
         // Sidebar
         Gtk::CheckButton *checkAscii;

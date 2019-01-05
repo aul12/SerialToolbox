@@ -8,6 +8,8 @@
 #include "UiController.hpp"
 #include "../Util/Serial/InterfaceImplemenation.hpp"
 
+#include <iostream>
+
 namespace controller {
     UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView} {
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
@@ -31,6 +33,7 @@ namespace controller {
                     this->serialProxy = std::make_shared<SerialProxy>(this->interface);
                 }
                 this->interface->setPort(port);
+                this->mainView->setSerialOptionsVisibility(true);
             } catch (std::runtime_error &e) {
                 Gtk::MessageDialog dialog{this->mainView->getWindow(), "Error setting port",
                                           false, Gtk::MESSAGE_ERROR};
@@ -61,9 +64,12 @@ namespace controller {
             }
         };
 
-        /*decltype(serialProxy->receiveListener)::type receiveEvent = [this](std::deque<Representations> representations) {
-
-        };*/
+        decltype(serialProxy->receiveListener)::type receiveEvent = [this](std::deque<Representations> representations) {
+            for (const auto &repr : representations) {
+                std::cout << repr.ascii << " " << repr.dec << " " << repr.hex << " " << repr.bin << "\n";
+            }
+            std::cout << std::endl;
+        };
 
         mainView->baudSpinListener(baudSpinEvent);
         mainView->portComboListener(portComboEvent);

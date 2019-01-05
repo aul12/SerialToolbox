@@ -16,6 +16,7 @@ namespace view {
 
         builder->get_widget(WIDGET_MAP(mainWindow));
         builder->get_widget(WIDGET_MAP(portCombo));
+        builder->get_widget(WIDGET_MAP(parityCombo));
         builder->get_widget(WIDGET_MAP(baudSpin));
         builder->get_widget(WIDGET_MAP(dataBitsSpin));
         builder->get_widget(WIDGET_MAP(stopBitsSpin));
@@ -23,6 +24,8 @@ namespace view {
         builder->get_widget(WIDGET_MAP(checkHex));
         builder->get_widget(WIDGET_MAP(checkDec));
         builder->get_widget(WIDGET_MAP(checkBin));
+        builder->get_widget(WIDGET_MAP(stopBitsLabel));
+        builder->get_widget(WIDGET_MAP(dataBitsLabel));
 
         this->portCombo->signal_changed().connect(sigc::mem_fun(this, &MainView::portComboHandler));
         this->baudSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::baudSpinHandler));
@@ -88,5 +91,14 @@ namespace view {
 
     auto MainView::getBinEnabled() const -> bool {
         return this->checkBin->get_active();
+    }
+
+    void MainView::setSerialOptionsVisibility(bool visible) {
+        this->baudSpin->set_visible(visible);
+        this->stopBitsSpin->set_visible(visible);
+        this->dataBitsSpin->set_visible(visible);
+        this->parityCombo->set_visible(visible);
+        this->stopBitsLabel->set_visible(visible);
+        this->dataBitsLabel->set_visible(visible);
     }
 }

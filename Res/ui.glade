@@ -36,12 +36,10 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">Test</property>
-  </object>
   <object class="GtkWindow" id="mainWindow">
     <property name="can_focus">False</property>
-    <child>
+    <property name="title" translatable="yes">Serial Toolbox</property>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child>
@@ -49,7 +47,6 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="orientation">vertical</property>
-        <property name="wide_handle">True</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
@@ -71,7 +68,7 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="baudSpin">
-                <property name="visible">True</property>
+                <property name="app_paintable">True</property>
                 <property name="can_focus">True</property>
                 <property name="text" translatable="yes">9600</property>
                 <property name="input_purpose">number</property>
@@ -86,7 +83,6 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="dataBitsSpin">
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="text" translatable="yes">8</property>
                 <property name="adjustment">DataBitsAdjustement</property>
@@ -100,8 +96,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
+              <object class="GtkLabel" id="dataBitsLabel">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Data-Bits:</property>
               </object>
@@ -114,7 +109,6 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="stopBitsSpin">
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="text" translatable="yes">1</property>
                 <property name="input_purpose">number</property>
@@ -129,8 +123,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
+              <object class="GtkLabel" id="stopBitsLabel">
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Stop Bits:</property>
               </object>
@@ -142,8 +135,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="comboParity">
-                <property name="visible">True</property>
+              <object class="GtkComboBoxText" id="parityCombo">
                 <property name="can_focus">False</property>
                 <property name="active">0</property>
                 <items>
@@ -177,7 +169,6 @@
               <object class="GtkPaned">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="wide_handle">True</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -282,21 +273,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkGrid">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkTextView">
+                      <object class="GtkFlowBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="buffer">textbuffer1</property>
-                        <property name="monospace">True</property>
+                        <property name="can_focus">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -350,7 +339,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Repetitions (-1 means Infinite)</property>
+                                <property name="text" translatable="yes">1</property>
                                 <property name="adjustment">RepeatAdjustment</property>
+                                <property name="value">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -363,7 +354,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Time between sending (Milliseconds)</property>
+                                <property name="text" translatable="yes">1000</property>
                                 <property name="adjustment">IntervalAdjustment</property>
+                                <property name="value">1000</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -398,12 +391,9 @@
                             <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkTextView">
+                              <object class="GtkFlowBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="buffer">textbuffer1</property>
+                                <property name="can_focus">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -419,8 +409,9 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -443,5 +434,8 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">Test</property>
   </object>
 </interface>
