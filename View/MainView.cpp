@@ -7,6 +7,7 @@
 
 #include <gtkmm/builder.h>
 #include "MainView.hpp"
+#include "ByteRepresentationWidget.hpp"
 
 #define WIDGET_MAP(x) #x, x
 
@@ -26,18 +27,23 @@ namespace view {
         builder->get_widget(WIDGET_MAP(checkBin));
         builder->get_widget(WIDGET_MAP(stopBitsLabel));
         builder->get_widget(WIDGET_MAP(dataBitsLabel));
-        builder->get_widget(WIDGET_MAP(receiveFlowBox));
-        builder->get_widget(WIDGET_MAP(sendFlowBox));
+        builder->get_widget(WIDGET_MAP(receiveFlow));
+        builder->get_widget(WIDGET_MAP(sendFlow));
         builder->get_widget(WIDGET_MAP(encodingSendCombo));
         builder->get_widget(WIDGET_MAP(toSendEntry));
         builder->get_widget(WIDGET_MAP(repetitionsSpin));
         builder->get_widget(WIDGET_MAP(periodSpin));
         builder->get_widget(WIDGET_MAP(sendButton));
+        builder->get_widget(WIDGET_MAP(sendFlow));
 
         this->portCombo->signal_changed().connect(sigc::mem_fun(this, &MainView::portComboHandler));
         this->baudSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::baudSpinHandler));
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
+
+
+        this->receiveFlow->add(byteRepresentationWidget);
+        byteRepresentationWidget.show();
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {

@@ -8,9 +8,9 @@
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP
 #define SERIALTOOLBOX_MAINVIEW_HPP
 
-
 #include <gtkmm.h>
 #include "../Util/Listener.hpp"
+#include "ByteRepresentationWidget.hpp"
 
 namespace view {
     class MainView {
@@ -55,15 +55,18 @@ namespace view {
         Gtk::CheckButton *checkBin;
 
         // Receive
-        Gtk::FlowBox *receiveFlowBox;
+        Gtk::FlowBox *receiveFlow;
 
         // Send
-        Gtk::FlowBox *sendFlowBox;
+        Gtk::FlowBox *sendFlow;
         Gtk::ComboBoxText *encodingSendCombo;
         Gtk::Entry *toSendEntry;
         Gtk::SpinButton *repetitionsSpin;
         Gtk::SpinButton *periodSpin;
         Gtk::Button *sendButton;
+
+        //Test
+        ByteRepresentationWidget byteRepresentationWidget{"a", "b", "c", "d"};
 
         void portComboHandler();
         void baudSpinHandler();

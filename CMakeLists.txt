@@ -22,6 +22,7 @@ add_definitions(${GTKMM_CFLAGS_OTHER})
 
 set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/View/MainView.cpp
+        ${CMAKE_SOURCE_DIR}/View/ByteRepresentationWidget.cpp
         ${CMAKE_SOURCE_DIR}/Controller/UiController.cpp
         ${CMAKE_SOURCE_DIR}/Controller/SerialProxy.cpp)
 
