@@ -41,9 +41,11 @@ namespace view {
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
 
-
-        this->receiveFlow->add(byteRepresentationWidget);
-        byteRepresentationWidget.show();
+        for (auto c = 0; c < 64; c++) {
+            byteRepresentationWidgets.emplace_back("A", "123", "7F", "01101100");
+            this->receiveFlow->add(byteRepresentationWidgets.back());
+            byteRepresentationWidgets.back().show();
+        }
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {

@@ -66,7 +66,7 @@ namespace view {
         Gtk::Button *sendButton;
 
         //Test
-        ByteRepresentationWidget byteRepresentationWidget{"a", "b", "c", "d"};
+        std::deque<ByteRepresentationWidget> byteRepresentationWidgets;
 
         void portComboHandler();
         void baudSpinHandler();

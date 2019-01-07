@@ -15,6 +15,11 @@ namespace view {
         labelBin.set_text(bin);
         labelHex.set_text(hex);
 
+        labelAscii.override_background_color(Gdk::RGBA("#0DB4FF"));
+        labelDec.override_background_color(Gdk::RGBA("#E88F0C"));
+        labelBin.override_background_color(Gdk::RGBA("#FF0000"));
+        labelHex.override_background_color(Gdk::RGBA("#6000E8"));
+
         this->box.set_orientation(Gtk::ORIENTATION_VERTICAL);
         this->box.add(labelAscii);
         this->box.add(labelDec);
