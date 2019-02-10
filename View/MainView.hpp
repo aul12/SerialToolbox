@@ -36,6 +36,9 @@ namespace view {
         auto getBinEnabled() const -> bool;
 
         void setSerialOptionsVisibility(bool visible);
+
+        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin);
+        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin);
     private:
         Gtk::Window *mainWindow;
 
@@ -65,7 +68,7 @@ namespace view {
         Gtk::SpinButton *periodSpin;
         Gtk::Button *sendButton;
 
-        //Test
+        // All widgets need to exist while they are visible
         std::deque<ByteRepresentationWidget> byteRepresentationWidgets;
 
         void portComboHandler();

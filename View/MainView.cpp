@@ -41,7 +41,7 @@ namespace view {
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
 
-        for (auto c = 0; c < 64; c++) {
+        for (auto c = 0; c < 16*10; c++) {
             byteRepresentationWidgets.emplace_back("A", "123", "7F", "01101100");
             this->receiveFlow->add(byteRepresentationWidgets.back());
             byteRepresentationWidgets.back().show();
