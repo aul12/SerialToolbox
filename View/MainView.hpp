@@ -69,7 +69,7 @@ namespace view {
         Gtk::Button *sendButton;
 
         // All widgets need to exist while they are visible
-        std::deque<ByteRepresentationWidget> byteRepresentationWidgets;
+        std::deque<ByteRepresentationWidget> sendWidgets, receiveWidgets;
 
         void portComboHandler();
         void baudSpinHandler();

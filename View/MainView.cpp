@@ -41,11 +41,8 @@ namespace view {
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
 
-        for (auto c = 0; c < 16*10; c++) {
-            byteRepresentationWidgets.emplace_back("A", "123", "7F", "01101100");
-            this->receiveFlow->add(byteRepresentationWidgets.back());
-            byteRepresentationWidgets.back().show();
-        }
+        this->addReceived("A", "123", "7F", "01101100");
+        this->addSend("B", "123", "7F", "01101100");
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {
@@ -115,5 +112,17 @@ namespace view {
         this->parityCombo->set_visible(visible);
         this->stopBitsLabel->set_visible(visible);
         this->dataBitsLabel->set_visible(visible);
+    }
+
+    void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin) {
+        sendWidgets.emplace_back(ascii, dec, hex, bin);
+        this->sendFlow->add(sendWidgets.back());
+        sendWidgets.back().show();
+    }
+
+    void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin) {
+        receiveWidgets.emplace_back(ascii, dec, hex, bin);
+        this->receiveFlow->add(receiveWidgets.back());
+        receiveWidgets.back().show();
     }
 }
