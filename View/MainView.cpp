@@ -125,4 +125,11 @@ namespace view {
         this->receiveFlow->add(receiveWidgets.back());
         receiveWidgets.back().show();
     }
+
+    void MainView::showError(std::string title, std::string message) {
+        Gtk::MessageDialog dialog{*this->mainWindow, title,
+                                  false, Gtk::MESSAGE_ERROR};
+        dialog.set_secondary_text(message);
+        dialog.run();
+    }
 }

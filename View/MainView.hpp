@@ -39,6 +39,8 @@ namespace view {
 
         void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin);
         void addSend(std::string ascii, std::string dec, std::string hex, std::string bin);
+        
+        void showError(std::string title, std::string message);
     private:
         Gtk::Window *mainWindow;
 

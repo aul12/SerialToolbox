@@ -15,8 +15,6 @@ namespace util::serial {
     /**
      * Implements an Interface for Posix conforming systems (POSIX.1-2001). Tested
      * on Linux Kernel 4.15.
-     * @tparam BUF_SIZE the size of the internal buffer, this is an template argument because the buffer
-     * gets statically allocated.
      */
     class InterfacePosix : public Interface {
     public:

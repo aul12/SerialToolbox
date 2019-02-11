@@ -20,6 +20,12 @@ namespace controller {
         std::shared_ptr<view::MainView> mainView;
         std::shared_ptr<util::serial::Interface> interface;
         std::shared_ptr<controller::SerialProxy> serialProxy;
+
+        void baudEvent(int baud);
+        void portEvent(std::string port);
+        void stopBitsEvent(int stopBits);
+        void dataBitsEvent(int dataBits);
+        void receiveEvent(std::deque<Representations> representations);
     };
 }
 
