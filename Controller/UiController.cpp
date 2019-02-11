@@ -79,6 +79,8 @@ namespace controller {
     }
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
-        this->serialProxy->send({data}, static_cast<Representation>(repr));
+        auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
+        this->mainView->addSend(res.front().ascii, res.front().dec,
+                res.front().hex, res.front().bin);
     }
 }
