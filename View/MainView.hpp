@@ -25,6 +25,7 @@ namespace view {
         const util::Listener<int> baudSpinListener;
         const util::Listener<int> dataBitsSpinListener;
         const util::Listener<int> stopBitsSpinListener;
+        const util::Listener<int, std::string, int, int> sendClickListener;
 
         auto getPort() const -> std::string;
         auto getBaud() const -> int;
@@ -73,10 +74,13 @@ namespace view {
         // All widgets need to exist while they are visible
         std::deque<ByteRepresentationWidget> sendWidgets, receiveWidgets;
 
+        std::map<std::string, int> representationIds;
+
         void portComboHandler();
         void baudSpinHandler();
         void dataBitsSpinHandler();
         void stopBitsSpinHandler();
+        void sendHandler();
     };
 }
 

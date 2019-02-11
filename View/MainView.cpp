@@ -40,9 +40,15 @@ namespace view {
         this->baudSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::baudSpinHandler));
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
+        this->sendButton->signal_clicked().connect(sigc::mem_fun(this, &MainView::sendHandler));
 
         this->addReceived("A", "123", "7F", "01101100");
         this->addSend("B", "123", "7F", "01101100");
+
+        this->representationIds.insert({"ascii", 0});
+        this->representationIds.insert({"hex", 1});
+        this->representationIds.insert({"dec", 2});
+        this->representationIds.insert({"bin", 3});
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {
@@ -71,6 +77,19 @@ namespace view {
 
     void MainView::stopBitsSpinHandler() {
         stopBitsSpinListener(this->stopBitsSpin->get_value_as_int());
+    }
+
+    void MainView::sendHandler() {
+        std::string repr = this->encodingSendCombo->get_active_id();
+        std::string data = this->toSendEntry->get_text();
+        int repe = this->repetitionsSpin->get_value_as_int();
+        int inte = this->periodSpin->get_value_as_int();
+        auto reprId = representationIds.find(repr);
+        if (reprId == representationIds.end()) {
+            throw std::runtime_error{"Invalid key!"};
+        }
+
+        sendClickListener(reprId->second, data, repe, inte);
     }
 
     auto MainView::getPort() const -> std::string {
