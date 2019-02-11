@@ -59,9 +59,18 @@ namespace util::serial {
         while (this->readLock.try_lock()) { // @TODO maybe should use notify
             this->readLock.unlock();
 
-            auto readed = read(this->fd, buffer.data(), BUF_SIZE); // go fix your language, read needs to be written as red
+            /*
+             * Go fix your language (en). "read" needs to get a decent past tense form,
+             * i decided on "readed" instead of the phonetically incorrect and irregular
+             * "reed" (https://www.youtube.com/watch?v=A8zWWp0akUU).
+             */
+            auto readed = read(this->fd, buffer.data(), BUF_SIZE);
 
-            if (readed < 0) {
+            /*
+             * For some strange reasons read ignores the blocking option on the first call,
+             * in this case errno is equal to EAGAIN (11).
+             */
+            if (readed < 0 && errno != EAGAIN) {
                 throw std::runtime_error(strerror(errno));
             } else if (readed > 0) {
                 this->callbackIfAvailable({buffer.data(), buffer.data() + readed});
