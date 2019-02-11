@@ -340,10 +340,10 @@ Author: Paul Nykiel
                                 <property name="can_focus">False</property>
                                 <property name="active">0</property>
                                 <items>
-                                  <item translatable="yes">ASCII</item>
-                                  <item translatable="yes">HEX</item>
-                                  <item translatable="yes">DEC</item>
-                                  <item translatable="yes">BIN</item>
+                                  <item id="ascii" translatable="yes">ASCII</item>
+                                  <item id="hex" translatable="yes">HEX</item>
+                                  <item id="dec" translatable="yes">DEC</item>
+                                  <item id="bin" translatable="yes">BIN</item>
                                 </items>
                               </object>
                               <packing>
