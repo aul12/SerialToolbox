@@ -26,6 +26,7 @@ namespace controller {
         void stopBitsEvent(int stopBits);
         void dataBitsEvent(int dataBits);
         void receiveEvent(std::deque<Representations> representations);
+        void sendEvent(int repr, const std::string &data, int repetitions, int period);
     };
 }
 

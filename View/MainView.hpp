@@ -25,7 +25,7 @@ namespace view {
         const util::Listener<int> baudSpinListener;
         const util::Listener<int> dataBitsSpinListener;
         const util::Listener<int> stopBitsSpinListener;
-        const util::Listener<int, std::string, int, int> sendClickListener;
+        const util::Listener<int, const std::string&, int, int> sendClickListener;
 
         auto getPort() const -> std::string;
         auto getBaud() const -> int;
