@@ -138,13 +138,13 @@ namespace view {
     }
 
     void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin) {
-        sendWidgets.emplace_back(ascii, dec, hex, bin);
+        sendWidgets.emplace_back(ascii, dec, bin, hex);
         this->sendFlow->add(sendWidgets.back());
         sendWidgets.back().show();
     }
 
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin) {
-        receiveWidgets.emplace_back(ascii, dec, hex, bin);
+        receiveWidgets.emplace_back(ascii, dec, bin, hex);
         this->receiveFlow->add(receiveWidgets.back());
         receiveWidgets.back().show();
     }
