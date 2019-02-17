@@ -22,11 +22,16 @@ namespace controller {
         std::function<void(int,const std::string&,int,int)> sendBind =
                 std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
                         std::placeholders::_3, std::placeholders::_4);
+        std::function<void(bool)> visibilityBind = std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
         mainView->baudSpinListener(baudBind);
         mainView->portComboListener(portBind);
         mainView->stopBitsSpinListener(stopBitBind);
         mainView->dataBitsSpinListener(dataBitsBind);
         mainView->sendClickListener(sendBind);
+        mainView->hexEnabledListener(visibilityBind);
+        mainView->decEnabledListener(visibilityBind);
+        mainView->binEnabledListener(visibilityBind);
+        mainView->asciiEnabledListener(visibilityBind);
     }
 
     void UiController::baudEvent(int baud) {
@@ -82,5 +87,10 @@ namespace controller {
         auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
         this->mainView->addSend(res.front().ascii, res.front().dec,
                 res.front().hex, res.front().bin);
+    }
+
+    void UiController::visibilityEvent(bool vis) {
+        this->mainView->setVisibility(mainView->getAsciiEnabled(),
+                mainView->getDecEnabled(), mainView->getHexEnabled(), mainView->getBinEnabled());
     }
 }
