@@ -18,9 +18,15 @@ namespace view {
                 const std::string &dec, const std::string &bin, const std::string &hex);
         operator Gtk::Box&();
         void show();
+
+        void setVisibilityHex(bool visibility);
+        void setVisibilityDec(bool visibility);
+        void setVisibilityBin(bool visibility);
+        void setVisibilityAscii(bool visibility);
     private:
         Gtk::Box box;
         Gtk::Label labelHex, labelDec, labelBin, labelAscii;
+        bool hexVis, decVis, binVis, asciiVis;
     };
 }
 
