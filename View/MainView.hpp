@@ -21,6 +21,7 @@ namespace view {
 
         auto getWindow() -> Gtk::Window&;
 
+        // Top Bar
         const util::Listener<std::string> portComboListener;
         const util::Listener<int> baudSpinListener;
         const util::Listener<int> dataBitsSpinListener;
@@ -31,16 +32,26 @@ namespace view {
         auto getBaud() const -> int;
         auto getDataBits() const -> int;
         auto getStopBits() const -> int;
+
+        void setSerialOptionsVisibility(bool visible);
+
+        // Sidebar
+        const util::Listener<bool> asciiEnabledListener;
+        const util::Listener<bool> hexEnabledListener;
+        const util::Listener<bool> decEnabledListener;
+        const util::Listener<bool> binEnabledListener;
+
         auto getAsciiEnabled() const -> bool;
         auto getHexEnabled() const -> bool;
         auto getDecEnabled() const -> bool;
         auto getBinEnabled() const -> bool;
 
-        void setSerialOptionsVisibility(bool visible);
-
+        // Center
         void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin);
         void addSend(std::string ascii, std::string dec, std::string hex, std::string bin);
-        
+        void setVisibility(bool ascii, bool dec, bool hex, bool bin);
+
+        // Util
         void showError(std::string title, std::string message);
     private:
         Gtk::Window *mainWindow;
@@ -54,11 +65,22 @@ namespace view {
         Gtk::Label *stopBitsLabel;
         Gtk::Label *dataBitsLabel;
 
+        void portComboHandler();
+        void baudSpinHandler();
+        void dataBitsSpinHandler();
+        void stopBitsSpinHandler();
+        void sendHandler();
+
         // Sidebar
         Gtk::CheckButton *checkAscii;
         Gtk::CheckButton *checkHex;
         Gtk::CheckButton *checkDec;
         Gtk::CheckButton *checkBin;
+
+        void checkAsciiHandler();
+        void checkHexHandler();
+        void checkDecHandler();
+        void checkBinHandler();
 
         // Receive
         Gtk::FlowBox *receiveFlow;
@@ -76,11 +98,6 @@ namespace view {
 
         std::map<std::string, int> representationIds;
 
-        void portComboHandler();
-        void baudSpinHandler();
-        void dataBitsSpinHandler();
-        void stopBitsSpinHandler();
-        void sendHandler();
     };
 }
 

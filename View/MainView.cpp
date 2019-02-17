@@ -41,6 +41,10 @@ namespace view {
         this->dataBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::dataBitsSpinHandler));
         this->stopBitsSpin->signal_value_changed().connect(sigc::mem_fun(this, &MainView::stopBitsSpinHandler));
         this->sendButton->signal_clicked().connect(sigc::mem_fun(this, &MainView::sendHandler));
+        this->checkBin->signal_clicked().connect(sigc::mem_fun(this, &MainView::checkBinHandler));
+        this->checkHex->signal_clicked().connect(sigc::mem_fun(this, &MainView::checkHexHandler));
+        this->checkAscii->signal_clicked().connect(sigc::mem_fun(this, &MainView::checkAsciiHandler));
+        this->checkDec->signal_clicked().connect(sigc::mem_fun(this, &MainView::checkDecHandler));
 
         this->addReceived("A", "123", "7F", "01101100");
         this->addSend("B", "123", "7F", "01101100");
@@ -150,5 +154,37 @@ namespace view {
                                   false, Gtk::MESSAGE_ERROR};
         dialog.set_secondary_text(message);
         dialog.run();
+    }
+
+    void MainView::setVisibility(bool ascii, bool dec, bool hex, bool bin) {
+        for (auto &widget : this->sendWidgets) {
+            widget.setVisibilityAscii(ascii);
+            widget.setVisibilityBin(bin);
+            widget.setVisibilityDec(dec);
+            widget.setVisibilityHex(hex);
+        }
+
+        for (auto &widget : this->receiveWidgets) {
+            widget.setVisibilityAscii(ascii);
+            widget.setVisibilityBin(bin);
+            widget.setVisibilityDec(dec);
+            widget.setVisibilityHex(hex);
+        }
+    }
+
+    void MainView::checkAsciiHandler() {
+        this->asciiEnabledListener(this->getAsciiEnabled());
+    }
+
+    void MainView::checkHexHandler() {
+        this->hexEnabledListener(this->getHexEnabled());
+    }
+
+    void MainView::checkDecHandler() {
+        this->decEnabledListener(this->getDecEnabled());
+    }
+
+    void MainView::checkBinHandler() {
+        this->binEnabledListener(this->getBinEnabled());
     }
 }
