@@ -84,7 +84,7 @@ namespace controller {
     }
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
-        std::async(std::launch::async, [this, &repr, &data, &repetitions, &period](){
+        repetitionFuture = std::async(std::launch::async, [this, &repr, &data, &repetitions, &period](){
             for (auto c = 0; c < repetitions; c++) {
                 auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
                 this->mainView->addSend(res.front().ascii, res.front().dec,
