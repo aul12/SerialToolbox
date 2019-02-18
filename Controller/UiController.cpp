@@ -84,9 +84,16 @@ namespace controller {
     }
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
-        auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
-        this->mainView->addSend(res.front().ascii, res.front().dec,
-                res.front().hex, res.front().bin);
+        std::async(std::launch::async, [this, &repr, &data, &repetitions, &period](){
+            for (auto c = 0; c < repetitions; c++) {
+                auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
+                this->mainView->addSend(res.front().ascii, res.front().dec,
+                                        res.front().hex, res.front().bin);
+                if (c + 1 < repetitions) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(period));
+                }
+            }
+        });
     }
 
     void UiController::visibilityEvent(bool vis) {
