@@ -151,12 +151,12 @@ TEST(SerialProxy, ReceiveAscii) {
     std::deque<controller::Representations> recv;
     std::vector<uint8_t> send{0,1,2,3,'a', ';', 127,255};
     std::deque<std::string> recvAscii{
-            {static_cast<char>(0)},
-            {static_cast<char>(1)},
-            {static_cast<char>(2)},
-            {static_cast<char>(3)},
+            {"NUL"},
+            {"SOH"},
+            {"STX"},
+            {"ETX"},
             "a", ";",
-            {static_cast<char>(127)},
+            {"DEL"},
             {static_cast<char>(255)},
     };
 
