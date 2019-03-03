@@ -2,7 +2,7 @@
  * @file ConnectionHandler.hpp
  * @author paul
  * @date 02.03.19
- * @brief ConnectionHandler @TODO
+ * @brief Combines all stateful components of a connection
  */
 
 #ifndef SERIALTOOLBOX_CONNECTIONHANDLER_HPP

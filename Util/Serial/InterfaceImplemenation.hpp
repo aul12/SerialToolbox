@@ -2,7 +2,7 @@
  * @file InterfaceImpl.hpp
  * @author paul
  * @date 02.01.19
- * @brief InterfaceImpl @TODO
+ * @brief Defines the used interface as an abstraction for all components building on the interface.
  */
 
 #ifndef SERIALTOOLBOX_INTERFACEIMPL_HPP

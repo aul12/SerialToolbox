@@ -2,14 +2,13 @@
  * @file SerialProxy.cpp
  * @author paul
  * @date 31.12.18
- * @brief SerialProxy @TODO
+ * @brief Definition of a wrapper between the raw interface and the controller
  */
 
 #include "SerialProxy.hpp"
 
 #include <sstream>
 #include <bitset>
-#include <cassert>
 
 namespace controller {
 

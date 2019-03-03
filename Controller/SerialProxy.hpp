@@ -2,7 +2,7 @@
  * @file SerialProxy.hpp
  * @author paul
  * @date 31.12.18
- * @brief SerialProxy @TODO
+ * @brief Declaration of the Serial Proxy class
  */
 
 #ifndef SERIALTOOLBOX_SERIALPROXY_HPP

@@ -2,7 +2,7 @@
  * @file ByteRepresentationWidget.cpp
  * @author paul
  * @date 05.01.19
- * @brief ByteRepresentationWidget @TODO
+ * @brief Implementation of a custom widget for representing different representations
  */
 
 #include "ByteRepresentationWidget.hpp"

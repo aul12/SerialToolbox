@@ -2,7 +2,7 @@
  * @file Listener.hpp
  * @author paul
  * @date 31.12.18
- * @brief Listener @TODO
+ * @brief Implements a simple generic listener with multiple receivers
  */
 
 #ifndef SERIALTOOLBOX_LISTENER_HPP

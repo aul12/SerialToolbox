@@ -2,7 +2,6 @@
  * @file InterfaceImpl.hpp
  * @author paul
  * @date 01.01.19
- * @brief InterfaceImpl @TODO
  */
 
 #ifndef HTERMCLONE_INTERFACEIMPL_HPP

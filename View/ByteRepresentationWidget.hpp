@@ -2,7 +2,7 @@
  * @file ByteRepresentationWidget.hpp
  * @author paul
  * @date 05.01.19
- * @brief ByteRepresentationWidget @TODO
+ * @brief Declares a custom GtkBox for representing a item in four different formats
  */
 
 #ifndef SERIALTOOLBOX_BYTEREPRESENTATIONWIDGET_HPP

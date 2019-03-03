@@ -2,7 +2,7 @@
  * @file UiController.hpp
  * @author paul
  * @date 31.12.18
- * @brief UiController @TODO
+ * @brief Declares the main controller
  */
 
 #ifndef SERIALTOOLBOX_UICONTROLLER_HPP

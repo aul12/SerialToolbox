@@ -2,7 +2,7 @@
  * @file SerialInterface.hpp
  * @author paul
  * @date 29.12.18
- * @brief SerialInterface @TODO
+ * @brief Definition of an interface definition conforming to POSIX
  */
 
 #ifndef SERIALTOOLBOX_INTERFACEPOSIX_HPP

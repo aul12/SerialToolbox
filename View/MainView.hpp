@@ -2,7 +2,7 @@
  * @file MainView.hpp
  * @author paul
  * @date 30.12.18
- * @brief MainView @TODO
+ * @brief Declaration of the MainView class
  */
 
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP

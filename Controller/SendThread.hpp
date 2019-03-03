@@ -2,7 +2,7 @@
  * @file SendThread.hpp
  * @author paul
  * @date 02.03.19
- * @brief SendThread @TODO
+ * @brief Declares a thread to send message multiple times
  */
 
 #ifndef SERIALTOOLBOX_SENDTHREAD_HPP
@@ -11,7 +11,6 @@
 #include <list>
 #include <mutex>
 #include <memory>
-#include <condition_variable>
 #include "../View/MainView.hpp"
 #include "SerialProxy.hpp"
 
@@ -30,6 +29,7 @@ namespace controller {
         std::list<std::tuple<int, std::string, int, int>> queue;
         std::mutex queueLock;
         std::mutex dataNotify;
+        std::mutex uiMutex;
         std::atomic_bool finished;
         std::shared_ptr<view::MainView> mainView;
         std::shared_ptr<controller::SerialProxy> serialProxy;

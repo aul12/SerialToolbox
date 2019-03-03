@@ -2,7 +2,7 @@
  * @file MainView.cpp
  * @author paul
  * @date 30.12.18
- * @brief MainView @TODO
+ * @brief Wrapper for the MainView (view)
  */
 
 #include <gtkmm/builder.h>

@@ -2,13 +2,12 @@
  * @file UiController.cpp
  * @author paul
  * @date 31.12.18
- * @brief UiController @TODO
+ * @brief Implements the main controller
  */
 
 #include "UiController.hpp"
 #include "../Util/Serial/InterfaceImplemenation.hpp"
 
-#include <iostream>
 #include <functional>
 
 namespace controller {

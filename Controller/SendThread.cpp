@@ -4,7 +4,7 @@
  * @file SendThread.cpp
  * @author paul
  * @date 02.03.19
- * @brief SendThread @TODO
+ * @brief Implementation of a multithreaded and thread save sender
  */
 
 #include "SendThread.hpp"
@@ -26,7 +26,6 @@ namespace controller {
                 auto elem = queue.back();
                 queue.pop_back();
                 queueLock.unlock();
-
 
                 for (auto c = 0; c < std::get<2>(elem); c++) {
                     auto res = this->serialProxy->send({std::get<1>(elem)},

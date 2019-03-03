@@ -2,7 +2,7 @@
  * @file SerialInterface.cpp
  * @author paul
  * @date 29.12.18
- * @brief SerialInterface @TODO
+ * @brief Implementation of an interface for posix compliant systems
  */
 
 #include "InterfacePosix.hpp"

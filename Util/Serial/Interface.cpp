@@ -2,7 +2,7 @@
  * @file Interface.cpp
  * @author paul
  * @date 30.12.18
- * @brief Interface @TODO
+ * @brief represents an abstract serial interface
  */
 
 #include "Interface.hpp"
