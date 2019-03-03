@@ -139,12 +139,20 @@ namespace view {
 
     void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin) {
         sendWidgets.emplace_back(ascii, dec, bin, hex);
+        sendWidgets.back().setVisibilityBin(this->getBinEnabled());
+        sendWidgets.back().setVisibilityDec(this->getDecEnabled());
+        sendWidgets.back().setVisibilityHex(this->getHexEnabled());
+        sendWidgets.back().setVisibilityAscii(this->getAsciiEnabled());
         this->sendFlow->add(sendWidgets.back());
         sendWidgets.back().show();
     }
 
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin) {
         receiveWidgets.emplace_back(ascii, dec, bin, hex);
+        receiveWidgets.back().setVisibilityBin(this->getBinEnabled());
+        receiveWidgets.back().setVisibilityDec(this->getDecEnabled());
+        receiveWidgets.back().setVisibilityHex(this->getHexEnabled());
+        receiveWidgets.back().setVisibilityAscii(this->getAsciiEnabled());
         this->receiveFlow->add(receiveWidgets.back());
         receiveWidgets.back().show();
     }

@@ -94,7 +94,7 @@ namespace view {
         Gtk::Button *sendButton;
 
         // All widgets need to exist while they are visible
-        std::deque<ByteRepresentationWidget> sendWidgets, receiveWidgets;
+        std::list<ByteRepresentationWidget> sendWidgets, receiveWidgets;
 
         std::map<std::string, int> representationIds;
 
