@@ -36,7 +36,9 @@ namespace controller {
 
     void UiController::baudEvent(int baud) {
         try {
-            this->interface->setBaud(baud);
+            if (this->connectionHandler.has_value()) {
+                this->connectionHandler.value().interface->setBaud(baud);
+            }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting baud", e.what());
         }
@@ -44,16 +46,19 @@ namespace controller {
 
     void UiController::portEvent(std::string port) {
         try {
-            if (this->interface == nullptr) {
-                this->interface = std::make_shared<util::serial::InterfaceImplementation>
-                        (this->mainView->getPort(), this->mainView->getBaud());
-                this->serialProxy = std::make_shared<SerialProxy>(this->interface);
+            this->connectionHandler.reset();
 
-                std::function<void(std::deque<Representations>)> receiveBind =
-                        std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
-                this->serialProxy->receiveListener(receiveBind);
-            }
-            this->interface->setPort(port);
+            ConnectionContainer nConnHandler;
+            nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>
+                    (port, this->mainView->getBaud());
+            nConnHandler.serialProxy = std::make_shared<SerialProxy>(nConnHandler.interface);
+            nConnHandler.sendThread = std::make_shared<SendThread>(this->mainView, nConnHandler.serialProxy);
+
+            std::function<void(std::deque<Representations>)> receiveBind =
+                    std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
+            nConnHandler.serialProxy->receiveListener(receiveBind);
+            this->connectionHandler = nConnHandler;
+
             this->mainView->setSerialOptionsVisibility(true);
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting port", e.what());
@@ -63,7 +68,9 @@ namespace controller {
 
     void UiController::stopBitsEvent(int stopBits) {
         try {
-            this->interface->setStopBits(stopBits);
+            if (this->connectionHandler.has_value()) {
+                this->connectionHandler.value().interface->setStopBits(stopBits);
+            }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting stop bits", e.what());
         }
@@ -71,7 +78,9 @@ namespace controller {
 
     void UiController::dataBitsEvent(int dataBits) {
         try {
-            this->interface->setDataBits(dataBits);
+            if (this->connectionHandler.has_value()) {
+                this->connectionHandler.value().interface->setDataBits(dataBits);
+            }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting data bits", e.what());
         }
@@ -84,16 +93,9 @@ namespace controller {
     }
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
-        repetitionFuture = std::async(std::launch::async, [this, &repr, &data, &repetitions, &period](){
-            for (auto c = 0; c < repetitions; c++) {
-                auto res = this->serialProxy->send({data}, static_cast<Representation>(repr));
-                this->mainView->addSend(res.front().ascii, res.front().dec,
-                                        res.front().hex, res.front().bin);
-                if (c + 1 < repetitions) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(period));
-                }
-            }
-        });
+        if (this->connectionHandler.has_value()) {
+            this->connectionHandler.value().sendThread->send(repr, data, repetitions, period);
+        }
     }
 
     void UiController::visibilityEvent(bool vis) {

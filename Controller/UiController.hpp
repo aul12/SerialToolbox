@@ -10,6 +10,8 @@
 
 #include "SerialProxy.hpp"
 #include "../View/MainView.hpp"
+#include "SendThread.hpp"
+#include "ConnectionContainer.hpp"
 
 namespace controller {
     class UiController {
@@ -18,9 +20,7 @@ namespace controller {
 
     private:
         std::shared_ptr<view::MainView> mainView;
-        std::shared_ptr<util::serial::Interface> interface;
-        std::shared_ptr<controller::SerialProxy> serialProxy;
-        std::future<void> repetitionFuture;
+        std::optional<ConnectionContainer> connectionHandler;
 
         void baudEvent(int baud);
         void portEvent(std::string port);
