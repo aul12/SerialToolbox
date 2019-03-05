@@ -8,9 +8,18 @@
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP
 #define SERIALTOOLBOX_MAINVIEW_HPP
 
-#include "../Util/Listener.hpp"
-#include "ByteRepresentationWidget.hpp"
 #include <map>
+#include <memory>
+
+#include <QWidget>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QPushButton>
+
+#include "../Util/Listener.hpp"
 
 namespace view {
     class MainView {
@@ -18,8 +27,6 @@ namespace view {
         explicit MainView(const std::string &uiFile);
 
         void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
-
-        //auto getWindow() -> Gtk::Window&;
 
         // Top Bar
         const util::Listener<std::string> portComboListener;
@@ -54,16 +61,15 @@ namespace view {
         // Util
         void showError(std::string title, std::string message);
     private:
-        /*Gtk::Window *mainWindow;
+        std::unique_ptr<QWidget> mainWindow;
 
         // Top bar
-        Gtk::ComboBoxText *portCombo;
-        Gtk::ComboBoxText *parityCombo;
-        Gtk::SpinButton *baudSpin;
-        Gtk::SpinButton *dataBitsSpin;
-        Gtk::SpinButton *stopBitsSpin;
-        Gtk::Label *stopBitsLabel;
-        Gtk::Label *dataBitsLabel;
+        std::unique_ptr<QComboBox> portCombo;
+        std::unique_ptr<QComboBox> parityCombo;
+        std::unique_ptr<QSpinBox> baudSpin;
+        std::unique_ptr<QSpinBox> dataBitsSpin;
+        std::unique_ptr<QSpinBox> stopBitsSpin;
+        std::unique_ptr<QLabel> baudLabel, parityLabel, stopBitsLabel, dataBitsLabel;
 
         void portComboHandler();
         void baudSpinHandler();
@@ -72,10 +78,7 @@ namespace view {
         void sendHandler();
 
         // Sidebar
-        Gtk::CheckButton *checkAscii;
-        Gtk::CheckButton *checkHex;
-        Gtk::CheckButton *checkDec;
-        Gtk::CheckButton *checkBin;
+        std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
 
         void checkAsciiHandler();
         void checkHexHandler();
@@ -83,18 +86,12 @@ namespace view {
         void checkBinHandler();
 
         // Receive
-        Gtk::FlowBox *receiveFlow;
 
         // Send
-        Gtk::FlowBox *sendFlow;
-        Gtk::ComboBoxText *encodingSendCombo;
-        Gtk::Entry *toSendEntry;
-        Gtk::SpinButton *repetitionsSpin;
-        Gtk::SpinButton *periodSpin;
-        Gtk::Button *sendButton;*/
-
-        // All widgets need to exist while they are visible
-        std::list<ByteRepresentationWidget> sendWidgets, receiveWidgets;
+        std::unique_ptr<QComboBox> encodingSendCombo;
+        std::unique_ptr<QLineEdit> toSendEntry;
+        std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;
+        std::unique_ptr<QPushButton> sendButton;
 
         std::map<std::string, int> representationIds;
 

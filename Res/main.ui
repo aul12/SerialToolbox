@@ -40,7 +40,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QComboBox" name="comboBox_3">
+       <widget class="QComboBox" name="encodingSendCombo">
         <item>
          <property name="text">
           <string>ASCII</string>
@@ -64,7 +64,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="toSendEntry"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -87,7 +87,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_4">
+       <widget class="QSpinBox" name="repetitionsSpin">
         <property name="minimum">
          <number>0</number>
         </property>
@@ -107,7 +107,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_5">
+       <widget class="QSpinBox" name="periodSpin">
         <property name="maximum">
          <number>86400000</number>
         </property>
@@ -117,7 +117,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="sendButton">
         <property name="text">
          <string>Send</string>
         </property>
@@ -161,24 +161,24 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="portLabel">
          <property name="text">
           <string>Port:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="portCombo"/>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="baudLabel">
          <property name="text">
           <string>Baud:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox">
+        <widget class="QSpinBox" name="baudSpin">
          <property name="minimum">
           <number>50</number>
          </property>
@@ -204,14 +204,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="parityLabel">
          <property name="text">
           <string>Parity:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2">
+        <widget class="QComboBox" name="parityCombo">
          <item>
           <property name="text">
            <string>No Parity</string>
@@ -240,14 +240,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="stopBitsLabel">
          <property name="text">
           <string>Stop-Bits:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox_2">
+        <widget class="QSpinBox" name="stopBitsSpin">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -257,14 +257,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="dataBitsLabel">
          <property name="text">
           <string>Data-Bits:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox_3">
+        <widget class="QSpinBox" name="dataBitsSpin">
          <property name="minimum">
           <number>5</number>
          </property>
@@ -294,28 +294,28 @@
    <widget class="QWidget" name="dockWidgetContents_5">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="checkAscii">
        <property name="text">
         <string>ASCII</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_2">
+      <widget class="QCheckBox" name="checkDec">
        <property name="text">
         <string>DEC</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_3">
+      <widget class="QCheckBox" name="checkBin">
        <property name="text">
         <string>BIN</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_4">
+      <widget class="QCheckBox" name="checkHex">
        <property name="text">
         <string>HEX</string>
        </property>

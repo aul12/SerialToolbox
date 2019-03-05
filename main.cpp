@@ -12,19 +12,11 @@
 
 int main(int argc, char *argv[]) {
     QApplication app (argc, argv);
-    QUiLoader loader;
 
-    QFile file("Res/main.ui");
-    file.open(QFile::ReadOnly);
-
-    std::unique_ptr<QWidget> formWidget{loader.load(&file)};
-    file.close();
-
-    formWidget->showMaximized();
+    auto mainView = std::make_shared<view::MainView>("Res/main.ui");
+    controller::UiController uiController{mainView};
 
     QApplication::exec();
-    //auto mainView = std::make_shared<view::MainView>("Res/ui.glade");
-    //controller::UiController uiController{mainView};
 
     return 0;
 }
