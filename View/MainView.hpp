@@ -8,9 +8,9 @@
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP
 #define SERIALTOOLBOX_MAINVIEW_HPP
 
-#include <gtkmm.h>
 #include "../Util/Listener.hpp"
 #include "ByteRepresentationWidget.hpp"
+#include <map>
 
 namespace view {
     class MainView {
@@ -19,7 +19,7 @@ namespace view {
 
         void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
 
-        auto getWindow() -> Gtk::Window&;
+        //auto getWindow() -> Gtk::Window&;
 
         // Top Bar
         const util::Listener<std::string> portComboListener;
@@ -54,7 +54,7 @@ namespace view {
         // Util
         void showError(std::string title, std::string message);
     private:
-        Gtk::Window *mainWindow;
+        /*Gtk::Window *mainWindow;
 
         // Top bar
         Gtk::ComboBoxText *portCombo;
@@ -91,7 +91,7 @@ namespace view {
         Gtk::Entry *toSendEntry;
         Gtk::SpinButton *repetitionsSpin;
         Gtk::SpinButton *periodSpin;
-        Gtk::Button *sendButton;
+        Gtk::Button *sendButton;*/
 
         // All widgets need to exist while they are visible
         std::list<ByteRepresentationWidget> sendWidgets, receiveWidgets;

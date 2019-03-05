@@ -9,14 +9,13 @@
 #define SERIALTOOLBOX_BYTEREPRESENTATIONWIDGET_HPP
 
 #include <string>
-#include <gtkmm.h>
 
 namespace view {
     class ByteRepresentationWidget {
     public:
         explicit ByteRepresentationWidget(const std::string &ascii,
                 const std::string &dec, const std::string &bin, const std::string &hex);
-        operator Gtk::Box&();
+        //operator Gtk::Box&();
         void show();
 
         void setVisibilityHex(bool visibility);
@@ -24,8 +23,8 @@ namespace view {
         void setVisibilityBin(bool visibility);
         void setVisibilityAscii(bool visibility);
     private:
-        Gtk::Box box;
-        Gtk::Label labelHex, labelDec, labelBin, labelAscii;
+        //Gtk::Box box;
+        //Gtk::Label labelHex, labelDec, labelBin, labelAscii;
         bool hexVis, decVis, binVis, asciiVis;
     };
 }

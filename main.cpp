@@ -1,17 +1,30 @@
 #include <iostream>
 #include <memory>
-#include <gtkmm.h>
 #include "Util/Serial/InterfacePosix.hpp"
 #include "View/MainView.hpp"
 #include "Controller/UiController.hpp"
+#include <QDebug>
+#include <QtUiTools/QUiLoader>
+#include <QtCore/QFile>
+#include <QtWidgets/QApplication>
+#include <QWidget>
 
 
 int main(int argc, char *argv[]) {
-    auto app = Gtk::Application::create(argc, argv, "me.aul12.term");
+    QApplication app (argc, argv);
+    QUiLoader loader;
 
-    auto mainView = std::make_shared<view::MainView>("Res/ui.glade");
-    controller::UiController uiController{mainView};
-    app->run(mainView->getWindow());
+    QFile file("Res/main.ui");
+    file.open(QFile::ReadOnly);
+
+    std::unique_ptr<QWidget> formWidget{loader.load(&file)};
+    file.close();
+
+    formWidget->show();
+
+    QApplication::exec();
+    //auto mainView = std::make_shared<view::MainView>("Res/ui.glade");
+    //controller::UiController uiController{mainView};
 
     return 0;
 }
