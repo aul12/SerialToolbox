@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<QWidget> formWidget{loader.load(&file)};
     file.close();
 
-    formWidget->show();
+    formWidget->showMaximized();
 
     QApplication::exec();
     //auto mainView = std::make_shared<view::MainView>("Res/ui.glade");
