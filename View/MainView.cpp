@@ -235,8 +235,4 @@ namespace view {
     void MainView::checkBinHandler() {
         this->binEnabledListener(this->getBinEnabled());
     }
-
-    void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin) {
-
-    }
 }
