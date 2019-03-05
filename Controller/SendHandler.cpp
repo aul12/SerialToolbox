@@ -7,16 +7,16 @@
  * @brief Implementation of a multithreaded and thread save sender
  */
 
-#include "SendThread.hpp"
+#include "SendHandler.hpp"
 
 namespace controller {
-    SendThread::SendThread(std::shared_ptr<view::MainView> mainView,
+    SendHandler::SendHandler(std::shared_ptr<view::MainView> mainView,
                            std::shared_ptr<controller::SerialProxy> serialProxy)
             : finished{false}, mainView{std::move(mainView)}, serialProxy{std::move(serialProxy)},
-                thread{&SendThread::run, this} {
+                thread{&SendHandler::run, this} {
     }
 
-    void SendThread::run() {
+    void SendHandler::run() {
         while (!finished) {
             queueLock.lock();
             if (queue.empty()) {
@@ -40,13 +40,13 @@ namespace controller {
         }
     }
 
-    void SendThread::send(int repr, const std::string &data, int repetitions, int period) {
+    void SendHandler::send(int repr, const std::string &data, int repetitions, int period) {
         std::lock_guard<std::mutex> l{queueLock};
         queue.emplace_back(repr, data, repetitions, period);
         dataNotify.unlock();
     }
 
-    SendThread::~SendThread() {
+    SendHandler::~SendHandler() {
         finished = true;
         dataNotify.unlock();
     }

@@ -15,15 +15,15 @@
 #include "SerialProxy.hpp"
 
 namespace controller {
-    class SendThread {
+    class SendHandler {
     public:
-        SendThread(std::shared_ptr<view::MainView> mainView, std::shared_ptr<controller::SerialProxy> serialProxy);
+        SendHandler(std::shared_ptr<view::MainView> mainView, std::shared_ptr<controller::SerialProxy> serialProxy);
 
         void run();
 
         void send(int repr, const std::string &data, int repetitions, int period);
 
-        ~SendThread();
+        ~SendHandler();
 
     private:
         std::list<std::tuple<int, std::string, int, int>> queue;

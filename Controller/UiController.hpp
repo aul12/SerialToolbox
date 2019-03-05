@@ -10,7 +10,7 @@
 
 #include "SerialProxy.hpp"
 #include "../View/MainView.hpp"
-#include "SendThread.hpp"
+#include "SendHandler.hpp"
 #include "ConnectionContainer.hpp"
 
 namespace controller {

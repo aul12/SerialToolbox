@@ -51,7 +51,7 @@ namespace controller {
             nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>
                     (port, this->mainView->getBaud());
             nConnHandler.serialProxy = std::make_shared<SerialProxy>(nConnHandler.interface);
-            nConnHandler.sendThread = std::make_shared<SendThread>(this->mainView, nConnHandler.serialProxy);
+            nConnHandler.sendThread = std::make_shared<SendHandler>(this->mainView, nConnHandler.serialProxy);
 
             std::function<void(std::deque<Representations>)> receiveBind =
                     std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
