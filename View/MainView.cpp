@@ -27,6 +27,8 @@ namespace view {
         QUiLoader loader;
 
         mainWindow = std::unique_ptr<QWidget>(loader.load(&file));
+        file.close();
+        mainWindow->showMaximized();
 
         FIND_WIDGET(portCombo);
         FIND_WIDGET(parityCombo);
@@ -47,17 +49,44 @@ namespace view {
         FIND_WIDGET(periodSpin);
         FIND_WIDGET(sendButton);
 
-        mainWindow->showMaximized();
+        mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
+            portComboHandler();
+        });
+        mainWindow->connect(baudSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
+            baudSpinHandler();
+        });
+        mainWindow->connect(dataBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
+            dataBitsSpinHandler();
+        });
+        mainWindow->connect(stopBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
+            stopBitsSpinHandler();
+        });
+
+        mainWindow->connect(checkAscii.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
+            checkAsciiHandler();
+        });
+        mainWindow->connect(checkBin.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
+            checkBinHandler();
+        });
+        mainWindow->connect(checkDec.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
+            checkDecHandler();
+        });
+        mainWindow->connect(checkHex.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
+            checkHexHandler();
+        });
+
+        mainWindow->connect(sendButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            sendHandler();
+        });
 
         this->addReceived("A", "123", "7F", "01101100");
         this->addSend("B", "123", "7F", "01101100");
 
-        this->representationIds.insert({"ascii", 0});
-        this->representationIds.insert({"hex", 1});
-        this->representationIds.insert({"dec", 2});
-        this->representationIds.insert({"bin", 3});
+        this->representationIds.insert({"ASCII", 0});
+        this->representationIds.insert({"HEX", 1});
+        this->representationIds.insert({"DEC", 2});
+        this->representationIds.insert({"BIN", 3});
 
-        file.close();
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {

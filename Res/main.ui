@@ -298,12 +298,18 @@
        <property name="text">
         <string>ASCII</string>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="checkDec">
        <property name="text">
         <string>DEC</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -312,12 +318,18 @@
        <property name="text">
         <string>BIN</string>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="checkHex">
        <property name="text">
         <string>HEX</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

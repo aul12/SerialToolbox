@@ -22,7 +22,7 @@
 #include "../Util/Listener.hpp"
 
 namespace view {
-    class MainView {
+    class MainView : private QObject {
     public:
         explicit MainView(const std::string &uiFile);
 
@@ -75,7 +75,6 @@ namespace view {
         void baudSpinHandler();
         void dataBitsSpinHandler();
         void stopBitsSpinHandler();
-        void sendHandler();
 
         // Sidebar
         std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
@@ -92,6 +91,8 @@ namespace view {
         std::unique_ptr<QLineEdit> toSendEntry;
         std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;
         std::unique_ptr<QPushButton> sendButton;
+
+        void sendHandler();
 
         std::map<std::string, int> representationIds;
 
