@@ -12,55 +12,40 @@ namespace view {
                                                        const std::string &bin, const std::string &hex) :
                                                        hexVis{true}, decVis{true},
                                                        binVis{true}, asciiVis{true} {
-        this->labelAscii.set_text(ascii);
-        this->labelDec.set_text(dec);
-        this->labelBin.set_text(bin);
-        this->labelHex.set_text(hex);
+        this->labelAscii = std::make_unique<QLabel>(ascii.c_str());
+        this->labelDec = std::make_unique<QLabel>(dec.c_str());
+        this->labelBin = std::make_unique<QLabel>(bin.c_str());
+        this->labelHex = std::make_unique<QLabel>(hex.c_str());
 
-        this->labelAscii.override_background_color(Gdk::RGBA("#0DB4FF"));
-        this->labelDec.override_background_color(Gdk::RGBA("#E88F0C"));
-        this->labelBin.override_background_color(Gdk::RGBA("#FF0000"));
-        this->labelHex.override_background_color(Gdk::RGBA("#6000E8"));
+        this->labelAscii->setStyleSheet("QLabel { background-color : #0DB4FF; color : white; }");
+        this->labelDec->setStyleSheet("QLabel { background-color : #E88F0C; color : white; }");
+        this->labelBin->setStyleSheet("QLabel { background-color : #FF0000; color : white; }");
+        this->labelHex->setStyleSheet("QLabel { background-color : #6000E8; color : white; }");
 
-        this->box.set_orientation(Gtk::ORIENTATION_VERTICAL);
-        this->box.add(labelAscii);
-        this->box.add(labelDec);
-        this->box.add(labelBin);
-        this->box.add(labelHex);
-
-        this->show();
-    }
-
-    void ByteRepresentationWidget::show() {
-        this->box.show();
-        this->setVisibilityAscii(this->asciiVis);
-        this->setVisibilityBin(this->binVis);
-        this->setVisibilityDec(this->decVis);
-        this->setVisibilityHex(this->hexVis);
+        this->addChildWidget(this->labelAscii.get());
+        this->addChildWidget(this->labelDec.get());
+        this->addChildWidget(this->labelBin.get());
+        this->addChildWidget(this->labelHex.get());
     }
 
     void ByteRepresentationWidget::setVisibilityHex(bool visibility) {
-        this->labelHex.set_visible(visibility);
+        this->labelHex->setVisible(visibility);
         this->hexVis = visibility;
     }
 
     void ByteRepresentationWidget::setVisibilityDec(bool visibility) {
-        this->labelDec.set_visible(visibility);
+        this->labelDec->setVisible(visibility);
         this->decVis = visibility;
     }
 
     void ByteRepresentationWidget::setVisibilityBin(bool visibility) {
-        this->labelBin.set_visible(visibility);
+        this->labelBin->setVisible(visibility);
         this->binVis = visibility;
     }
 
     void ByteRepresentationWidget::setVisibilityAscii(bool visibility) {
-        this->labelAscii.set_visible(visibility);
+        this->labelAscii->setVisible(visibility);
         this->asciiVis = visibility;
-    }
-
-    ByteRepresentationWidget::operator Gtk::Box &() {
-        return this->box;
     }
 }
 

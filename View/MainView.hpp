@@ -18,6 +18,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QGridLayout>
 
 #include "../Util/Listener.hpp"
 
@@ -60,6 +61,7 @@ namespace view {
 
         // Util
         void showError(std::string title, std::string message);
+
     private:
         std::unique_ptr<QWidget> mainWindow;
 
@@ -85,8 +87,10 @@ namespace view {
         void checkBinHandler();
 
         // Receive
+        std::unique_ptr<QGridLayout> receiveGrid;
 
         // Send
+        std::unique_ptr<QGridLayout> sendGrid;
         std::unique_ptr<QComboBox> encodingSendCombo;
         std::unique_ptr<QLineEdit> toSendEntry;
         std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;

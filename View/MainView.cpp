@@ -48,6 +48,8 @@ namespace view {
         FIND_WIDGET(repetitionsSpin);
         FIND_WIDGET(periodSpin);
         FIND_WIDGET(sendButton);
+        FIND_WIDGET(sendGrid);
+        FIND_WIDGET(receiveGrid);
 
         mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
             portComboHandler();
@@ -178,6 +180,8 @@ namespace view {
         this->sendFlow->add(sendWidgets.back());
         sendWidgets.back().show();*/
         //@TODO
+        ByteRepresentationWidget byteRepresentationWidget{ascii, dec, bin, hex};
+        this->sendGrid->addLayout(&byteRepresentationWidget, 0,0);
     }
 
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin) {
@@ -230,5 +234,9 @@ namespace view {
 
     void MainView::checkBinHandler() {
         this->binEnabledListener(this->getBinEnabled());
+    }
+
+    void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin) {
+
     }
 }
