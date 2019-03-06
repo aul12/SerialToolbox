@@ -8,15 +8,16 @@
 #include "ByteRepresentationWidget.hpp"
 
 namespace view {
-    ByteRepresentationWidget::ByteRepresentationWidget(const std::string &ascii, const std::string &dec,
+    ByteRepresentationWidget::ByteRepresentationWidget(std::shared_ptr<QWidget> parent,
+            const std::string &ascii, const std::string &dec,
                                                        const std::string &bin, const std::string &hex) :
-                                                       QVBoxLayout{},
+                                                       QVBoxLayout{parent.get()},
                                                        hexVis{true}, decVis{true},
                                                        binVis{true}, asciiVis{true} {
-        this->labelAscii = std::make_unique<QLabel>(ascii.c_str());
-        this->labelDec = std::make_unique<QLabel>(dec.c_str());
-        this->labelBin = std::make_unique<QLabel>(bin.c_str());
-        this->labelHex = std::make_unique<QLabel>(hex.c_str());
+        this->labelAscii = std::make_unique<QLabel>(ascii.c_str(), parent.get());
+        this->labelDec = std::make_unique<QLabel>(dec.c_str(), parent.get());
+        this->labelBin = std::make_unique<QLabel>(bin.c_str(), parent.get());
+        this->labelHex = std::make_unique<QLabel>(hex.c_str(), parent.get());
 
         this->labelAscii->setStyleSheet("QLabel { background-color : #0DB4FF; color : white; }");
         this->labelDec->setStyleSheet("QLabel { background-color : #E88F0C; color : white; }");

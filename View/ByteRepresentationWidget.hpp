@@ -17,7 +17,7 @@
 namespace view {
     class ByteRepresentationWidget : public QVBoxLayout {
     public:
-        explicit ByteRepresentationWidget(const std::string &ascii,
+        explicit ByteRepresentationWidget(std::shared_ptr<QWidget> parent, const std::string &ascii,
                 const std::string &dec, const std::string &bin, const std::string &hex);
 
         void setVisibilityHex(bool visibility);

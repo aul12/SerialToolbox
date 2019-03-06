@@ -73,7 +73,7 @@ namespace view {
         void addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
         void addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
     private:
-        std::unique_ptr<QWidget> mainWindow;
+        std::shared_ptr<QWidget> mainWindow;
 
         // Top bar
         std::unique_ptr<QComboBox> portCombo;

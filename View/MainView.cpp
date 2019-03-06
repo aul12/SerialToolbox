@@ -25,7 +25,7 @@ namespace view {
         }
         QUiLoader loader;
 
-        mainWindow = std::unique_ptr<QWidget>(loader.load(&file));
+        mainWindow = std::shared_ptr<QWidget>(loader.load(&file));
         file.close();
         mainWindow->showMaximized();
 
@@ -171,7 +171,7 @@ namespace view {
     }
 
     void MainView::addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
-        sendWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(ascii, dec, bin, hex));
+        sendWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(mainWindow, ascii, dec, bin, hex));
         sendWidgets.back()->setVisibilityBin(this->getBinEnabled());
         sendWidgets.back()->setVisibilityDec(this->getDecEnabled());
         sendWidgets.back()->setVisibilityHex(this->getHexEnabled());
@@ -189,7 +189,7 @@ namespace view {
     }
 
     void MainView::addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
-        receiveWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(ascii, dec, bin, hex));
+        receiveWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(mainWindow, ascii, dec, bin, hex));
         receiveWidgets.back()->setVisibilityBin(this->getBinEnabled());
         receiveWidgets.back()->setVisibilityDec(this->getDecEnabled());
         receiveWidgets.back()->setVisibilityHex(this->getHexEnabled());
