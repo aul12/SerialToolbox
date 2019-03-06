@@ -9,7 +9,7 @@ Dependencies:
  * CMake (>= 3.10)
  * GTest and GMock
  * Address Sanitizer (LibASan)
- * gtkmm 3
+ * QT5
  
 # Nomenclature
 * Callback: one or zero receivers
