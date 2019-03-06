@@ -1,11 +1,8 @@
-sudo: required
-dist: bionic
-
 services:
   - docker
 
 before_install:
-    - sudo docker build -t serial_toolbox .
+    - docker build -t serial_toolbox .
 
 script:
-    - sudo docker run serial_toolbox
+    - docker run serial_toolbox
