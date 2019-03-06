@@ -30,6 +30,7 @@
 
 namespace view {
     class MainView : private QObject {
+        Q_OBJECT
     public:
         explicit MainView(const std::string &uiFile);
 
@@ -118,7 +119,8 @@ namespace view {
         // Qt Hacks
         std::mutex listLock;
         std::list<std::function<void()>> toCall;
-        std::unique_ptr<QTimer> timer;
+    public slots:
+        void mainThreadHandler();
     };
 }
 

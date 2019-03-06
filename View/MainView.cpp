@@ -80,18 +80,6 @@ namespace view {
             sendHandler();
         });
 
-        timer = std::make_unique<QTimer>();
-        mainWindow->connect(timer.get(), &QTimer::timeout, this, [this](){
-            if(this->listLock.try_lock()) {
-                for (const auto &f : this->toCall) {
-                    f();
-                }
-                this->toCall.clear();
-                listLock.unlock();
-            }
-        });
-        timer->start(10);
-
         this->addReceived("A", "123", "7F", "01101100");
         this->addSend("B", "123", "7F", "01101100");
 
@@ -258,11 +246,24 @@ namespace view {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addReceivedImpl, this, ascii, dec, hex, bin, addNewLine));
         listLock.unlock();
+        QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addSendImpl, this, ascii, dec, hex, bin, addNewLine));
         listLock.unlock();
+        QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
+    }
+
+    void MainView::mainThreadHandler() {
+        if(this->listLock.try_lock()) {
+            for (const auto &f : this->toCall) {
+                f();
+            }
+            this->toCall.clear();
+            listLock.unlock();
+        }
+
     }
 }
