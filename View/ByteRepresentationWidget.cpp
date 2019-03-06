@@ -23,6 +23,8 @@ namespace view {
         this->labelBin->setStyleSheet("QLabel { background-color : #FF0000; color : white; }");
         this->labelHex->setStyleSheet("QLabel { background-color : #6000E8; color : white; }");
 
+        this->setSpacing(0);
+
         this->addWidget(this->labelAscii.get());
         this->addWidget(this->labelDec.get());
         this->addWidget(this->labelBin.get());
