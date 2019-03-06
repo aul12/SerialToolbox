@@ -25,7 +25,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>747</width>
+         <width>725</width>
          <height>245</height>
         </rect>
        </property>
@@ -152,7 +152,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>747</width>
+         <width>725</width>
          <height>244</height>
         </rect>
        </property>
@@ -324,6 +324,13 @@
    <widget class="QWidget" name="dockWidgetContents_5">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Show:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="checkAscii">
        <property name="text">
         <string>ASCII</string>
@@ -361,6 +368,42 @@
        <property name="checked">
         <bool>true</bool>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Linebreak:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboLinebreak">
+       <item>
+        <property name="text">
+         <string>NONE</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>LF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CRLF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CR</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>LFCR</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

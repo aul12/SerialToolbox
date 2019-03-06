@@ -49,6 +49,7 @@ namespace view {
         FIND_WIDGET(sendButton);
         FIND_WIDGET(sendGrid);
         FIND_WIDGET(receiveGrid);
+        FIND_WIDGET(comboLinebreak);
 
         mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
             portComboHandler();

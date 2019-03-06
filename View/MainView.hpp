@@ -90,6 +90,7 @@ namespace view {
 
         // Sidebar
         std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
+        std::unique_ptr<QComboBox> comboLinebreak;
 
         void checkAsciiHandler();
         void checkHexHandler();
