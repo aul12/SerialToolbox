@@ -12,13 +12,14 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif ()
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM REQUIRED gtkmm-3.0)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
-include_directories(SYSTEM ${GTKMM_INCLUDE_DIRS})
-link_directories(${GTKMM_LIBRARY_DIRS})
-
-add_definitions(${GTKMM_CFLAGS_OTHER})
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Quick REQUIRED)
+find_package(Qt5UiTools REQUIRED)
 
 set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/View/MainView.cpp
@@ -34,7 +35,8 @@ else()
     message(FATAL_ERROR "Windows not supported, maybe try using cygwin (or a proper POSIX compliant system)")
 endif()
 
-set(LIBS stdc++fs pthread ${GTKMM_LIBRARIES})
+set(QT_LIBS Qt5::Core Qt5::Widgets Qt5::Quick Qt5::UiTools)
+set(LIBS stdc++fs pthread ${QT_LIBS})
 
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
 

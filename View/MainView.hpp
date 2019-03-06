@@ -8,18 +8,33 @@
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP
 #define SERIALTOOLBOX_MAINVIEW_HPP
 
-#include <gtkmm.h>
+#include <map>
+#include <memory>
+#include <deque>
+#include <mutex>
+#include <functional>
+#include <list>
+
+#include <QWidget>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QTimer>
+
 #include "../Util/Listener.hpp"
 #include "ByteRepresentationWidget.hpp"
 
 namespace view {
-    class MainView {
+    class MainView : private QObject {
+        Q_OBJECT
     public:
         explicit MainView(const std::string &uiFile);
 
         void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
-
-        auto getWindow() -> Gtk::Window&;
 
         // Top Bar
         const util::Listener<std::string> portComboListener;
@@ -47,35 +62,34 @@ namespace view {
         auto getBinEnabled() const -> bool;
 
         // Center
-        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin);
-        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin);
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
+        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
+        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
 
         // Util
         void showError(std::string title, std::string message);
+
     private:
-        Gtk::Window *mainWindow;
+        void addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
+        void addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
+    private:
+        std::shared_ptr<QWidget> mainWindow;
 
         // Top bar
-        Gtk::ComboBoxText *portCombo;
-        Gtk::ComboBoxText *parityCombo;
-        Gtk::SpinButton *baudSpin;
-        Gtk::SpinButton *dataBitsSpin;
-        Gtk::SpinButton *stopBitsSpin;
-        Gtk::Label *stopBitsLabel;
-        Gtk::Label *dataBitsLabel;
+        std::unique_ptr<QComboBox> portCombo;
+        std::unique_ptr<QComboBox> parityCombo;
+        std::unique_ptr<QSpinBox> baudSpin;
+        std::unique_ptr<QSpinBox> dataBitsSpin;
+        std::unique_ptr<QSpinBox> stopBitsSpin;
+        std::unique_ptr<QLabel> baudLabel, parityLabel, stopBitsLabel, dataBitsLabel;
 
         void portComboHandler();
         void baudSpinHandler();
         void dataBitsSpinHandler();
         void stopBitsSpinHandler();
-        void sendHandler();
 
         // Sidebar
-        Gtk::CheckButton *checkAscii;
-        Gtk::CheckButton *checkHex;
-        Gtk::CheckButton *checkDec;
-        Gtk::CheckButton *checkBin;
+        std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
 
         void checkAsciiHandler();
         void checkHexHandler();
@@ -83,21 +97,30 @@ namespace view {
         void checkBinHandler();
 
         // Receive
-        Gtk::FlowBox *receiveFlow;
+        std::unique_ptr<QGridLayout> receiveGrid;
+        std::deque<std::unique_ptr<ByteRepresentationWidget>> receiveWidgets;
+        std::pair<int,int> receivePosition;
 
         // Send
-        Gtk::FlowBox *sendFlow;
-        Gtk::ComboBoxText *encodingSendCombo;
-        Gtk::Entry *toSendEntry;
-        Gtk::SpinButton *repetitionsSpin;
-        Gtk::SpinButton *periodSpin;
-        Gtk::Button *sendButton;
+        std::unique_ptr<QGridLayout> sendGrid;
+        std::deque<std::unique_ptr<ByteRepresentationWidget>> sendWidgets;
+        std::pair<int,int> sendPosition;
+        std::unique_ptr<QComboBox> encodingSendCombo;
+        std::unique_ptr<QLineEdit> toSendEntry;
+        std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;
+        std::unique_ptr<QPushButton> sendButton;
 
-        // All widgets need to exist while they are visible
-        std::list<ByteRepresentationWidget> sendWidgets, receiveWidgets;
+        void sendHandler();
 
         std::map<std::string, int> representationIds;
 
+        static constexpr int flowWidth = 16;
+
+        // Qt Hacks
+        std::mutex listLock;
+        std::list<std::function<void()>> toCall;
+    public slots:
+        void mainThreadHandler();
     };
 }
 

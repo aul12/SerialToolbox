@@ -97,7 +97,7 @@ namespace controller {
         }
     }
 
-    void UiController::visibilityEvent(bool vis) {
+    void UiController::visibilityEvent(bool) {
         this->mainView->setVisibility(mainView->getAsciiEnabled(),
                 mainView->getDecEnabled(), mainView->getHexEnabled(), mainView->getBinEnabled());
     }
