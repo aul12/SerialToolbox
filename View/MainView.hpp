@@ -10,6 +10,10 @@
 
 #include <map>
 #include <memory>
+#include <deque>
+#include <mutex>
+#include <functional>
+#include <list>
 
 #include <QWidget>
 #include <QComboBox>
@@ -19,8 +23,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QTimer>
 
 #include "../Util/Listener.hpp"
+#include "ByteRepresentationWidget.hpp"
 
 namespace view {
     class MainView : private QObject {
@@ -55,13 +61,16 @@ namespace view {
         auto getBinEnabled() const -> bool;
 
         // Center
-        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin);
-        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin);
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
+        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
+        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
 
         // Util
         void showError(std::string title, std::string message);
 
+    private:
+        void addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
+        void addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
     private:
         std::unique_ptr<QWidget> mainWindow;
 
@@ -88,9 +97,13 @@ namespace view {
 
         // Receive
         std::unique_ptr<QGridLayout> receiveGrid;
+        std::deque<std::unique_ptr<ByteRepresentationWidget>> receiveWidgets;
+        std::pair<int,int> receivePosition;
 
         // Send
         std::unique_ptr<QGridLayout> sendGrid;
+        std::deque<std::unique_ptr<ByteRepresentationWidget>> sendWidgets;
+        std::pair<int,int> sendPosition;
         std::unique_ptr<QComboBox> encodingSendCombo;
         std::unique_ptr<QLineEdit> toSendEntry;
         std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;
@@ -100,6 +113,12 @@ namespace view {
 
         std::map<std::string, int> representationIds;
 
+        static constexpr int flowWidth = 16;
+
+        // Qt Hacks
+        std::mutex listLock;
+        std::list<std::function<void()>> toCall;
+        std::unique_ptr<QTimer> timer;
     };
 }
 

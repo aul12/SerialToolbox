@@ -10,6 +10,7 @@
 namespace view {
     ByteRepresentationWidget::ByteRepresentationWidget(const std::string &ascii, const std::string &dec,
                                                        const std::string &bin, const std::string &hex) :
+                                                       QVBoxLayout{},
                                                        hexVis{true}, decVis{true},
                                                        binVis{true}, asciiVis{true} {
         this->labelAscii = std::make_unique<QLabel>(ascii.c_str());
@@ -22,10 +23,10 @@ namespace view {
         this->labelBin->setStyleSheet("QLabel { background-color : #FF0000; color : white; }");
         this->labelHex->setStyleSheet("QLabel { background-color : #6000E8; color : white; }");
 
-        this->addChildWidget(this->labelAscii.get());
-        this->addChildWidget(this->labelDec.get());
-        this->addChildWidget(this->labelBin.get());
-        this->addChildWidget(this->labelHex.get());
+        this->addWidget(this->labelAscii.get());
+        this->addWidget(this->labelDec.get());
+        this->addWidget(this->labelBin.get());
+        this->addWidget(this->labelHex.get());
     }
 
     void ByteRepresentationWidget::setVisibilityHex(bool visibility) {
