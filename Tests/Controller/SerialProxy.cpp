@@ -33,6 +33,26 @@ TEST(SerialProxy, SendDec) {
     EXPECT_EQ(iface->buffer, dec);
 }
 
+TEST(SerialProxy, SendAscii) {
+    auto iface = std::make_shared<InterfaceMock>();
+    controller::SerialProxy serialProxy{iface};
+
+    std::vector<uint8_t> dec{97,98,99,100,101};
+
+    EXPECT_NO_THROW(serialProxy.send({"a","b","c","d","e"}, controller::Representation::ASCII));
+    EXPECT_EQ(iface->buffer, dec);
+}
+
+TEST(SerialProxy, SendAsciiSpecial) {
+    auto iface = std::make_shared<InterfaceMock>();
+    controller::SerialProxy serialProxy{iface};
+
+    std::vector<uint8_t> dec{0, 7, 10, 13};
+
+    EXPECT_NO_THROW(serialProxy.send({"NUL", "BEL", "LF", "CR"}, controller::Representation::ASCII));
+    EXPECT_EQ(iface->buffer, dec);
+}
+
 TEST(SerialProxy, SendBinFail) {
     auto iface = std::make_shared<InterfaceMock>();
     controller::SerialProxy serialProxy{iface};
