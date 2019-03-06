@@ -28,18 +28,17 @@ namespace controller {
     public:
         explicit SerialProxy(const std::shared_ptr<util::serial::Interface> &interface);
 
-        auto send(std::vector<std::string> bytes, Representation representation) -> std::deque<Representations>;
+        auto send(const std::vector<std::string> &bytes, Representation representation) -> std::deque<Representations>;
 
         const util::Listener<std::deque<Representations>> receiveListener;
     private:
         std::shared_ptr<util::serial::Interface> interface;
         std::map<uint8_t, std::string> specialAsciiCharacters;
 
-        void readCallback(std::vector<uint8_t>  data);
-        auto convertToByte(std::string string, Representation representation) -> uint8_t;
+        void readCallback(const std::vector<uint8_t> &data);
+        auto convertToByte(const std::string &string, Representation representation) -> uint8_t;
         auto convertToRepresentations(uint8_t data) -> Representations;
-
-
+        auto specialAsciiCharactersReverseLookup(const std::string &value) const -> std::optional<uint8_t>;
     };
 }
 

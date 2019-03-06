@@ -96,7 +96,7 @@ namespace util::serial {
         void callbackIfAvailable(const std::vector<uint8_t> &data);
 
     private:
-        std::optional<std::function<void(std::vector<uint8_t>)>> callback;
+        std::optional<std::function<void(const std::vector<uint8_t>&)>> callback;
         mutable std::mutex writeLock;
     };
 

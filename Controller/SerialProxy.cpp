@@ -51,7 +51,7 @@ namespace controller {
         specialAsciiCharacters.insert({127, "DEL"});
     }
 
-    auto SerialProxy::send(std::vector<std::string> bytes, Representation representation)
+    auto SerialProxy::send(const std::vector<std::string> &bytes, const Representation representation)
         -> std::deque<Representations> {
         std::vector<uint8_t> buf;
 
@@ -67,21 +67,27 @@ namespace controller {
         return representations;
     }
 
-    void SerialProxy::readCallback(std::vector<uint8_t> data) {
+    void SerialProxy::readCallback(const std::vector<uint8_t> &data) {
         std::deque<Representations> ret;
         std::transform(data.begin(), data.end(), std::back_inserter(ret),
                 std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
         receiveListener(ret);
     }
 
-    auto SerialProxy::convertToByte(std::string string, Representation representation) -> uint8_t {
+    auto SerialProxy::convertToByte(const std::string &string, Representation representation) -> uint8_t {
         int base = 0;
         switch (representation) {
             case Representation::ASCII:
-                if (string.length() != 1) {
-                    throw std::runtime_error("Not valid ascii");
+                if (string.length() == 1) {
+                    return static_cast<uint8_t>(string.at(0));
+                } else {
+                    auto opt = specialAsciiCharactersReverseLookup(string);
+                    if (opt.has_value()) {
+                        return opt.value();
+                    } else {
+                        throw std::runtime_error("Not valid ascii");
+                    }
                 }
-                return static_cast<uint8_t>(string.at(0));
             case Representation::HEX:
                 base = 16;
                 break;
@@ -127,5 +133,14 @@ namespace controller {
             representations.ascii = static_cast<char>(data);
         }
         return representations;
+    }
+
+    auto SerialProxy::specialAsciiCharactersReverseLookup(const std::string &value) const -> std::optional<uint8_t> {
+        for (const auto &item : this->specialAsciiCharacters) {
+            if (item.second == value) {
+                return item.first;
+            }
+        }
+        return std::nullopt;
     }
 }
