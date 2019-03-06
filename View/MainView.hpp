@@ -72,7 +72,8 @@ namespace view {
     private:
         void addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
         void addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
-    private:
+        void showErrorImpl(std::string title, std::string message);
+
         std::shared_ptr<QWidget> mainWindow;
 
         // Top bar

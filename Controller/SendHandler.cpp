@@ -28,10 +28,15 @@ namespace controller {
                 queueLock.unlock();
 
                 for (auto c = 0; c < std::get<2>(elem); c++) {
-                    auto res = this->serialProxy->send({std::get<1>(elem)},
-                                                       static_cast<Representation>(std::get<0>(elem)));
-                    this->mainView->addSend(res.front().ascii, res.front().dec,
-                                            res.front().hex, res.front().bin);
+                    try {
+                        auto res = this->serialProxy->send({std::get<1>(elem)},
+                                                           static_cast<Representation>(std::get<0>(elem)));
+                        this->mainView->addSend(res.front().ascii, res.front().dec,
+                                                res.front().hex, res.front().bin);
+                    } catch (std::runtime_error &e) {
+                        this->mainView->showError("Error sending", e.what());
+                    }
+
                     if (c + 1 < std::get<2>(elem)) {
                         std::this_thread::sleep_for(std::chrono::milliseconds(std::get<3>(elem)));
                     }

@@ -207,7 +207,7 @@ namespace view {
         }
     }
 
-    void MainView::showError(std::string title, std::string message) {
+    void MainView::showErrorImpl(std::string title, std::string message) {
         QMessageBox::critical(mainWindow.get(), title.c_str(), message.c_str(), QMessageBox::Ok);
     }
 
@@ -253,6 +253,13 @@ namespace view {
     void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addSendImpl, this, ascii, dec, hex, bin, addNewLine));
+        listLock.unlock();
+        QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
+    }
+
+    void MainView::showError(std::string title, std::string message) {
+        listLock.lock();
+        toCall.emplace_back(std::bind(&MainView::showErrorImpl, this, title, message));
         listLock.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
