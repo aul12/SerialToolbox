@@ -55,11 +55,13 @@ namespace view {
         const util::Listener<bool> hexEnabledListener;
         const util::Listener<bool> decEnabledListener;
         const util::Listener<bool> binEnabledListener;
+        const util::Listener<int> linebreakListener;
 
         auto getAsciiEnabled() const -> bool;
         auto getHexEnabled() const -> bool;
         auto getDecEnabled() const -> bool;
         auto getBinEnabled() const -> bool;
+        auto getLinebreak() const -> int;
 
         // Center
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
@@ -97,6 +99,7 @@ namespace view {
         void checkHexHandler();
         void checkDecHandler();
         void checkBinHandler();
+        void lineBreakHandler();
 
         // Receive
         std::unique_ptr<QGridLayout> receiveGrid;

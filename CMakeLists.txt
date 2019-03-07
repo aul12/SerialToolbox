@@ -26,6 +26,7 @@ set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/View/ByteRepresentationWidget.cpp
         ${CMAKE_SOURCE_DIR}/Controller/UiController.cpp
         ${CMAKE_SOURCE_DIR}/Controller/SendHandler.cpp
+        ${CMAKE_SOURCE_DIR}/Controller/LineBreakStateMachine.cpp
         ${CMAKE_SOURCE_DIR}/Controller/SerialProxy.cpp)
 
 if(UNIX)

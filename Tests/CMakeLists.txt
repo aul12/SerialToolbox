@@ -8,6 +8,7 @@ set(TEST_SOURCES
         ${CMAKE_SOURCE_DIR}/Tests/Util/Listener.cpp
         ${CMAKE_SOURCE_DIR}/Tests/Controller/SerialProxy.cpp
         ${CMAKE_SOURCE_DIR}/Tests/Controller/UiController.cpp
+        ${CMAKE_SOURCE_DIR}/Tests/Controller/LineBreakStateMachine.cpp
         ${CMAKE_SOURCE_DIR}/Tests/Util/Serial/Interface.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR})

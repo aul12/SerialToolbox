@@ -77,6 +77,10 @@ namespace view {
             checkHexHandler();
         });
 
+        mainWindow->connect(comboLinebreak.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
+            lineBreakHandler();
+        });
+
         mainWindow->connect(sendButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
             sendHandler();
         });
@@ -144,6 +148,10 @@ namespace view {
 
     auto MainView::getStopBits() const -> int {
         return this->stopBitsSpin->value();
+    }
+
+    auto MainView::getLinebreak() const -> int {
+        return this->comboLinebreak->currentIndex();
     }
 
     auto MainView::getAsciiEnabled() const -> bool {
@@ -243,6 +251,10 @@ namespace view {
         this->binEnabledListener(this->getBinEnabled());
     }
 
+    void MainView::lineBreakHandler() {
+        this->linebreakListener(this->getLinebreak());
+    }
+
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addReceivedImpl, this, ascii, dec, hex, bin, addNewLine));
@@ -272,6 +284,6 @@ namespace view {
             this->toCall.clear();
             listLock.unlock();
         }
-
     }
+
 }
