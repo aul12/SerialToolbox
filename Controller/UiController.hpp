@@ -12,6 +12,7 @@
 #include "../View/MainView.hpp"
 #include "SendHandler.hpp"
 #include "ConnectionContainer.hpp"
+#include "LineBreakStateMachine.hpp"
 
 namespace controller {
     class UiController {
@@ -29,6 +30,8 @@ namespace controller {
         void receiveEvent(std::deque<Representations> representations);
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);
+        void lineBreakEvent(int type);
+        LineBreakStateMachine lineBreakStateMachine;
     };
 }
 

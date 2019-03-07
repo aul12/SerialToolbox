@@ -12,7 +12,7 @@ namespace controller {
         type{linebreak}, state{LinebreakState::NONE} {}
 
     auto LineBreakStateMachine::addAscii(std::string ascii) -> bool {
-        if (ascii != "\r" && ascii != "\n") {
+        if (ascii != "CR" && ascii != "LF") {
             this->state = LinebreakState::NONE;
             return false;
         }
@@ -21,25 +21,25 @@ namespace controller {
             case LinebreakType::NONE:
                 return false;
             case LinebreakType::LF:
-                return ascii == "\n";
+                return ascii == "LF";
             case LinebreakType::CR:
-                return ascii == "\r";
+                return ascii == "CR";
             case LinebreakType::CRLF:
             case LinebreakType::LFCR:
-                if (this->state == LinebreakState::NONE) {
-                    if (ascii == "\n") {
+                if (this->state == LinebreakState::CR && this->type == LinebreakType::CRLF &&
+                            ascii == "LF") {
+                    this->state = LinebreakState::NONE;
+                    return true;
+                } else if (this->state == LinebreakState::LF && this->type == LinebreakType::LFCR &&
+                            ascii == "CR") {
+                    this->state = LinebreakState::NONE;
+                    return true;
+                } else {
+                    if (ascii == "LF") {
                         this->state = LinebreakState::LF;
                     } else {
                         this->state = LinebreakState::CR;
                     }
-                } else if (this->state == LinebreakState::CR && this->type == LinebreakType::CRLF &&
-                            ascii == "\n") {
-                    this->state = LinebreakState::NONE;
-                    return true;
-                } else if (this->state == LinebreakState::LF && this->type == LinebreakType::LFCR &&
-                            ascii == "\r") {
-                    this->state = LinebreakState::NONE;
-                    return true;
                 }
                 break;
         }

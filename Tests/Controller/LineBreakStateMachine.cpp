@@ -51,88 +51,98 @@ TEST(LineBreakStateMachine, LineBreakCr) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::CR};
     EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("b"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("d"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("e"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\r"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("f"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("g"));
 }
 TEST(LineBreakStateMachine, LineBreakLf) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::LF};
     EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("b"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("d"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("e"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("f"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\n"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("g"));
 }
 TEST(LineBreakStateMachine, LineBreakCrLf) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::CRLF};
     EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("b"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("d"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("e"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("f"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("g"));
 }
 TEST(LineBreakStateMachine, LineBreakLfCr) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::LFCR};
     EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("b"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("d"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("e"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("f"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("g"));
 }
 TEST(LineBreakStateMachine, LineBreakNone) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::NONE};
     EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("b"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("d"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("e"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("f"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_FALSE(lineBreakStateMachine.addAscii("g"));
+}
+
+TEST(LineBreakStateMachine, CrLfExtended) {
+    controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::CRLF};
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("a"));
 }
 
 TEST(LineBreakStateMachine, SetLineBreak) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::NONE};
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
     EXPECT_NO_THROW(lineBreakStateMachine.setLinebreak(controller::LinebreakType::LF));
-    EXPECT_TRUE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_TRUE(lineBreakStateMachine.addAscii("LF"));
 }
 
 TEST(LineBreakStateMachine, Reset) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::CRLF};
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\r"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("CR"));
     EXPECT_NO_THROW(lineBreakStateMachine.reset());
-    EXPECT_FALSE(lineBreakStateMachine.addAscii("\n"));
+    EXPECT_FALSE(lineBreakStateMachine.addAscii("LF"));
 }

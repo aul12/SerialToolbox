@@ -12,7 +12,8 @@
 namespace controller {
     SendHandler::SendHandler(std::shared_ptr<view::MainView> mainView,
                            std::shared_ptr<controller::SerialProxy> serialProxy)
-            : finished{false}, mainView{std::move(mainView)}, serialProxy{std::move(serialProxy)},
+            : lineBreakStateMachine{static_cast<LinebreakType>(mainView->getLinebreak())},
+                finished{false}, mainView{std::move(mainView)}, serialProxy{std::move(serialProxy)},
                 thread{&SendHandler::run, this} {
     }
 
@@ -31,8 +32,11 @@ namespace controller {
                     try {
                         auto res = this->serialProxy->send({std::get<1>(elem)},
                                                            static_cast<Representation>(std::get<0>(elem)));
+                        lineBreakMutex.lock();
                         this->mainView->addSend(res.front().ascii, res.front().dec,
-                                                res.front().hex, res.front().bin);
+                                                res.front().hex, res.front().bin,
+                                                lineBreakStateMachine.addAscii(res.front().ascii));
+                        lineBreakMutex.unlock();
                     } catch (std::runtime_error &e) {
                         this->mainView->showError("Error sending", e.what());
                     }
@@ -54,5 +58,11 @@ namespace controller {
     SendHandler::~SendHandler() {
         finished = true;
         dataNotify.unlock();
+    }
+
+    void SendHandler::setLineBreak(LinebreakType linebreakType) {
+        lineBreakMutex.lock();
+        this->lineBreakStateMachine.setLinebreak(linebreakType);
+        lineBreakMutex.unlock();
     }
 }

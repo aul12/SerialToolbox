@@ -11,7 +11,9 @@
 #include <functional>
 
 namespace controller {
-    UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView} {
+    UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView},
+        lineBreakStateMachine{static_cast<LinebreakType>(mainView->getLinebreak())} {
+
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
 
         std::function<void(int)> baudBind = std::bind(&UiController::baudEvent, this, std::placeholders::_1);
@@ -22,6 +24,7 @@ namespace controller {
                 std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
                         std::placeholders::_3, std::placeholders::_4);
         std::function<void(bool)> visibilityBind = std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
+        std::function<void(int)> lineBreakBind = std::bind(&UiController::lineBreakEvent, this, std::placeholders::_1);
         mainView->baudSpinListener(baudBind);
         mainView->portComboListener(portBind);
         mainView->stopBitsSpinListener(stopBitBind);
@@ -31,6 +34,7 @@ namespace controller {
         mainView->decEnabledListener(visibilityBind);
         mainView->binEnabledListener(visibilityBind);
         mainView->asciiEnabledListener(visibilityBind);
+        mainView->linebreakListener(lineBreakBind);
     }
 
     void UiController::baudEvent(int baud) {
@@ -87,7 +91,8 @@ namespace controller {
 
     void UiController::receiveEvent(std::deque<Representations> representations) {
         for (const auto &repr : representations) {
-            this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin);
+            this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin,
+                    lineBreakStateMachine.addAscii(repr.ascii));
         }
     }
 
@@ -100,5 +105,12 @@ namespace controller {
     void UiController::visibilityEvent(bool) {
         this->mainView->setVisibility(mainView->getAsciiEnabled(),
                 mainView->getDecEnabled(), mainView->getHexEnabled(), mainView->getBinEnabled());
+    }
+
+    void UiController::lineBreakEvent(int type) {
+        this->lineBreakStateMachine.setLinebreak(static_cast<LinebreakType>(type));
+        if (this->connectionHandler.has_value()) {
+            this->connectionHandler->sendThread->setLineBreak(static_cast<LinebreakType>(type));
+        }
     }
 }

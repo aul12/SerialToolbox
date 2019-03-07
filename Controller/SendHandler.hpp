@@ -13,6 +13,7 @@
 #include <memory>
 #include "../View/MainView.hpp"
 #include "SerialProxy.hpp"
+#include "LineBreakStateMachine.hpp"
 
 namespace controller {
     class SendHandler {
@@ -23,13 +24,16 @@ namespace controller {
 
         void send(int repr, const std::string &data, int repetitions, int period);
 
+        void setLineBreak(LinebreakType linebreakType);
+
         ~SendHandler();
 
     private:
+        std::mutex lineBreakMutex;
+        LineBreakStateMachine lineBreakStateMachine;
         std::list<std::tuple<int, std::string, int, int>> queue;
         std::mutex queueLock;
         std::mutex dataNotify;
-        std::mutex uiMutex;
         std::atomic_bool finished;
         std::shared_ptr<view::MainView> mainView;
         std::shared_ptr<controller::SerialProxy> serialProxy;
