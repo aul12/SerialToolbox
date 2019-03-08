@@ -30,7 +30,23 @@ namespace controller {
 
                 for (auto c = 0; c < std::get<2>(elem); c++) {
                     try {
-                        auto res = this->serialProxy->send({std::get<1>(elem)},
+                        size_t pos = 0;
+                        std::string token;
+                        std::string toSend = std::get<1>(elem);
+                        while ((pos = toSend.find(' ')) != std::string::npos) {
+                            token = toSend.substr(0, pos);
+
+                            auto res = this->serialProxy->send({token},
+                                                               static_cast<Representation>(std::get<0>(elem)));
+                            lineBreakMutex.lock();
+                            this->mainView->addSend(res.front().ascii, res.front().dec,
+                                                    res.front().hex, res.front().bin,
+                                                    lineBreakStateMachine.addAscii(res.front().ascii));
+                            lineBreakMutex.unlock();
+
+                            toSend.erase(0, pos + 1);
+                        }
+                        auto res = this->serialProxy->send({toSend},
                                                            static_cast<Representation>(std::get<0>(elem)));
                         lineBreakMutex.lock();
                         this->mainView->addSend(res.front().ascii, res.front().dec,
