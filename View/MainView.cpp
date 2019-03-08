@@ -61,17 +61,21 @@ namespace view {
                 this, [this](const QString &port){
             portComboListener(port.toLocal8Bit().data());
         });
-        mainWindow->connect(baudSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+        mainWindow->connect(baudSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
                 this, [this](int baud){
             baudSpinListener(baud);
         });
-        mainWindow->connect(dataBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+        mainWindow->connect(dataBitsSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
                 this, [this](int dataBits){
             dataBitsSpinListener(dataBits);
         });
-        mainWindow->connect(stopBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+        mainWindow->connect(stopBitsSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
                 this, [this](int stopBits){
             stopBitsSpinListener(stopBits);
+        });
+        mainWindow->connect(parityCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, [this](int sel){
+            parityListener(sel);
         });
 
         mainWindow->connect(checkAscii.get(),  QOverload<int>::of(&QCheckBox::stateChanged),

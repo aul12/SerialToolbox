@@ -27,6 +27,7 @@ namespace controller {
         void portEvent(std::string port);
         void stopBitsEvent(int stopBits);
         void dataBitsEvent(int dataBits);
+        void parityEvent(int sel);
         void receiveEvent(std::deque<Representations> representations);
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);

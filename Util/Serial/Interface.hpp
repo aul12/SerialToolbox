@@ -19,7 +19,7 @@
 
 namespace util::serial {
     enum class Parity {
-        NONE, ODD, EVEN, MARK, SPACE
+        NONE = 0, EVEN = 1, ODD = 2, SPACE = 3, MARK = 4
     };
 
     /**

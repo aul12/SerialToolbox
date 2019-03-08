@@ -20,6 +20,7 @@ namespace controller {
         std::function<void(std::string)> portBind = std::bind(&UiController::portEvent, this, std::placeholders::_1);
         std::function<void(int)> stopBitBind = std::bind(&UiController::stopBitsEvent, this, std::placeholders::_1);
         std::function<void(int)> dataBitsBind = std::bind(&UiController::dataBitsEvent, this, std::placeholders::_1);
+        std::function<void(int)> parityBind = std::bind(&UiController::parityEvent, this, std::placeholders::_1);
         std::function<void(int,const std::string&,int,int)> sendBind =
                 std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
                         std::placeholders::_3, std::placeholders::_4);
@@ -34,6 +35,7 @@ namespace controller {
         mainView->portComboListener(portBind);
         mainView->stopBitsSpinListener(stopBitBind);
         mainView->dataBitsSpinListener(dataBitsBind);
+        mainView->parityListener(parityBind);
         mainView->sendClickListener(sendBind);
         mainView->hexEnabledListener(visibilityBind);
         mainView->decEnabledListener(visibilityBind);
@@ -157,5 +159,11 @@ namespace controller {
 
     void UiController::clearTxEvent() {
         this->mainView->clearSent();
+    }
+
+    void UiController::parityEvent(int sel) {
+        if (this->connectionHandler.has_value()) {
+            this->connectionHandler.value().interface->setParity(static_cast<util::serial::Parity>(sel));
+        }
     }
 }

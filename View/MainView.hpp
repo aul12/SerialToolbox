@@ -41,7 +41,7 @@ namespace view {
         const util::Listener<int> baudSpinListener;
         const util::Listener<int> dataBitsSpinListener;
         const util::Listener<int> stopBitsSpinListener;
-        const util::Listener<int, const std::string&, int, int> sendClickListener;
+        const util::Listener<int> parityListener;
 
         auto getPort() const -> std::string;
         auto getBaud() const -> int;
@@ -73,6 +73,8 @@ namespace view {
         void addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
         void clearReceived();
         void clearSent();
+
+        const util::Listener<int, const std::string&, int, int> sendClickListener;
 
         // Util
         void showError(std::string title, std::string message);
