@@ -31,6 +31,8 @@ namespace controller {
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);
         void lineBreakEvent(int type);
+        void resetRxEvent();
+        void resetTxEvent();
         LineBreakStateMachine lineBreakStateMachine;
     };
 }

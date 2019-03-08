@@ -26,6 +26,8 @@ namespace controller {
 
         void setLineBreak(LinebreakType linebreakType);
 
+        void resetCount();
+
         ~SendHandler();
 
     private:

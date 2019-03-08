@@ -52,6 +52,8 @@ namespace view {
         FIND_WIDGET(comboLinebreak);
         FIND_WIDGET(labelRxCount);
         FIND_WIDGET(labelTxCount);
+        FIND_WIDGET(buttonResetRx);
+        FIND_WIDGET(buttonResetTx);
 
         mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
             portComboHandler();
@@ -85,6 +87,14 @@ namespace view {
 
         mainWindow->connect(sendButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
             sendHandler();
+        });
+
+        mainWindow->connect(buttonResetRx.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            resetRxListener();
+        });
+
+        mainWindow->connect(buttonResetTx.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            resetTxListener();
         });
 
         this->addReceived("A", "123", "7F", "01101100");

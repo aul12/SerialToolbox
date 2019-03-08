@@ -56,6 +56,7 @@ namespace view {
         const util::Listener<bool> decEnabledListener;
         const util::Listener<bool> binEnabledListener;
         const util::Listener<int> linebreakListener;
+        const util::Listener<> resetRxListener, resetTxListener;
 
         auto getAsciiEnabled() const -> bool;
         auto getHexEnabled() const -> bool;
@@ -97,6 +98,7 @@ namespace view {
         std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
         std::unique_ptr<QComboBox> comboLinebreak;
         std::unique_ptr<QLabel> labelRxCount, labelTxCount;
+        std::unique_ptr<QPushButton> buttonResetRx, buttonResetTx;
 
         void checkAsciiHandler();
         void checkHexHandler();

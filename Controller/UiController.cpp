@@ -25,6 +25,9 @@ namespace controller {
                         std::placeholders::_3, std::placeholders::_4);
         std::function<void(bool)> visibilityBind = std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
         std::function<void(int)> lineBreakBind = std::bind(&UiController::lineBreakEvent, this, std::placeholders::_1);
+        std::function<void()> rxResetBind = std::bind(&UiController::resetRxEvent, this);
+        std::function<void()> txResetBind = std::bind(&UiController::resetTxEvent, this);
+
         mainView->baudSpinListener(baudBind);
         mainView->portComboListener(portBind);
         mainView->stopBitsSpinListener(stopBitBind);
@@ -35,6 +38,8 @@ namespace controller {
         mainView->binEnabledListener(visibilityBind);
         mainView->asciiEnabledListener(visibilityBind);
         mainView->linebreakListener(lineBreakBind);
+        mainView->resetTxListener(txResetBind);
+        mainView->resetRxListener(rxResetBind);
     }
 
     void UiController::baudEvent(int baud) {
@@ -125,6 +130,20 @@ namespace controller {
         this->lineBreakStateMachine.setLinebreak(static_cast<LinebreakType>(type));
         if (this->connectionHandler.has_value()) {
             this->connectionHandler->sendThread->setLineBreak(static_cast<LinebreakType>(type));
+        }
+    }
+
+    void UiController::resetRxEvent() {
+        if (this->connectionHandler.has_value()) {
+            this->connectionHandler.value().received = 0;
+            this->mainView->setRxCount(0);
+        }
+    }
+
+    void UiController::resetTxEvent() {
+        if (this->connectionHandler.has_value()) {
+            this->connectionHandler.value().sendThread->resetCount();
+            this->mainView->setTxCount(0);
         }
     }
 }

@@ -70,4 +70,8 @@ namespace controller {
         this->lineBreakStateMachine.setLinebreak(linebreakType);
         lineBreakMutex.unlock();
     }
+
+    void SendHandler::resetCount() {
+        this->sendCount = 0;
+    }
 }
