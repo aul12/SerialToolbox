@@ -54,35 +54,46 @@ namespace view {
         FIND_WIDGET(labelTxCount);
         FIND_WIDGET(buttonResetRx);
         FIND_WIDGET(buttonResetTx);
+        FIND_WIDGET(buttonClearReceived);
+        FIND_WIDGET(buttonClearSent);
 
-        mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
-            portComboHandler();
+        mainWindow->connect(portCombo.get(),  QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
+                this, [this](const QString &port){
+            portComboListener(port.toLocal8Bit().data());
         });
-        mainWindow->connect(baudSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
-            baudSpinHandler();
+        mainWindow->connect(baudSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+                this, [this](int baud){
+            baudSpinListener(baud);
         });
-        mainWindow->connect(dataBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
-            dataBitsSpinHandler();
+        mainWindow->connect(dataBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+                this, [this](int dataBits){
+            dataBitsSpinListener(dataBits);
         });
-        mainWindow->connect(stopBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int){
-            stopBitsSpinHandler();
-        });
-
-        mainWindow->connect(checkAscii.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
-            checkAsciiHandler();
-        });
-        mainWindow->connect(checkBin.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
-            checkBinHandler();
-        });
-        mainWindow->connect(checkDec.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
-            checkDecHandler();
-        });
-        mainWindow->connect(checkHex.get(),  QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int){
-            checkHexHandler();
+        mainWindow->connect(stopBitsSpin.get(),  QOverload<int>::of(&QSpinBox::valueChanged),
+                this, [this](int stopBits){
+            stopBitsSpinListener(stopBits);
         });
 
-        mainWindow->connect(comboLinebreak.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
-            lineBreakHandler();
+        mainWindow->connect(checkAscii.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
+                this, [this](int state){
+            asciiEnabledListener(state == Qt::Checked);
+        });
+        mainWindow->connect(checkBin.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
+                this, [this](int state){
+            binEnabledListener(state == Qt::Checked);
+        });
+        mainWindow->connect(checkDec.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
+                this, [this](int state){
+            decEnabledListener(state == Qt::Checked);
+        });
+        mainWindow->connect(checkHex.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
+                this, [this](int state){
+            hexEnabledListener(state == Qt::Checked);
+        });
+
+        mainWindow->connect(comboLinebreak.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, [this](int index){
+            linebreakListener(index);
         });
 
         mainWindow->connect(sendButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
@@ -97,14 +108,18 @@ namespace view {
             resetTxListener();
         });
 
-        this->addReceived("A", "123", "7F", "01101100");
-        this->addSend("B", "123", "7F", "01101100");
+        mainWindow->connect(buttonClearSent.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            clearTxListener();
+        });
+
+        mainWindow->connect(buttonClearReceived.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            clearRxListener();
+        });
 
         this->representationIds.insert({"ASCII", 0});
         this->representationIds.insert({"HEX", 1});
         this->representationIds.insert({"DEC", 2});
         this->representationIds.insert({"BIN", 3});
-
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {
@@ -115,22 +130,6 @@ namespace view {
         }
         this->portCombo->addItems(stringList);
         this->portCombo->setCurrentIndex(activeIndex);
-    }
-
-    void MainView::portComboHandler() {
-        this->portComboListener(this->portCombo->currentText().toLocal8Bit().data());
-    }
-
-    void MainView::baudSpinHandler() {
-        baudSpinListener(this->baudSpin->value());
-    }
-
-    void MainView::dataBitsSpinHandler() {
-        dataBitsSpinListener(this->dataBitsSpin->value());
-    }
-
-    void MainView::stopBitsSpinHandler() {
-        stopBitsSpinListener(this->stopBitsSpin->value());
     }
 
     void MainView::sendHandler() {
@@ -249,6 +248,22 @@ namespace view {
         }
     }
 
+    void MainView::clearReceived() {
+        for (const auto &widget : this->receiveWidgets) {
+            this->receiveGrid->removeItem(widget.get());
+        }
+        this->receiveWidgets.clear();
+        this->receivePosition = std::make_pair(0,0);
+    }
+
+    void MainView::clearSent() {
+        for (const auto &widget : this->sendWidgets) {
+            this->sendGrid->removeItem(widget.get());
+        }
+        this->sendWidgets.clear();
+        this->sendPosition = std::make_pair(0,0);
+    }
+
     void MainView::showErrorImpl(std::string title, std::string message) {
         QMessageBox::critical(mainWindow.get(), title.c_str(), message.c_str(), QMessageBox::Ok);
     }
@@ -267,26 +282,6 @@ namespace view {
             widget->setVisibilityDec(dec);
             widget->setVisibilityHex(hex);
         }
-    }
-
-    void MainView::checkAsciiHandler() {
-        this->asciiEnabledListener(this->getAsciiEnabled());
-    }
-
-    void MainView::checkHexHandler() {
-        this->hexEnabledListener(this->getHexEnabled());
-    }
-
-    void MainView::checkDecHandler() {
-        this->decEnabledListener(this->getDecEnabled());
-    }
-
-    void MainView::checkBinHandler() {
-        this->binEnabledListener(this->getBinEnabled());
-    }
-
-    void MainView::lineBreakHandler() {
-        this->linebreakListener(this->getLinebreak());
     }
 
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
@@ -319,5 +314,4 @@ namespace view {
             listLock.unlock();
         }
     }
-
 }

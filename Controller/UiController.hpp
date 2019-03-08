@@ -33,6 +33,8 @@ namespace controller {
         void lineBreakEvent(int type);
         void resetRxEvent();
         void resetTxEvent();
+        void clearRxEvent();
+        void clearTxEvent();
         LineBreakStateMachine lineBreakStateMachine;
     };
 }

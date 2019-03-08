@@ -27,6 +27,8 @@ namespace controller {
         std::function<void(int)> lineBreakBind = std::bind(&UiController::lineBreakEvent, this, std::placeholders::_1);
         std::function<void()> rxResetBind = std::bind(&UiController::resetRxEvent, this);
         std::function<void()> txResetBind = std::bind(&UiController::resetTxEvent, this);
+        std::function<void()> rxClearBind = std::bind(&UiController::clearRxEvent, this);
+        std::function<void()> txClearBind = std::bind(&UiController::clearTxEvent, this);
 
         mainView->baudSpinListener(baudBind);
         mainView->portComboListener(portBind);
@@ -40,6 +42,8 @@ namespace controller {
         mainView->linebreakListener(lineBreakBind);
         mainView->resetTxListener(txResetBind);
         mainView->resetRxListener(rxResetBind);
+        mainView->clearRxListener(rxClearBind);
+        mainView->clearTxListener(txClearBind);
     }
 
     void UiController::baudEvent(int baud) {
@@ -145,5 +149,13 @@ namespace controller {
             this->connectionHandler.value().sendThread->resetCount();
             this->mainView->setTxCount(0);
         }
+    }
+
+    void UiController::clearRxEvent() {
+        this->mainView->clearReceived();
+    }
+
+    void UiController::clearTxEvent() {
+        this->mainView->clearSent();
     }
 }

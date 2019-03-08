@@ -57,6 +57,7 @@ namespace view {
         const util::Listener<bool> binEnabledListener;
         const util::Listener<int> linebreakListener;
         const util::Listener<> resetRxListener, resetTxListener;
+        const util::Listener<> clearRxListener, clearTxListener;
 
         auto getAsciiEnabled() const -> bool;
         auto getHexEnabled() const -> bool;
@@ -70,6 +71,8 @@ namespace view {
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
         void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
         void addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
+        void clearReceived();
+        void clearSent();
 
         // Util
         void showError(std::string title, std::string message);
@@ -89,22 +92,12 @@ namespace view {
         std::unique_ptr<QSpinBox> stopBitsSpin;
         std::unique_ptr<QLabel> baudLabel, parityLabel, stopBitsLabel, dataBitsLabel;
 
-        void portComboHandler();
-        void baudSpinHandler();
-        void dataBitsSpinHandler();
-        void stopBitsSpinHandler();
-
         // Sidebar
         std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
         std::unique_ptr<QComboBox> comboLinebreak;
         std::unique_ptr<QLabel> labelRxCount, labelTxCount;
         std::unique_ptr<QPushButton> buttonResetRx, buttonResetTx;
-
-        void checkAsciiHandler();
-        void checkHexHandler();
-        void checkDecHandler();
-        void checkBinHandler();
-        void lineBreakHandler();
+        std::unique_ptr<QPushButton> buttonClearReceived, buttonClearSent;
 
         void setRxCountImpl(int count);
         void setTxCountImpl(int count);
