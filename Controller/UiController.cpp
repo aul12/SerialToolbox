@@ -98,7 +98,19 @@ namespace controller {
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
         if (this->connectionHandler.has_value()) {
-            this->connectionHandler.value().sendThread->send(repr, data, repetitions, period);
+            std::vector<std::string> tokens{};
+            size_t pos = 0;
+            auto text = data;
+            while ((pos = text.find(' ')) != std::string::npos) {
+                auto token = text.substr(0, pos);
+                if (!token.empty()) {
+                    tokens.emplace_back(std::move(token));
+                }
+                text.erase(0, pos + 1);
+            }
+            tokens.emplace_back(std::move(text));
+
+            this->connectionHandler.value().sendThread->send(repr, tokens, repetitions, period);
         }
     }
 

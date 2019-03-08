@@ -30,28 +30,14 @@ namespace controller {
 
                 for (auto c = 0; c < std::get<2>(elem); c++) {
                     try {
-                        size_t pos = 0;
-                        std::string token;
-                        std::string toSend = std::get<1>(elem);
-                        while ((pos = toSend.find(' ')) != std::string::npos) {
-                            token = toSend.substr(0, pos);
-
-                            auto res = this->serialProxy->send({token},
-                                                               static_cast<Representation>(std::get<0>(elem)));
-                            lineBreakMutex.lock();
-                            this->mainView->addSend(res.front().ascii, res.front().dec,
-                                                    res.front().hex, res.front().bin,
-                                                    lineBreakStateMachine.addAscii(res.front().ascii));
-                            lineBreakMutex.unlock();
-
-                            toSend.erase(0, pos + 1);
-                        }
-                        auto res = this->serialProxy->send({toSend},
+                        auto res = this->serialProxy->send(std::get<1>(elem),
                                                            static_cast<Representation>(std::get<0>(elem)));
                         lineBreakMutex.lock();
-                        this->mainView->addSend(res.front().ascii, res.front().dec,
-                                                res.front().hex, res.front().bin,
-                                                lineBreakStateMachine.addAscii(res.front().ascii));
+                        for (const auto &sent : res) {
+                            this->mainView->addSend(sent.ascii, sent.dec,
+                                                    sent.hex, sent.bin,
+                                                    lineBreakStateMachine.addAscii(res.front().ascii));
+                        }
                         lineBreakMutex.unlock();
                     } catch (std::runtime_error &e) {
                         this->mainView->showError("Error sending", e.what());
@@ -65,7 +51,7 @@ namespace controller {
         }
     }
 
-    void SendHandler::send(int repr, const std::string &data, int repetitions, int period) {
+    void SendHandler::send(int repr, const std::vector<std::string> &data, int repetitions, int period) {
         std::lock_guard<std::mutex> l{queueLock};
         queue.emplace_back(repr, data, repetitions, period);
         dataNotify.unlock();

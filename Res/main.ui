@@ -449,9 +449,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="buttonClearRx">
+        <widget class="QPushButton" name="buttonResetRx">
          <property name="text">
-          <string>Clear</string>
+          <string>Reset</string>
          </property>
         </widget>
        </item>
@@ -467,9 +467,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="buttonClearTx">
+        <widget class="QPushButton" name="buttonResetTx">
          <property name="text">
-          <string>Clear</string>
+          <string>Reset</string>
          </property>
         </widget>
        </item>

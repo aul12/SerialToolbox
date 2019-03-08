@@ -22,7 +22,7 @@ namespace controller {
 
         void run();
 
-        void send(int repr, const std::string &data, int repetitions, int period);
+        void send(int repr, const std::vector<std::string> &data, int repetitions, int period);
 
         void setLineBreak(LinebreakType linebreakType);
 
@@ -31,7 +31,7 @@ namespace controller {
     private:
         std::mutex lineBreakMutex;
         LineBreakStateMachine lineBreakStateMachine;
-        std::list<std::tuple<int, std::string, int, int>> queue;
+        std::list<std::tuple<int, std::vector<std::string>, int, int>> queue;
         std::mutex queueLock;
         std::mutex dataNotify;
         std::atomic_bool finished;

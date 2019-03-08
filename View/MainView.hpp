@@ -121,7 +121,7 @@ namespace view {
 
         static constexpr int flowWidth = 16;
 
-        // Qt Hacks
+        // UI Updates in the Main-Thread
         std::mutex listLock;
         std::list<std::function<void()>> toCall;
     public slots:
