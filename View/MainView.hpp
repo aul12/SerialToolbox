@@ -62,6 +62,8 @@ namespace view {
         auto getDecEnabled() const -> bool;
         auto getBinEnabled() const -> bool;
         auto getLinebreak() const -> int;
+        void setRxCount(int count);
+        void setTxCount(int count);
 
         // Center
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
@@ -94,12 +96,16 @@ namespace view {
         // Sidebar
         std::unique_ptr<QCheckBox> checkAscii, checkHex, checkDec, checkBin;
         std::unique_ptr<QComboBox> comboLinebreak;
+        std::unique_ptr<QLabel> labelRxCount, labelTxCount;
 
         void checkAsciiHandler();
         void checkHexHandler();
         void checkDecHandler();
         void checkBinHandler();
         void lineBreakHandler();
+
+        void setRxCountImpl(int count);
+        void setTxCountImpl(int count);
 
         // Receive
         std::unique_ptr<QGridLayout> receiveGrid;

@@ -39,6 +39,9 @@ namespace controller {
                                                     lineBreakStateMachine.addAscii(res.front().ascii));
                         }
                         lineBreakMutex.unlock();
+
+                        sendCount += res.size();
+                        this->mainView->setTxCount(sendCount);
                     } catch (std::runtime_error &e) {
                         this->mainView->showError("Error sending", e.what());
                     }

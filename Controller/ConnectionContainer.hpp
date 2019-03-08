@@ -16,6 +16,7 @@ namespace controller {
         std::shared_ptr<SendHandler> sendThread;
         std::shared_ptr<util::serial::Interface> interface;
         std::shared_ptr<controller::SerialProxy> serialProxy;
+        int received = 0;
     };
 }
 

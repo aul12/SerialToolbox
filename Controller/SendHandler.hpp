@@ -38,6 +38,7 @@ namespace controller {
         std::shared_ptr<view::MainView> mainView;
         std::shared_ptr<controller::SerialProxy> serialProxy;
         std::thread thread;
+        std::atomic_int sendCount = 0;
     };
 }
 

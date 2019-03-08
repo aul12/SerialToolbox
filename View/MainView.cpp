@@ -50,6 +50,8 @@ namespace view {
         FIND_WIDGET(sendGrid);
         FIND_WIDGET(receiveGrid);
         FIND_WIDGET(comboLinebreak);
+        FIND_WIDGET(labelRxCount);
+        FIND_WIDGET(labelTxCount);
 
         mainWindow->connect(portCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int){
             portComboHandler();
@@ -168,6 +170,28 @@ namespace view {
 
     auto MainView::getBinEnabled() const -> bool {
         return this->checkBin->isChecked();
+    }
+
+    void MainView::setRxCount(int count) {
+        listLock.lock();
+        toCall.emplace_back(std::bind(&MainView::setRxCountImpl, this, count));
+        listLock.unlock();
+        QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
+    }
+
+    void MainView::setTxCount(int count) {
+        listLock.lock();
+        toCall.emplace_back(std::bind(&MainView::setTxCountImpl, this, count));
+        listLock.unlock();
+        QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
+    }
+
+    void MainView::setRxCountImpl(int count) {
+        this->labelRxCount->setText(QStringLiteral("RX: %1").arg(count));
+    }
+
+    void MainView::setTxCountImpl(int count) {
+        this->labelTxCount->setText(QStringLiteral("TX: %1").arg(count));
     }
 
     void MainView::setSerialOptionsVisibility(bool visible) {

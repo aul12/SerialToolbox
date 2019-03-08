@@ -442,7 +442,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="labelRx">
+        <widget class="QLabel" name="labelRxCount">
          <property name="text">
           <string>RX: 0</string>
          </property>
@@ -460,7 +460,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="labelTx">
+        <widget class="QLabel" name="labelTxCount">
          <property name="text">
           <string>TX: 0</string>
          </property>

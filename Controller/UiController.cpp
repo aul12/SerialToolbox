@@ -94,6 +94,8 @@ namespace controller {
             this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin,
                     lineBreakStateMachine.addAscii(repr.ascii));
         }
+        this->connectionHandler.value().received += representations.size();
+        this->mainView->setRxCount(this->connectionHandler.value().received);
     }
 
     void UiController::sendEvent(int repr, const std::string &data, int repetitions, int period) {
