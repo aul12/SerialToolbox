@@ -39,8 +39,15 @@ endif()
 set(QT_LIBS Qt5::Core Qt5::Widgets Qt5::Quick Qt5::UiTools)
 set(LIBS stdc++fs pthread ${QT_LIBS})
 
+add_definitions(-DUI_FILE_LOCATION="${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/main.ui")
+
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LIBS})
 
+install(TARGETS ${PROJECT_NAME}
+        DESTINATION bin/)
+install(FILES Res/main.ui DESTINATION share/${PROJECT_NAME}/)
+
 add_subdirectory(Tests)
+

@@ -13,7 +13,11 @@
 int main(int argc, char *argv[]) {
     QApplication app (argc, argv);
 
-    auto mainView = std::make_shared<view::MainView>("Res/main.ui");
+    std::string uiFile = UI_FILE_LOCATION;
+    if (argc == 2) {
+        uiFile = argv[1];  
+    } 
+    auto mainView = std::make_shared<view::MainView>(uiFile);
     controller::UiController uiController{mainView};
 
     QApplication::exec();
