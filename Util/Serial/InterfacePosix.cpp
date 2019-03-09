@@ -227,7 +227,7 @@ namespace util::serial {
 
         tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
 
-        tcflag_t parityFlag;
+        tcflag_t parityFlag = 0;
         switch (parity) {
             case Parity::NONE:
                 parityFlag = 0;
