@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QTimer>
+#include <QScrollArea>
 
 #include "../Util/Listener.hpp"
 #include "ByteRepresentationWidget.hpp"
@@ -106,11 +106,13 @@ namespace view {
 
         // Receive
         std::unique_ptr<QGridLayout> receiveGrid;
+        std::unique_ptr<QScrollArea> receiveScroll;
         std::deque<std::unique_ptr<ByteRepresentationWidget>> receiveWidgets;
         std::pair<int,int> receivePosition;
 
         // Send
         std::unique_ptr<QGridLayout> sendGrid;
+        std::unique_ptr<QScrollArea> sendScroll;
         std::deque<std::unique_ptr<ByteRepresentationWidget>> sendWidgets;
         std::pair<int,int> sendPosition;
         std::unique_ptr<QComboBox> encodingSendCombo;

@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="receiveScroll">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -150,7 +150,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QScrollArea" name="scrollArea_2">
+     <widget class="QScrollArea" name="sendScroll">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>

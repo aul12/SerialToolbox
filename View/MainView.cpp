@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QUiLoader>
 #include <QMessageBox>
+#include <QScrollBar>
 
 #define FIND_WIDGET(x) \
 x=std::unique_ptr<decltype(x)::element_type>(mainWindow->findChild<decltype(x)::element_type*>(#x)); \
@@ -56,6 +57,8 @@ namespace view {
         FIND_WIDGET(buttonResetTx);
         FIND_WIDGET(buttonClearReceived);
         FIND_WIDGET(buttonClearSent);
+        FIND_WIDGET(sendScroll);
+        FIND_WIDGET(receiveScroll);
 
         mainWindow->connect(portCombo.get(),  QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
                 this, [this](const QString &port){
@@ -223,6 +226,8 @@ namespace view {
         sendWidgets.back()->setVisibilityHex(this->getHexEnabled());
         sendWidgets.back()->setVisibilityAscii(this->getAsciiEnabled());
         this->sendGrid->addLayout(sendWidgets.back().get(), sendPosition.second, sendPosition.first);
+        this->sendScroll->verticalScrollBar()->setValue(
+                this->sendScroll->verticalScrollBar()->maximum());
 
         sendPosition.first++;
         if (addNewLine) {
@@ -241,6 +246,8 @@ namespace view {
         receiveWidgets.back()->setVisibilityHex(this->getHexEnabled());
         receiveWidgets.back()->setVisibilityAscii(this->getAsciiEnabled());
         this->receiveGrid->addLayout(receiveWidgets.back().get(), receivePosition.second, receivePosition.first);
+        this->receiveScroll->verticalScrollBar()->setValue(
+                this->receiveScroll->verticalScrollBar()->maximum());
 
         receivePosition.first++;
         if (addNewLine) {
