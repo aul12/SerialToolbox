@@ -38,7 +38,7 @@ namespace util::serial {
         void readerThread();
         int fd;
         std::future<void> readerThreadHandle;
-        std::mutex readLock;
+        std::atomic_bool finished;
         static constexpr std::size_t BUF_SIZE = 4096;
     };
 }

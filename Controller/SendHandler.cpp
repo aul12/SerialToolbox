@@ -63,6 +63,7 @@ namespace controller {
     SendHandler::~SendHandler() {
         finished = true;
         dataNotify.unlock();
+        thread.join();
     }
 
     void SendHandler::setLineBreak(LinebreakType linebreakType) {

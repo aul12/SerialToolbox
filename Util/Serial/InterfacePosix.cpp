@@ -19,7 +19,7 @@
 
 namespace util::serial {
 
-    InterfacePosix::InterfacePosix(const std::string &port, int baud) {
+    InterfacePosix::InterfacePosix(const std::string &port, int baud) : finished{false} {
         this->setPort(port);
         this->setBaud(baud);
         this->setParity(Parity::NONE);
@@ -37,7 +37,7 @@ namespace util::serial {
         tty.c_iflag &= ~IGNBRK;         // disable break processing
         tty.c_lflag = 0;                // no signaling chars, no echo, no canonical processing
         tty.c_oflag = 0;                // no remapping, no delays
-        tty.c_cc[VMIN] = 1;            // read requires at least one character
+        tty.c_cc[VMIN] = 0;            // read requires at least one character
         tty.c_cc[VTIME] = 0;            // read is  blocking
         tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
         tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls, enable reading
@@ -56,9 +56,7 @@ namespace util::serial {
     void InterfacePosix::readerThread() {
         std::array<uint8_t, BUF_SIZE> buffer{};
 
-        while (this->readLock.try_lock()) { // @TODO maybe should use notify
-            this->readLock.unlock();
-
+        while (!finished) { // @TODO maybe should use notify
             /*
              * Go fix your language (en). "read" needs to get a decent past tense form,
              * i decided on "readed" instead of the phonetically incorrect and irregular
@@ -79,9 +77,9 @@ namespace util::serial {
     }
 
     InterfacePosix::~InterfacePosix() {
-        this->readLock.lock();
-        close(this->fd);
+        finished = true;
         this->readerThreadHandle.wait();
+        close(this->fd);
     }
 
     void InterfacePosix::sendBuff(const std::vector<uint8_t> &buffer) const {
