@@ -10,6 +10,7 @@
 #include "RepresentationFlowView.hpp"
 
 #include <QHeaderView>
+#include <QScrollBar>
 
 RepresentationFlowView::RepresentationFlowView(std::shared_ptr<QTableView> view,
         const std::shared_ptr<QWidget>& mainWindow, int flowWidth)
@@ -66,7 +67,10 @@ void RepresentationFlowView::add(const std::string& ascii, const std::string& de
 
     this->view->update();
 
-    // @TODO scroll if at bottom
+    auto scrollbar = this->view->verticalScrollBar();
+    if (scrollbar->value() == scrollbar->maximum()) {
+        this->view->scrollToBottom();
+    }
 
     position.first++;
     if (addNewLine || position.first >= flowWidth) {
