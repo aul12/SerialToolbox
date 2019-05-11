@@ -22,11 +22,9 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QGridLayout>
-#include <QScrollArea>
 
 #include "../Util/Listener.hpp"
-#include "ByteRepresentationWidget.hpp"
+#include "RepresentationFlowView.hpp"
 
 namespace view {
     class MainView : private QObject {
@@ -38,9 +36,9 @@ namespace view {
 
         // Top Bar
         const util::Listener<std::string> portComboListener;
-        const util::Listener<int> baudSpinListener;
-        const util::Listener<int> dataBitsSpinListener;
-        const util::Listener<int> stopBitsSpinListener;
+        const util::Listener<> baudSpinListener;
+        const util::Listener<> dataBitsSpinListener;
+        const util::Listener<> stopBitsSpinListener;
         const util::Listener<int> parityListener;
 
         auto getPort() const -> std::string;
@@ -105,16 +103,12 @@ namespace view {
         void setTxCountImpl(int count);
 
         // Receive
-        std::unique_ptr<QGridLayout> receiveGrid;
-        std::unique_ptr<QScrollArea> receiveScroll;
-        std::deque<std::unique_ptr<ByteRepresentationWidget>> receiveWidgets;
-        std::pair<int,int> receivePosition;
+        std::shared_ptr<QTableView> receiveView;
+        std::unique_ptr<RepresentationFlowView> receiveFlowView;
 
         // Send
-        std::unique_ptr<QGridLayout> sendGrid;
-        std::unique_ptr<QScrollArea> sendScroll;
-        std::deque<std::unique_ptr<ByteRepresentationWidget>> sendWidgets;
-        std::pair<int,int> sendPosition;
+        std::shared_ptr<QTableView> sendView;
+        std::unique_ptr<RepresentationFlowView> sendFlowView;
         std::unique_ptr<QComboBox> encodingSendCombo;
         std::unique_ptr<QLineEdit> toSendEntry;
         std::unique_ptr<QSpinBox> repetitionsSpin, periodSpin;

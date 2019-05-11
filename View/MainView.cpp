@@ -13,13 +13,14 @@
 #include <QUiLoader>
 #include <QMessageBox>
 #include <QScrollBar>
+#include <QHeaderView>
 
 #define FIND_WIDGET(x) \
 x=std::unique_ptr<decltype(x)::element_type>(mainWindow->findChild<decltype(x)::element_type*>(#x)); \
 assert(x != nullptr)
 
 namespace view {
-    MainView::MainView(const std::string &uiFile) : receivePosition{0,0}, sendPosition{0,0} {
+    MainView::MainView(const std::string &uiFile) {
         QFile file{uiFile.c_str()};
         if(!file.open(QFile::ReadOnly)) {
             throw std::runtime_error("Could not find ui file");
@@ -48,8 +49,6 @@ namespace view {
         FIND_WIDGET(repetitionsSpin);
         FIND_WIDGET(periodSpin);
         FIND_WIDGET(sendButton);
-        FIND_WIDGET(sendGrid);
-        FIND_WIDGET(receiveGrid);
         FIND_WIDGET(comboLinebreak);
         FIND_WIDGET(labelRxCount);
         FIND_WIDGET(labelTxCount);
@@ -57,24 +56,24 @@ namespace view {
         FIND_WIDGET(buttonResetTx);
         FIND_WIDGET(buttonClearReceived);
         FIND_WIDGET(buttonClearSent);
-        FIND_WIDGET(sendScroll);
-        FIND_WIDGET(receiveScroll);
+        FIND_WIDGET(receiveView);
+        FIND_WIDGET(sendView);
 
         mainWindow->connect(portCombo.get(),  QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
                 this, [this](const QString &port){
             portComboListener(port.toLocal8Bit().data());
         });
-        mainWindow->connect(baudSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
-                this, [this](int baud){
-            baudSpinListener(baud);
+        mainWindow->connect(baudSpin.get(), &QSpinBox::editingFinished,
+                this, [this](){
+            baudSpinListener();
         });
-        mainWindow->connect(dataBitsSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
-                this, [this](int dataBits){
-            dataBitsSpinListener(dataBits);
+        mainWindow->connect(dataBitsSpin.get(), &QSpinBox::editingFinished,
+                this, [this](){
+            dataBitsSpinListener();
         });
-        mainWindow->connect(stopBitsSpin.get(), QOverload<int>::of(&QSpinBox::valueChanged),
-                this, [this](int stopBits){
-            stopBitsSpinListener(stopBits);
+        mainWindow->connect(stopBitsSpin.get(), &QSpinBox::editingFinished,
+                this, [this](){
+            stopBitsSpinListener();
         });
         mainWindow->connect(parityCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged),
                 this, [this](int sel){
@@ -127,6 +126,9 @@ namespace view {
         this->representationIds.insert({"HEX", 1});
         this->representationIds.insert({"DEC", 2});
         this->representationIds.insert({"BIN", 3});
+
+        this->receiveFlowView = std::make_unique<RepresentationFlowView>(receiveView, mainWindow, flowWidth);
+        this->sendFlowView = std::make_unique<RepresentationFlowView>(sendView, mainWindow, flowWidth);
     }
 
     void MainView::setPorts(const std::vector<std::string> &ports, int activeIndex) {
@@ -220,59 +222,19 @@ namespace view {
     }
 
     void MainView::addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
-        sendWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(mainWindow, ascii, dec, bin, hex));
-        sendWidgets.back()->setVisibilityBin(this->getBinEnabled());
-        sendWidgets.back()->setVisibilityDec(this->getDecEnabled());
-        sendWidgets.back()->setVisibilityHex(this->getHexEnabled());
-        sendWidgets.back()->setVisibilityAscii(this->getAsciiEnabled());
-        this->sendGrid->addLayout(sendWidgets.back().get(), sendPosition.second, sendPosition.first);
-        this->sendScroll->verticalScrollBar()->setValue(
-                this->sendScroll->verticalScrollBar()->maximum());
-
-        sendPosition.first++;
-        if (addNewLine) {
-            sendPosition.first = 0;
-            sendPosition.second++;
-        } else if (sendPosition.first >= flowWidth) {
-            sendPosition.first -= flowWidth;
-            sendPosition.second++;
-        }
+        this->sendFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 
     void MainView::addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
-        receiveWidgets.emplace_back(std::make_unique<ByteRepresentationWidget>(mainWindow, ascii, dec, bin, hex));
-        receiveWidgets.back()->setVisibilityBin(this->getBinEnabled());
-        receiveWidgets.back()->setVisibilityDec(this->getDecEnabled());
-        receiveWidgets.back()->setVisibilityHex(this->getHexEnabled());
-        receiveWidgets.back()->setVisibilityAscii(this->getAsciiEnabled());
-        this->receiveGrid->addLayout(receiveWidgets.back().get(), receivePosition.second, receivePosition.first);
-        this->receiveScroll->verticalScrollBar()->setValue(
-                this->receiveScroll->verticalScrollBar()->maximum());
-
-        receivePosition.first++;
-        if (addNewLine) {
-            receivePosition.first = 0;
-            receivePosition.second++;
-        } else if (receivePosition.first >= flowWidth) {
-            receivePosition.first -= flowWidth;
-            receivePosition.second++;
-        }
+        this->receiveFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 
     void MainView::clearReceived() {
-        for (const auto &widget : this->receiveWidgets) {
-            this->receiveGrid->removeItem(widget.get());
-        }
-        this->receiveWidgets.clear();
-        this->receivePosition = std::make_pair(0,0);
+        this->receiveFlowView->clear();
     }
 
     void MainView::clearSent() {
-        for (const auto &widget : this->sendWidgets) {
-            this->sendGrid->removeItem(widget.get());
-        }
-        this->sendWidgets.clear();
-        this->sendPosition = std::make_pair(0,0);
+        this->sendFlowView->clear();
     }
 
     void MainView::showErrorImpl(std::string title, std::string message) {
@@ -280,19 +242,8 @@ namespace view {
     }
 
     void MainView::setVisibility(bool ascii, bool dec, bool hex, bool bin) {
-        for (auto &widget : this->sendWidgets) {
-            widget->setVisibilityAscii(ascii);
-            widget->setVisibilityBin(bin);
-            widget->setVisibilityDec(dec);
-            widget->setVisibilityHex(hex);
-        }
-
-        for (auto &widget: this->receiveWidgets) {
-            widget->setVisibilityAscii(ascii);
-            widget->setVisibilityBin(bin);
-            widget->setVisibilityDec(dec);
-            widget->setVisibilityHex(hex);
-        }
+        this->receiveFlowView->setVisibility(ascii, dec, hex, bin);
+        this->sendFlowView->setVisibility(ascii, dec, hex, bin);
     }
 
     void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {

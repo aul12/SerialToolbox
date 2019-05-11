@@ -16,10 +16,10 @@ namespace controller {
 
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
 
-        std::function<void(int)> baudBind = std::bind(&UiController::baudEvent, this, std::placeholders::_1);
+        std::function<void()> baudBind = std::bind(&UiController::baudEvent, this);
         std::function<void(std::string)> portBind = std::bind(&UiController::portEvent, this, std::placeholders::_1);
-        std::function<void(int)> stopBitBind = std::bind(&UiController::stopBitsEvent, this, std::placeholders::_1);
-        std::function<void(int)> dataBitsBind = std::bind(&UiController::dataBitsEvent, this, std::placeholders::_1);
+        std::function<void()> stopBitBind = std::bind(&UiController::stopBitsEvent, this);
+        std::function<void()> dataBitsBind = std::bind(&UiController::dataBitsEvent, this);
         std::function<void(int)> parityBind = std::bind(&UiController::parityEvent, this, std::placeholders::_1);
         std::function<void(int,const std::string&,int,int)> sendBind =
                 std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
@@ -48,10 +48,10 @@ namespace controller {
         mainView->clearTxListener(txClearBind);
     }
 
-    void UiController::baudEvent(int baud) {
+    void UiController::baudEvent() {
         try {
             if (this->connectionHandler.has_value()) {
-                this->connectionHandler.value().interface->setBaud(baud);
+                this->connectionHandler.value().interface->setBaud(this->mainView->getBaud());
             }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting baud", e.what());
@@ -80,20 +80,20 @@ namespace controller {
         }
     }
 
-    void UiController::stopBitsEvent(int stopBits) {
+    void UiController::stopBitsEvent() {
         try {
             if (this->connectionHandler.has_value()) {
-                this->connectionHandler.value().interface->setStopBits(stopBits);
+                this->connectionHandler.value().interface->setStopBits(this->mainView->getStopBits());
             }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting stop bits", e.what());
         }
     }
 
-    void UiController::dataBitsEvent(int dataBits) {
+    void UiController::dataBitsEvent() {
         try {
             if (this->connectionHandler.has_value()) {
-                this->connectionHandler.value().interface->setDataBits(dataBits);
+                this->connectionHandler.value().interface->setDataBits(this->mainView->getDataBits());
             }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting data bits", e.what());
