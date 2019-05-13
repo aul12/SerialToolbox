@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=SerialToolbox
+Exec=SerialToolbox
+Comment=A serial port terminal and debugger, inspired by HTerm
+Categories=Development
+Keywords=Serial;Uart;HTerm
