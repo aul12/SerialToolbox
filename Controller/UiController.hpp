@@ -23,12 +23,13 @@ namespace controller {
         std::shared_ptr<view::MainView> mainView;
         std::optional<ConnectionContainer> connectionHandler;
 
+        void refreshEvent();
+        void connectEvent();
         void baudEvent();
-        void portEvent(std::string port);
         void stopBitsEvent();
         void dataBitsEvent();
         void parityEvent(int sel);
-        void receiveEvent(std::deque<Representations> representations);
+        void receiveEvent(const std::deque<Representations>& representations);
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);
         void lineBreakEvent(int type);

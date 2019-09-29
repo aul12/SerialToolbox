@@ -16,8 +16,9 @@ namespace controller {
 
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
 
+        std::function<void()> refreshBind = std::bind(&UiController::refreshEvent, this);
+        std::function<void()> connectBind = std::bind(&UiController::connectEvent, this);
         std::function<void()> baudBind = std::bind(&UiController::baudEvent, this);
-        std::function<void(std::string)> portBind = std::bind(&UiController::portEvent, this, std::placeholders::_1);
         std::function<void()> stopBitBind = std::bind(&UiController::stopBitsEvent, this);
         std::function<void()> dataBitsBind = std::bind(&UiController::dataBitsEvent, this);
         std::function<void(int)> parityBind = std::bind(&UiController::parityEvent, this, std::placeholders::_1);
@@ -31,8 +32,9 @@ namespace controller {
         std::function<void()> rxClearBind = std::bind(&UiController::clearRxEvent, this);
         std::function<void()> txClearBind = std::bind(&UiController::clearTxEvent, this);
 
+        mainView->refreshListener(refreshBind);
+        mainView->connectListener(connectBind);
         mainView->baudSpinListener(baudBind);
-        mainView->portComboListener(portBind);
         mainView->stopBitsSpinListener(stopBitBind);
         mainView->dataBitsSpinListener(dataBitsBind);
         mainView->parityListener(parityBind);
@@ -48,6 +50,48 @@ namespace controller {
         mainView->clearTxListener(txClearBind);
     }
 
+    void UiController::refreshEvent() {
+        auto currPort = mainView->getPort();
+        auto ports = util::serial::InterfaceImplementation::getAvailablePorts();
+        auto activeIndex = -1;
+
+        for (std::size_t c=0; c<ports.size(); ++c) {
+            if (ports[c] == currPort) {
+                activeIndex = static_cast<int>(c);
+            }
+        }
+
+        mainView->setPorts(ports, activeIndex);
+    }
+
+    void UiController::connectEvent() {
+        if (!this->connectionHandler.has_value()) {
+            try {
+                this->connectionHandler.reset();
+
+                ConnectionContainer nConnHandler;
+                nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>
+                        (mainView->getPort(), this->mainView->getBaud());
+                nConnHandler.serialProxy = std::make_shared<SerialProxy>(nConnHandler.interface);
+                nConnHandler.sendThread = std::make_shared<SendHandler>(this->mainView, nConnHandler.serialProxy);
+
+                std::function<void(std::deque<Representations>)> receiveBind =
+                        std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
+                nConnHandler.serialProxy->receiveListener(receiveBind);
+                this->connectionHandler = nConnHandler;
+
+                this->mainView->setConnectButtonText("Disconnect");
+            } catch (std::runtime_error &e) {
+                this->mainView->showError("Error setting port", e.what());
+                this->connectionHandler.reset();
+                this->mainView->setConnectButtonText("Connect");
+            }
+        } else {
+            this->connectionHandler.reset();
+            this->mainView->setConnectButtonText("Connect");
+        }
+    }
+
     void UiController::baudEvent() {
         try {
             if (this->connectionHandler.has_value()) {
@@ -55,28 +99,6 @@ namespace controller {
             }
         } catch (std::runtime_error &e) {
             this->mainView->showError("Error setting baud", e.what());
-        }
-    }
-
-    void UiController::portEvent(std::string port) {
-        try {
-            this->connectionHandler.reset();
-
-            ConnectionContainer nConnHandler;
-            nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>
-                    (port, this->mainView->getBaud());
-            nConnHandler.serialProxy = std::make_shared<SerialProxy>(nConnHandler.interface);
-            nConnHandler.sendThread = std::make_shared<SendHandler>(this->mainView, nConnHandler.serialProxy);
-
-            std::function<void(std::deque<Representations>)> receiveBind =
-                    std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
-            nConnHandler.serialProxy->receiveListener(receiveBind);
-            this->connectionHandler = nConnHandler;
-
-            this->mainView->setSerialOptionsVisibility(true);
-        } catch (std::runtime_error &e) {
-            this->mainView->showError("Error setting port", e.what());
-            this->mainView->setSerialOptionsVisibility(false);
         }
     }
 
@@ -100,7 +122,7 @@ namespace controller {
         }
     }
 
-    void UiController::receiveEvent(std::deque<Representations> representations) {
+    void UiController::receiveEvent(const std::deque<Representations>& representations) {
         for (const auto &repr : representations) {
             this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin,
                     lineBreakStateMachine.addAscii(repr.ascii));
