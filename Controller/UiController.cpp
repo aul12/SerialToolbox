@@ -56,7 +56,17 @@ namespace controller {
     }
 
     void UiController::refreshEvent() {
+        auto currPort = mainView->getPort();
+        auto ports = util::serial::InterfaceImplementation::getAvailablePorts();
+        auto activeIndex = -1;
 
+        for (std::size_t c=0; c<ports.size(); ++c) {
+            if (ports[c] == currPort) {
+                activeIndex = static_cast<int>(c);
+            }
+        }
+
+        mainView->setPorts(ports, activeIndex);
     }
 
     void UiController::connectEvent() {
