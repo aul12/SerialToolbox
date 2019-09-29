@@ -122,7 +122,7 @@ namespace controller {
         }
     }
 
-    void UiController::receiveEvent(std::deque<Representations> representations) {
+    void UiController::receiveEvent(const std::deque<Representations>& representations) {
         for (const auto &repr : representations) {
             this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin,
                     lineBreakStateMachine.addAscii(repr.ascii));

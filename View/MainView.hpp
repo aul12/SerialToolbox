@@ -48,7 +48,6 @@ namespace view {
         auto getDataBits() const -> int;
         auto getStopBits() const -> int;
 
-        void setSerialOptionsVisibility(bool visible);
         void setConnectButtonText(const std::string &text);
 
         // Sidebar
@@ -70,20 +69,20 @@ namespace view {
 
         // Center
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
-        void addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
-        void addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine = false);
+        void addReceived(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine = false);
+        void addSend(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine = false);
         void clearReceived();
         void clearSent();
 
         const util::Listener<int, const std::string&, int, int> sendClickListener;
 
         // Util
-        void showError(std::string title, std::string message);
+        void showError(const std::string& title, const std::string& message);
 
     private:
-        void addReceivedImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
-        void addSendImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
-        void showErrorImpl(std::string title, std::string message);
+        void addReceivedImpl(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine);
+        void addSendImpl(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine);
+        void showErrorImpl(const std::string& title, const std::string& message);
 
         std::shared_ptr<QWidget> mainWindow;
 

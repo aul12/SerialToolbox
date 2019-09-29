@@ -22,7 +22,7 @@ assert(x != nullptr)
 namespace view {
     MainView::MainView(const std::string &uiFile) {
         QFile file{uiFile.c_str()};
-        if(!file.open(QFile::ReadOnly)) {
+        if (!file.open(QFile::ReadOnly)) {
             throw std::runtime_error("Could not find ui file");
         }
         QUiLoader loader;
@@ -61,72 +61,72 @@ namespace view {
         FIND_WIDGET(receiveView);
         FIND_WIDGET(sendView);
 
-        mainWindow->connect(portCombo.get(),  QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
-                this, [this](const QString &port){
-            portComboListener(port.toLocal8Bit().data());
-        });
-        mainWindow->connect(refreshButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(portCombo.get(), QOverload<const QString &>::of(&QComboBox::currentIndexChanged),
+                            this, [this](const QString &port) {
+                    portComboListener(port.toLocal8Bit().data());
+                });
+        mainWindow->connect(refreshButton.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             refreshListener();
         });
-        mainWindow->connect(connectButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(connectButton.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             connectListener();
         });
         mainWindow->connect(baudSpin.get(), &QSpinBox::editingFinished,
-                this, [this](){
-            baudSpinListener();
-        });
+                            this, [this]() {
+                    baudSpinListener();
+                });
         mainWindow->connect(dataBitsSpin.get(), &QSpinBox::editingFinished,
-                this, [this](){
-            dataBitsSpinListener();
-        });
+                            this, [this]() {
+                    dataBitsSpinListener();
+                });
         mainWindow->connect(stopBitsSpin.get(), &QSpinBox::editingFinished,
-                this, [this](){
-            stopBitsSpinListener();
-        });
-        mainWindow->connect(parityCombo.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged),
-                this, [this](int sel){
-            parityListener(sel);
-        });
+                            this, [this]() {
+                    stopBitsSpinListener();
+                });
+        mainWindow->connect(parityCombo.get(), QOverload<int>::of(&QComboBox::currentIndexChanged),
+                            this, [this](int sel) {
+                    parityListener(sel);
+                });
 
-        mainWindow->connect(checkAscii.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
-                this, [this](int state){
-            asciiEnabledListener(state == Qt::Checked);
-        });
-        mainWindow->connect(checkBin.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
-                this, [this](int state){
-            binEnabledListener(state == Qt::Checked);
-        });
-        mainWindow->connect(checkDec.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
-                this, [this](int state){
-            decEnabledListener(state == Qt::Checked);
-        });
-        mainWindow->connect(checkHex.get(),  QOverload<int>::of(&QCheckBox::stateChanged),
-                this, [this](int state){
-            hexEnabledListener(state == Qt::Checked);
-        });
+        mainWindow->connect(checkAscii.get(), QOverload<int>::of(&QCheckBox::stateChanged),
+                            this, [this](int state) {
+                    asciiEnabledListener(state == Qt::Checked);
+                });
+        mainWindow->connect(checkBin.get(), QOverload<int>::of(&QCheckBox::stateChanged),
+                            this, [this](int state) {
+                    binEnabledListener(state == Qt::Checked);
+                });
+        mainWindow->connect(checkDec.get(), QOverload<int>::of(&QCheckBox::stateChanged),
+                            this, [this](int state) {
+                    decEnabledListener(state == Qt::Checked);
+                });
+        mainWindow->connect(checkHex.get(), QOverload<int>::of(&QCheckBox::stateChanged),
+                            this, [this](int state) {
+                    hexEnabledListener(state == Qt::Checked);
+                });
 
-        mainWindow->connect(comboLinebreak.get(),  QOverload<int>::of(&QComboBox::currentIndexChanged),
-                this, [this](int index){
-            linebreakListener(index);
-        });
+        mainWindow->connect(comboLinebreak.get(), QOverload<int>::of(&QComboBox::currentIndexChanged),
+                            this, [this](int index) {
+                    linebreakListener(index);
+                });
 
-        mainWindow->connect(sendButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(sendButton.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             sendHandler();
         });
 
-        mainWindow->connect(buttonResetRx.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(buttonResetRx.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             resetRxListener();
         });
 
-        mainWindow->connect(buttonResetTx.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(buttonResetTx.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             resetTxListener();
         });
 
-        mainWindow->connect(buttonClearSent.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(buttonClearSent.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             clearTxListener();
         });
 
-        mainWindow->connect(buttonClearReceived.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+        mainWindow->connect(buttonClearReceived.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
             clearRxListener();
         });
 
@@ -220,24 +220,19 @@ namespace view {
         this->labelTxCount->setText(QStringLiteral("TX: %1").arg(count));
     }
 
-    void MainView::setSerialOptionsVisibility(bool visible) {
-        this->baudSpin->setVisible(visible);
-        this->stopBitsSpin->setVisible(visible);
-        this->dataBitsSpin->setVisible(visible);
-        this->parityCombo->setVisible(visible);
-        this->stopBitsLabel->setVisible(visible);
-        this->dataBitsLabel->setVisible(visible);
-    }
-
     void MainView::setConnectButtonText(const std::string &text) {
         this->connectButton->setText(text.c_str());
     }
 
-    void MainView::addSendImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void MainView::addSendImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
+                               const std::string &bin,
+                               bool addNewLine) {
         this->sendFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 
-    void MainView::addReceivedImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void MainView::addReceivedImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
+                                   const std::string &bin,
+                                   bool addNewLine) {
         this->receiveFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 
@@ -249,7 +244,7 @@ namespace view {
         this->sendFlowView->clear();
     }
 
-    void MainView::showErrorImpl(std::string title, std::string message) {
+    void MainView::showErrorImpl(const std::string &title, const std::string &message) {
         QMessageBox::critical(mainWindow.get(), title.c_str(), message.c_str(), QMessageBox::Ok);
     }
 
@@ -258,21 +253,26 @@ namespace view {
         this->sendFlowView->setVisibility(ascii, dec, hex, bin);
     }
 
-    void MainView::addReceived(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void
+    MainView::addReceived(const std::string &ascii, const std::string &dec, const std::string &hex,
+                          const std::string &bin,
+                          bool addNewLine) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addReceivedImpl, this, ascii, dec, hex, bin, addNewLine));
         listLock.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::addSend(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void
+    MainView::addSend(const std::string &ascii, const std::string &dec, const std::string &hex, const std::string &bin,
+                      bool addNewLine) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::addSendImpl, this, ascii, dec, hex, bin, addNewLine));
         listLock.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::showError(std::string title, std::string message) {
+    void MainView::showError(const std::string &title, const std::string &message) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::showErrorImpl, this, title, message));
         listLock.unlock();
@@ -280,7 +280,7 @@ namespace view {
     }
 
     void MainView::mainThreadHandler() {
-        if(this->listLock.try_lock()) {
+        if (this->listLock.try_lock()) {
             for (const auto &f : this->toCall) {
                 f();
             }

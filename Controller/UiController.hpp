@@ -29,7 +29,7 @@ namespace controller {
         void stopBitsEvent();
         void dataBitsEvent();
         void parityEvent(int sel);
-        void receiveEvent(std::deque<Representations> representations);
+        void receiveEvent(const std::deque<Representations>& representations);
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);
         void lineBreakEvent(int type);
