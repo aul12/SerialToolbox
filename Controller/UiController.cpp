@@ -16,7 +16,6 @@ namespace controller {
 
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
 
-        std::function<void(std::string)> portBind = std::bind(&UiController::portEvent, this, std::placeholders::_1);
         std::function<void()> refreshBind = std::bind(&UiController::refreshEvent, this);
         std::function<void()> connectBind = std::bind(&UiController::connectEvent, this);
         std::function<void()> baudBind = std::bind(&UiController::baudEvent, this);
@@ -33,7 +32,6 @@ namespace controller {
         std::function<void()> rxClearBind = std::bind(&UiController::clearRxEvent, this);
         std::function<void()> txClearBind = std::bind(&UiController::clearTxEvent, this);
 
-        mainView->portComboListener(portBind);
         mainView->refreshListener(refreshBind);
         mainView->connectListener(connectBind);
         mainView->baudSpinListener(baudBind);
@@ -50,9 +48,6 @@ namespace controller {
         mainView->resetRxListener(rxResetBind);
         mainView->clearRxListener(rxClearBind);
         mainView->clearTxListener(txClearBind);
-    }
-
-    void UiController::portEvent(const std::string& ) {
     }
 
     void UiController::refreshEvent() {
