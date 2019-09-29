@@ -32,6 +32,8 @@ namespace view {
         mainWindow->showMaximized();
 
         FIND_WIDGET(portCombo);
+        FIND_WIDGET(refreshButton);
+        FIND_WIDGET(connectButton);
         FIND_WIDGET(parityCombo);
         FIND_WIDGET(baudSpin);
         FIND_WIDGET(dataBitsSpin);
@@ -62,6 +64,12 @@ namespace view {
         mainWindow->connect(portCombo.get(),  QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
                 this, [this](const QString &port){
             portComboListener(port.toLocal8Bit().data());
+        });
+        mainWindow->connect(refreshButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            refreshListener();
+        });
+        mainWindow->connect(connectButton.get(),  QOverload<bool>::of(&QPushButton::clicked), this, [this](bool){
+            connectListener();
         });
         mainWindow->connect(baudSpin.get(), &QSpinBox::editingFinished,
                 this, [this](){
@@ -221,11 +229,15 @@ namespace view {
         this->dataBitsLabel->setVisible(visible);
     }
 
-    void MainView::addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void MainView::setConnectButtonText(const std::string &text) {
+        this->connectButton->setText(text.c_str());
+    }
+
+    void MainView::addSendImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
         this->sendFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 
-    void MainView::addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
+    void MainView::addReceivedImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine) {
         this->receiveFlowView->add(ascii, dec, hex, bin, addNewLine);
     }
 

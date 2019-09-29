@@ -23,8 +23,10 @@ namespace controller {
         std::shared_ptr<view::MainView> mainView;
         std::optional<ConnectionContainer> connectionHandler;
 
+        void portEvent(const std::string& port);
+        void refreshEvent();
+        void connectEvent();
         void baudEvent();
-        void portEvent(std::string port);
         void stopBitsEvent();
         void dataBitsEvent();
         void parityEvent(int sel);

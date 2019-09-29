@@ -36,6 +36,8 @@ namespace view {
 
         // Top Bar
         const util::Listener<std::string> portComboListener;
+        const util::Listener<> refreshListener;
+        const util::Listener<> connectListener;
         const util::Listener<> baudSpinListener;
         const util::Listener<> dataBitsSpinListener;
         const util::Listener<> stopBitsSpinListener;
@@ -47,6 +49,7 @@ namespace view {
         auto getStopBits() const -> int;
 
         void setSerialOptionsVisibility(bool visible);
+        void setConnectButtonText(const std::string &text);
 
         // Sidebar
         const util::Listener<bool> asciiEnabledListener;
@@ -78,14 +81,16 @@ namespace view {
         void showError(std::string title, std::string message);
 
     private:
-        void addReceivedImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
-        void addSendImpl(std::string ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
+        void addReceivedImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
+        void addSendImpl(const std::string& ascii, std::string dec, std::string hex, std::string bin, bool addNewLine);
         void showErrorImpl(std::string title, std::string message);
 
         std::shared_ptr<QWidget> mainWindow;
 
         // Top bar
         std::unique_ptr<QComboBox> portCombo;
+        std::unique_ptr<QPushButton> refreshButton;
+        std::unique_ptr<QPushButton> connectButton;
         std::unique_ptr<QComboBox> parityCombo;
         std::unique_ptr<QSpinBox> baudSpin;
         std::unique_ptr<QSpinBox> dataBitsSpin;

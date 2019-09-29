@@ -196,6 +196,20 @@
         <widget class="QComboBox" name="portCombo"/>
        </item>
        <item>
+        <widget class="QPushButton" name="refreshButton">
+         <property name="text">
+          <string>Refresh</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="connectButton">
+         <property name="text">
+          <string>Connect</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="baudLabel">
          <property name="text">
           <string>Baud:</string>
