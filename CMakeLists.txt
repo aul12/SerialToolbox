@@ -50,6 +50,7 @@ target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LIBS})
 install(TARGETS ${PROJECT_NAME}
         DESTINATION bin/)
 install(FILES Res/main.ui DESTINATION share/${PROJECT_NAME}/)
+install(CODE "execute_process(COMMAND xdg-desktop-menu install ${CMAKE_SOURCE_DIR}/aul12-SerialToolbox.desktop)")
 
 add_subdirectory(Tests)
 
