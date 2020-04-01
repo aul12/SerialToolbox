@@ -164,15 +164,15 @@ namespace controller {
     void UiController::resetRxEvent() {
         if (this->connectionHandler.has_value()) {
             this->connectionHandler.value().received = 0;
-            this->mainView->setRxCount(0);
         }
+        this->mainView->setRxCount(0);
     }
 
     void UiController::resetTxEvent() {
         if (this->connectionHandler.has_value()) {
             this->connectionHandler.value().sendThread->resetCount();
-            this->mainView->setTxCount(0);
         }
+        this->mainView->setTxCount(0);
     }
 
     void UiController::clearRxEvent() {
