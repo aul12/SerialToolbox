@@ -25,7 +25,12 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Quick REQUIRED)
 find_package(Qt5UiTools REQUIRED)
 
-add_external_dependency(googletest https://github.com/google/googletest.git master)
+
+option(BUILD_TESTS "Build Unit Tests for SerialToolbox" ON)
+
+if (BUILD_TESTS)
+    add_external_dependency(googletest https://github.com/google/googletest.git master)
+endif ()
 
 set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/View/MainView.cpp

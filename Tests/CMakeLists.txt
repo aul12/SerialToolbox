@@ -1,4 +1,3 @@
-option(BUILD_TESTS "Build Unit Tests for SerialToolbox" ON)
 
 if (BUILD_TESTS)
     project(Tests)
