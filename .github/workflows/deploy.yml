@@ -24,7 +24,7 @@ jobs:
           mkdir -p ${dirname}/usr/local/bin
       - name: Install dependencies
         run: |
-          sudo apt install qtbase5-dev
+          sudo apt install qt5-default qtbase5-dev
       - name: Build Application
         run: |
           mkdir build
