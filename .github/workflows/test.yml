@@ -16,17 +16,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Install GTest
-        run: |
-          sudo apt install libgtest-dev google-mock
-          cd /usr/src/gtest
-          sudo cmake CMakeLists.txt
-          sudo make -j$(nproc)
-          sudo cp *.a /usr/lib
-          cd /usr/src/gmock
-          sudo cmake CMakeLists.txt
-          sudo make -j$(nproc)
-          sudo cp *.a /usr/lib
       - name: Install dependencies
         run: |
           sudo apt install qtbase5-dev-tools

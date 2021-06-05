@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(SerialToolbox)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/external_dep.cmake)
+
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif (NOT CMAKE_BUILD_TYPE)
@@ -22,6 +24,8 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Quick REQUIRED)
 find_package(Qt5UiTools REQUIRED)
+
+add_external_dependency(googletest https://github.com/google/googletest.git master)
 
 set(SOURCES ${CMAKE_SOURCE_DIR}/Util/Serial/Interface.cpp
         ${CMAKE_SOURCE_DIR}/View/MainView.cpp
