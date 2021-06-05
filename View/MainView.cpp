@@ -61,8 +61,9 @@ namespace view {
         FIND_WIDGET(receiveView);
         FIND_WIDGET(sendView);
 
-        mainWindow->connect(portCombo.get(), QOverload<const QString &>::of(&QComboBox::currentIndexChanged),
-                            this, [this](const QString &port) {
+        mainWindow->connect(portCombo.get(), QOverload<int>::of(&QComboBox::currentIndexChanged),
+                            this, [this](int index) {
+                    auto port = portCombo->itemText(index);
                     portComboListener(port.toLocal8Bit().data());
                 });
         mainWindow->connect(refreshButton.get(), QOverload<bool>::of(&QPushButton::clicked), this, [this](bool) {
