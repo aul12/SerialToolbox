@@ -11,6 +11,7 @@
 #include <list>
 #include <mutex>
 #include <memory>
+#include <thread>
 #include "../View/MainView.hpp"
 #include "SerialProxy.hpp"
 #include "LineBreakStateMachine.hpp"

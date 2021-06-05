@@ -8,7 +8,6 @@
  */
 
 #include "SendHandler.hpp"
-#include <thread>
 
 namespace controller {
     SendHandler::SendHandler(std::shared_ptr<view::MainView> mainView,
