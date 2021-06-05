@@ -1,0 +1,51 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      package_name: serialtoolbox
+      package_version: 0.2-1
+      dirname: serialtoolbox_0.2-1
+      CC: gcc-10
+      CXX: g++-10
+
+    steps:
+      - name: Checkout️
+        uses: actions/checkout@v2.3.1
+      - name: Setup .deb Directory
+        run: mkdir -p ${dirname}/usr/local/bin
+      - name: Install dependencies
+        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
+      - name: Build Application
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_INSTALL_PREFIX=../${dirname}/usr/local -DBUILD_TEST=OFF ..
+          make -j$(nproc) install
+      - name: Install Package config
+        run: |
+          mkdir -p ${dirname}/DEBIAN
+          cp .github/workflows/debian_control ${dirname}/DEBIAN/control
+          sed -i "s/PACKAGE_NAME/$package_name/g" ${dirname}/DEBIAN/control
+          sed -i "s/PACKAGE_VERSION/$package_version/g" ${dirname}/DEBIAN/control
+          cp package/postinst ${dirname}/DEBIAN/postinst
+          chmod 0555 ${dirname}/DEBIAN/postinst
+      - name: Build Package
+        run: dpkg-deb --build ${dirname}
+      - name: Test install
+        run: sudo dpkg -i ${dirname}.deb
+      - name: Move Package into deploy dir
+        run: |
+          mkdir deploy
+          cp ${dirname}.deb deploy/${package_name}.deb
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: deploy
+          CLEAN: true

@@ -1,8 +1,9 @@
-project(Tests)
 
-enable_testing()
-find_package(GTest)
-if (GTest_FOUND)
+if (BUILD_TESTS)
+    project(Tests)
+
+    enable_testing()
+
     include_directories(${GTEST_INCLUDE_DIR})
 
     set(TEST_SOURCES

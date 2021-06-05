@@ -1,0 +1,29 @@
+name: Unit Tests
+on: [pull_request]
+
+jobs:
+  GTest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++-9, g++-10, clang++-9, clang++-10]
+        build: [Release, Debug]
+    env:
+      CXX: ${{ matrix.cxx }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev clang-*
+      - name: Set up Build
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build }} ..
+      - name: Build
+        run: |
+          cd build
+          make -j$(nproc)
+      - name: Test
+        run: ./build/Tests/Tests
