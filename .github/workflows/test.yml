@@ -15,8 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: |
-          sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev clang-*
+        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev clang-*
       - name: Set up Build
         run: |
           mkdir build
@@ -27,5 +26,4 @@ jobs:
           cd build
           make -j$(nproc)
       - name: Test
-        run: |
-          ./build/Tests/Tests
+        run: ./build/Tests/Tests

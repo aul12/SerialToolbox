@@ -17,17 +17,15 @@ jobs:
       - name: Checkout️
         uses: actions/checkout@v2.3.1
       - name: Setup .deb Directory
-        run: |
-          mkdir -p ${dirname}/usr/local/bin
+        run: mkdir -p ${dirname}/usr/local/bin
       - name: Install dependencies
-        run: |
-          sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
+        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
       - name: Build Application
         run: |
           mkdir build
           cd build
           cmake -DCMAKE_INSTALL_PREFIX=../${dirname}/usr/local -DBUILD_TEST=OFF ..
-          make -j$(nproc)
+          make -j$(nproc) install
       - name: Install Package config
         run: |
           mkdir -p ${dirname}/DEBIAN
