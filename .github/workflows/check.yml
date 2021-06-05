@@ -1,0 +1,44 @@
+name: Static Analysis
+on: [pull_request]
+
+jobs:
+  Clang-Tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Clang-Tidy
+        run: |
+          sudo apt install clang-tidy
+      - name: Set up Build
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
+          cp compile_commands.json ..
+      - name: Run Clang Tidy
+        run: |
+          run-clang-tidy -j$(nproc) -quiet | tee clangtidy.log
+      - name: Check Clang Tidy Result
+        run: |
+          if grep "error" clangtidy.log; then exit 1; fi;
+
+  CppCheck:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install CppCheck
+        run: |
+          sudo apt install cppcheck
+      - name: Set up Build
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  ..
+          cp compile_commands.json ..
+      - name: Run CppCheck
+        run: |
+          cppcheck --project=compile_commands.json --error-exitcode=1
