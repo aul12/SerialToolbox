@@ -1,23 +1,27 @@
-project(Tests)
+option(BUILD_TESTS "Build Unit Tests for SerialToolbox" ON)
 
-enable_testing()
+if (BUILD_TESTS)
+    project(Tests)
 
-include_directories(${GTEST_INCLUDE_DIR})
+    enable_testing()
 
-set(TEST_SOURCES
-        ${CMAKE_SOURCE_DIR}/Tests/Util/Listener.cpp
-        ${CMAKE_SOURCE_DIR}/Tests/Controller/SerialProxy.cpp
-        ${CMAKE_SOURCE_DIR}/Tests/Controller/UiController.cpp
-        ${CMAKE_SOURCE_DIR}/Tests/Controller/LineBreakStateMachine.cpp
-        ${CMAKE_SOURCE_DIR}/Tests/Util/Serial/Interface.cpp)
+    include_directories(${GTEST_INCLUDE_DIR})
 
-include_directories(${CMAKE_SOURCE_DIR})
+    set(TEST_SOURCES
+            ${CMAKE_SOURCE_DIR}/Tests/Util/Listener.cpp
+            ${CMAKE_SOURCE_DIR}/Tests/Controller/SerialProxy.cpp
+            ${CMAKE_SOURCE_DIR}/Tests/Controller/UiController.cpp
+            ${CMAKE_SOURCE_DIR}/Tests/Controller/LineBreakStateMachine.cpp
+            ${CMAKE_SOURCE_DIR}/Tests/Util/Serial/Interface.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp ${SOURCES} ${TEST_SOURCES})
+    include_directories(${CMAKE_SOURCE_DIR})
 
-target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LIBS} gmock gtest)
+    add_executable(${PROJECT_NAME} main.cpp ${SOURCES} ${TEST_SOURCES})
 
-add_test(
-        NAME ${PROJECT_NAME}
-        COMMAND ${PROJECT_NAME}
-)
+    target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES} ${LIBS} gmock gtest)
+
+    add_test(
+            NAME ${PROJECT_NAME}
+            COMMAND ${PROJECT_NAME}
+    )
+endif ()
