@@ -17,7 +17,7 @@ namespace util::serial {
      * on Linux Kernel 4.15.
      */
     class InterfacePosix : public Interface {
-    public:
+      public:
         explicit InterfacePosix(const std::string &port, int baud = 9600);
 
         void setBaud(int baud) override;
@@ -33,7 +33,8 @@ namespace util::serial {
         ~InterfacePosix() override;
 
         static auto getAvailablePorts() -> std::vector<std::string>;
-    private:
+
+      private:
         void sendBuff(const std::vector<uint8_t> &buffer) const override;
         void readerThread();
         int fd;
@@ -41,6 +42,6 @@ namespace util::serial {
         std::atomic_bool finished;
         static constexpr std::size_t BUF_SIZE = 4096;
     };
-}
+} // namespace util::serial
 
-#endif //HTERMCLONE_SERIALINTERFACE_HPP
+#endif // HTERMCLONE_SERIALINTERFACE_HPP

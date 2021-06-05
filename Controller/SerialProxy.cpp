@@ -7,13 +7,14 @@
 
 #include "SerialProxy.hpp"
 
-#include <sstream>
 #include <bitset>
+#include <sstream>
 
 namespace controller {
 
-    SerialProxy::SerialProxy(const std::shared_ptr<util::serial::Interface> &interface)
-        : receiveListener{}, interface{interface} {
+    SerialProxy::SerialProxy(const std::shared_ptr<util::serial::Interface> &interface) :
+        receiveListener{},
+        interface{interface} {
         interface->registerReceiveCallback(std::bind(&SerialProxy::readCallback, this, std::placeholders::_1));
 
         specialAsciiCharacters.insert({0, "NUL"});
@@ -52,17 +53,17 @@ namespace controller {
     }
 
     auto SerialProxy::send(const std::vector<std::string> &bytes, const Representation representation)
-        -> std::deque<Representations> {
+            -> std::deque<Representations> {
         std::vector<uint8_t> buf;
 
         std::transform(bytes.begin(), bytes.end(), std::back_inserter(buf),
-                       [&representation, this] (const auto &b) { return convertToByte(b, representation); });
+                       [&representation, this](const auto &b) { return convertToByte(b, representation); });
 
         interface->send(buf.begin(), buf.end());
 
         std::deque<Representations> representations;
         std::transform(buf.begin(), buf.end(), std::back_inserter(representations),
-                std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
+                       std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
 
         return representations;
     }
@@ -70,7 +71,7 @@ namespace controller {
     void SerialProxy::readCallback(const std::vector<uint8_t> &data) {
         std::deque<Representations> ret;
         std::transform(data.begin(), data.end(), std::back_inserter(ret),
-                std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
+                       std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
         receiveListener(ret);
     }
 
@@ -143,4 +144,4 @@ namespace controller {
         }
         return std::nullopt;
     }
-}
+} // namespace controller

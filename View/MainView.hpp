@@ -8,20 +8,19 @@
 #ifndef SERIALTOOLBOX_MAINVIEW_HPP
 #define SERIALTOOLBOX_MAINVIEW_HPP
 
-#include <map>
-#include <memory>
-#include <deque>
-#include <mutex>
-#include <functional>
-#include <list>
-
-#include <QWidget>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QLabel>
 #include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSpinBox>
+#include <QWidget>
+#include <deque>
+#include <functional>
+#include <list>
+#include <map>
+#include <memory>
+#include <mutex>
 
 #include "../Util/Listener.hpp"
 #include "RepresentationFlowView.hpp"
@@ -29,7 +28,7 @@
 namespace view {
     class MainView : private QObject {
         Q_OBJECT
-    public:
+      public:
         explicit MainView(const std::string &uiFile);
 
         void setPorts(const std::vector<std::string> &ports, int activeIndex = 0);
@@ -69,20 +68,24 @@ namespace view {
 
         // Center
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
-        void addReceived(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine = false);
-        void addSend(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine = false);
+        void addReceived(const std::string &ascii, const std::string &dec, const std::string &hex,
+                         const std::string &bin, bool addNewLine = false);
+        void addSend(const std::string &ascii, const std::string &dec, const std::string &hex, const std::string &bin,
+                     bool addNewLine = false);
         void clearReceived();
         void clearSent();
 
-        const util::Listener<int, const std::string&, int, int> sendClickListener;
+        const util::Listener<int, const std::string &, int, int> sendClickListener;
 
         // Util
-        void showError(const std::string& title, const std::string& message);
+        void showError(const std::string &title, const std::string &message);
 
-    private:
-        void addReceivedImpl(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine);
-        void addSendImpl(const std::string& ascii, const std::string& dec, const std::string& hex, const std::string& bin, bool addNewLine);
-        void showErrorImpl(const std::string& title, const std::string& message);
+      private:
+        void addReceivedImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
+                             const std::string &bin, bool addNewLine);
+        void addSendImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
+                         const std::string &bin, bool addNewLine);
+        void showErrorImpl(const std::string &title, const std::string &message);
 
         std::shared_ptr<QWidget> mainWindow;
 
@@ -127,9 +130,9 @@ namespace view {
         // UI Updates in the Main-Thread
         std::mutex listLock;
         std::list<std::function<void()>> toCall;
-    public slots:
+      public slots:
         void mainThreadHandler();
     };
-}
+} // namespace view
 
 #endif

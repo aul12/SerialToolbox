@@ -7,15 +7,15 @@
 
 #include "InterfacePosix.hpp"
 
-#include <fcntl.h>
+#include <cassert>
 #include <cstring>
+#include <fcntl.h>
+#include <filesystem>
+#include <mutex>
+#include <regex>
 #include <termios.h>
 #include <unistd.h>
-#include <cassert>
 #include <vector>
-#include <mutex>
-#include <filesystem>
-#include <regex>
 
 namespace util::serial {
 
@@ -34,13 +34,13 @@ namespace util::serial {
 
         // disable IGNBRK for mismatched speed tests; otherwise receive break
         // as \000 chars
-        tty.c_iflag &= ~IGNBRK;         // disable break processing
-        tty.c_lflag = 0;                // no signaling chars, no echo, no canonical processing
-        tty.c_oflag = 0;                // no remapping, no delays
-        tty.c_cc[VMIN] = 0;            // read requires at least one character
-        tty.c_cc[VTIME] = 0;            // read is  blocking
+        tty.c_iflag &= ~IGNBRK;                 // disable break processing
+        tty.c_lflag = 0;                        // no signaling chars, no echo, no canonical processing
+        tty.c_oflag = 0;                        // no remapping, no delays
+        tty.c_cc[VMIN] = 0;                     // read requires at least one character
+        tty.c_cc[VTIME] = 0;                    // read is  blocking
         tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
-        tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls, enable reading
+        tty.c_cflag |= (CLOCAL | CREAD);        // ignore modem controls, enable reading
 
 #ifdef CRTSCTS
         tty.c_cflag &= ~CRTSCTS; // Disable hardware flow control if possible (not Posix, only Linux)
@@ -223,7 +223,7 @@ namespace util::serial {
             throw std::runtime_error(strerror(errno));
         }
 
-        tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
+        tty.c_cflag &= ~(PARENB | PARODD); // shut off parity
 
         tcflag_t parityFlag = 0;
         switch (parity) {
@@ -275,7 +275,7 @@ namespace util::serial {
             default:
                 throw std::runtime_error("Invalid dataBits (needs to be \\in [5,8]");
         }
-        tty.c_cflag = (tty.c_cflag & ~CSIZE) | charSize;     // 8-bit chars
+        tty.c_cflag = (tty.c_cflag & ~CSIZE) | charSize; // 8-bit chars
 
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
@@ -306,7 +306,7 @@ namespace util::serial {
         std::string path = "/dev/";
         std::regex deviceRegex{"tty[a-zA-Z]+[0-9]+"};
         std::vector<std::string> results;
-        for (const auto & entry : std::filesystem::directory_iterator(path)) {
+        for (const auto &entry : std::filesystem::directory_iterator(path)) {
             if (entry.is_character_file()) {
                 std::string fileName = entry.path().filename();
                 if (std::regex_match(fileName, deviceRegex)) {
@@ -316,4 +316,4 @@ namespace util::serial {
         }
         return results;
     }
-}
+} // namespace util::serial

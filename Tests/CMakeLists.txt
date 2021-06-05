@@ -22,4 +22,4 @@ if (GTest_FOUND)
             NAME ${PROJECT_NAME}
             COMMAND ${PROJECT_NAME}
     )
-endif()
+endif ()

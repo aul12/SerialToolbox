@@ -20,4 +20,4 @@ namespace util::serial {
             this->callback.value()(data);
         }
     }
-}
+} // namespace util::serial

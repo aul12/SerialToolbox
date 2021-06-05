@@ -9,17 +9,17 @@
 #define SERIALTOOLBOX_INTERFACEIMPL_HPP
 
 #ifdef POSIX
-#include "InterfacePosix.hpp"
+    #include "InterfacePosix.hpp"
 #else
-#error "Cannot build on Windows"
+    #error "Cannot build on Windows"
 #endif
 
 namespace util::serial {
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
     using InterfaceImplementation = util::serial::InterfacePosix;
 #else
     using InterfaceImplementation = util::serial::ImACompilerError
 #endif
-}
+} // namespace util::serial
 
-#endif //SERIALTOOLBOX_INTERFACEIMPL_HPP
+#endif // SERIALTOOLBOX_INTERFACEIMPL_HPP

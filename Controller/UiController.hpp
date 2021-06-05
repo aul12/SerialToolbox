@@ -8,18 +8,18 @@
 #ifndef SERIALTOOLBOX_UICONTROLLER_HPP
 #define SERIALTOOLBOX_UICONTROLLER_HPP
 
-#include "SerialProxy.hpp"
 #include "../View/MainView.hpp"
-#include "SendHandler.hpp"
 #include "ConnectionContainer.hpp"
 #include "LineBreakStateMachine.hpp"
+#include "SendHandler.hpp"
+#include "SerialProxy.hpp"
 
 namespace controller {
     class UiController {
-    public:
+      public:
         explicit UiController(const std::shared_ptr<view::MainView> &mainView);
 
-    private:
+      private:
         std::shared_ptr<view::MainView> mainView;
         std::optional<ConnectionContainer> connectionHandler;
 
@@ -29,7 +29,7 @@ namespace controller {
         void stopBitsEvent();
         void dataBitsEvent();
         void parityEvent(int sel);
-        void receiveEvent(const std::deque<Representations>& representations);
+        void receiveEvent(const std::deque<Representations> &representations);
         void sendEvent(int repr, const std::string &data, int repetitions, int period);
         void visibilityEvent(bool);
         void lineBreakEvent(int type);
@@ -39,6 +39,6 @@ namespace controller {
         void clearTxEvent();
         LineBreakStateMachine lineBreakStateMachine;
     };
-}
+} // namespace controller
 
 #endif

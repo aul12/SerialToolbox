@@ -8,25 +8,23 @@
 #ifndef SERIALTOOLBOX_INTERFACE_HPP
 #define SERIALTOOLBOX_INTERFACE_HPP
 
-#include <string>
-#include <optional>
-#include <functional>
-#include <vector>
-#include <mutex>
-#include <future>
-#include <cstdint>
 #include <cassert>
+#include <cstdint>
+#include <functional>
+#include <future>
+#include <mutex>
+#include <optional>
+#include <string>
+#include <vector>
 
 namespace util::serial {
-    enum class Parity {
-        NONE = 0, EVEN = 1, ODD = 2, SPACE = 3, MARK = 4
-    };
+    enum class Parity { NONE = 0, EVEN = 1, ODD = 2, SPACE = 3, MARK = 4 };
 
     /**
      * Implements an OS-independent serial interface.
      */
     class Interface {
-    public:
+      public:
         /**
          * Set the Baud rate.
          * @param baud the baud rate
@@ -82,7 +80,8 @@ namespace util::serial {
          * Default destructor, necessary when destructing a derived class from a base pointer.
          */
         virtual ~Interface() = default;
-    protected:
+
+      protected:
         /**
          * Send a buffer via the serial interface, needs to be implemented by the spec
          * @param send
@@ -95,8 +94,8 @@ namespace util::serial {
          */
         void callbackIfAvailable(const std::vector<uint8_t> &data);
 
-    private:
-        std::optional<std::function<void(const std::vector<uint8_t>&)>> callback;
+      private:
+        std::optional<std::function<void(const std::vector<uint8_t> &)>> callback;
         mutable std::mutex writeLock;
     };
 
@@ -115,7 +114,7 @@ namespace util::serial {
         buffer.reserve(static_cast<unsigned long>(size));
 
         for (auto it = begin; it != end; it++) {
-            buffer.push_back(static_cast<uint8_t >(*it));
+            buffer.push_back(static_cast<uint8_t>(*it));
         }
 
         writeLock.lock();
@@ -127,6 +126,6 @@ namespace util::serial {
         }
         writeLock.unlock();
     }
-}
+} // namespace util::serial
 
-#endif //SERIALTOOLBOX_INTERFACE_HPP
+#endif // SERIALTOOLBOX_INTERFACE_HPP

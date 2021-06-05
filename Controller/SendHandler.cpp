@@ -11,10 +11,12 @@
 
 namespace controller {
     SendHandler::SendHandler(std::shared_ptr<view::MainView> mainView,
-                           std::shared_ptr<controller::SerialProxy> serialProxy)
-            : lineBreakStateMachine{static_cast<LinebreakType>(mainView->getLinebreak())},
-                finished{false}, mainView{std::move(mainView)}, serialProxy{std::move(serialProxy)},
-                thread{&SendHandler::run, this} {
+                             std::shared_ptr<controller::SerialProxy> serialProxy) :
+        lineBreakStateMachine{static_cast<LinebreakType>(mainView->getLinebreak())},
+        finished{false},
+        mainView{std::move(mainView)},
+        serialProxy{std::move(serialProxy)},
+        thread{&SendHandler::run, this} {
     }
 
     void SendHandler::run() {
@@ -34,8 +36,7 @@ namespace controller {
                                                            static_cast<Representation>(std::get<0>(elem)));
                         lineBreakMutex.lock();
                         for (const auto &sent : res) {
-                            this->mainView->addSend(sent.ascii, sent.dec,
-                                                    sent.hex, sent.bin,
+                            this->mainView->addSend(sent.ascii, sent.dec, sent.hex, sent.bin,
                                                     lineBreakStateMachine.addAscii(res.front().ascii));
                         }
                         lineBreakMutex.unlock();
@@ -75,4 +76,4 @@ namespace controller {
     void SendHandler::resetCount() {
         this->sendCount = 0;
     }
-}
+} // namespace controller

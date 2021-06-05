@@ -10,7 +10,7 @@
 #include "Util/Serial/Interface.hpp"
 
 class InterfaceMock : public util::serial::Interface {
-public:
+  public:
     void setBaud(int baud) override {
         this->baud = baud;
     }
@@ -39,10 +39,11 @@ public:
     std::string port;
     util::serial::Parity parity;
     mutable std::vector<uint8_t> buffer;
-protected:
+
+  protected:
     void sendBuff(const std::vector<uint8_t> &buffer) const override {
         this->buffer = buffer;
     }
 };
 
-#endif //HTERMCLONE_INTERFACEIMPL_HPP
+#endif // HTERMCLONE_INTERFACEIMPL_HPP

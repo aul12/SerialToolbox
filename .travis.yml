@@ -2,7 +2,7 @@ services:
   - docker
 
 before_install:
-    - docker build -t serial_toolbox .
+  - docker build -t serial_toolbox .
 
 script:
-    - docker run serial_toolbox
+  - docker run serial_toolbox

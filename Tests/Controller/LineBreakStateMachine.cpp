@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include "Controller/LineBreakStateMachine.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(LineBreakStateMachine, NoLineBreakNone) {
     controller::LineBreakStateMachine lineBreakStateMachine{controller::LinebreakType::NONE};

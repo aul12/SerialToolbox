@@ -8,30 +8,30 @@
 #ifndef SERIALTOOLBOX_SERIALPROXY_HPP
 #define SERIALTOOLBOX_SERIALPROXY_HPP
 
-#include <memory>
-#include <map>
 #include <deque>
-#include "../Util/Serial/Interface.hpp"
+#include <map>
+#include <memory>
+
 #include "../Util/Listener.hpp"
+#include "../Util/Serial/Interface.hpp"
 
 
 namespace controller {
-    enum class Representation {
-        ASCII, HEX, DEC, BIN
-    };
+    enum class Representation { ASCII, HEX, DEC, BIN };
 
     struct Representations {
         std::string ascii, hex, dec, bin;
     };
 
     class SerialProxy {
-    public:
+      public:
         explicit SerialProxy(const std::shared_ptr<util::serial::Interface> &interface);
 
         auto send(const std::vector<std::string> &bytes, Representation representation) -> std::deque<Representations>;
 
         const util::Listener<std::deque<Representations>> receiveListener;
-    private:
+
+      private:
         std::shared_ptr<util::serial::Interface> interface;
         std::map<uint8_t, std::string> specialAsciiCharacters;
 
@@ -40,6 +40,6 @@ namespace controller {
         auto convertToRepresentations(uint8_t data) -> Representations;
         auto specialAsciiCharactersReverseLookup(const std::string &value) const -> std::optional<uint8_t>;
     };
-}
+} // namespace controller
 
 #endif

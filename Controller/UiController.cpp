@@ -6,12 +6,14 @@
  */
 
 #include "UiController.hpp"
-#include "../Util/Serial/InterfaceImplemenation.hpp"
 
 #include <functional>
 
+#include "../Util/Serial/InterfaceImplemenation.hpp"
+
 namespace controller {
-    UiController::UiController(const std::shared_ptr<view::MainView> &mainView) : mainView{mainView},
+    UiController::UiController(const std::shared_ptr<view::MainView> &mainView) :
+        mainView{mainView},
         lineBreakStateMachine{static_cast<LinebreakType>(mainView->getLinebreak())} {
 
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
@@ -22,10 +24,11 @@ namespace controller {
         std::function<void()> stopBitBind = std::bind(&UiController::stopBitsEvent, this);
         std::function<void()> dataBitsBind = std::bind(&UiController::dataBitsEvent, this);
         std::function<void(int)> parityBind = std::bind(&UiController::parityEvent, this, std::placeholders::_1);
-        std::function<void(int,const std::string&,int,int)> sendBind =
+        std::function<void(int, const std::string &, int, int)> sendBind =
                 std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
-                        std::placeholders::_3, std::placeholders::_4);
-        std::function<void(bool)> visibilityBind = std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
+                          std::placeholders::_3, std::placeholders::_4);
+        std::function<void(bool)> visibilityBind =
+                std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
         std::function<void(int)> lineBreakBind = std::bind(&UiController::lineBreakEvent, this, std::placeholders::_1);
         std::function<void()> rxResetBind = std::bind(&UiController::resetRxEvent, this);
         std::function<void()> txResetBind = std::bind(&UiController::resetTxEvent, this);
@@ -55,7 +58,7 @@ namespace controller {
         auto ports = util::serial::InterfaceImplementation::getAvailablePorts();
         auto activeIndex = -1;
 
-        for (std::size_t c=0; c<ports.size(); ++c) {
+        for (std::size_t c = 0; c < ports.size(); ++c) {
             if (ports[c] == currPort) {
                 activeIndex = static_cast<int>(c);
             }
@@ -70,8 +73,8 @@ namespace controller {
                 this->connectionHandler.reset();
 
                 ConnectionContainer nConnHandler;
-                nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>
-                        (mainView->getPort(), this->mainView->getBaud());
+                nConnHandler.interface = std::make_shared<util::serial::InterfaceImplementation>(
+                        mainView->getPort(), this->mainView->getBaud());
                 nConnHandler.serialProxy = std::make_shared<SerialProxy>(nConnHandler.interface);
                 nConnHandler.sendThread = std::make_shared<SendHandler>(this->mainView, nConnHandler.serialProxy);
 
@@ -122,10 +125,10 @@ namespace controller {
         }
     }
 
-    void UiController::receiveEvent(const std::deque<Representations>& representations) {
+    void UiController::receiveEvent(const std::deque<Representations> &representations) {
         for (const auto &repr : representations) {
             this->mainView->addReceived(repr.ascii, repr.dec, repr.hex, repr.bin,
-                    lineBreakStateMachine.addAscii(repr.ascii));
+                                        lineBreakStateMachine.addAscii(repr.ascii));
         }
         this->connectionHandler.value().received += representations.size();
         this->mainView->setRxCount(this->connectionHandler.value().received);
@@ -150,8 +153,8 @@ namespace controller {
     }
 
     void UiController::visibilityEvent(bool) {
-        this->mainView->setVisibility(mainView->getAsciiEnabled(),
-                mainView->getDecEnabled(), mainView->getHexEnabled(), mainView->getBinEnabled());
+        this->mainView->setVisibility(mainView->getAsciiEnabled(), mainView->getDecEnabled(), mainView->getHexEnabled(),
+                                      mainView->getBinEnabled());
     }
 
     void UiController::lineBreakEvent(int type) {
@@ -188,4 +191,4 @@ namespace controller {
             this->connectionHandler.value().interface->setParity(static_cast<util::serial::Parity>(sel));
         }
     }
-}
+} // namespace controller

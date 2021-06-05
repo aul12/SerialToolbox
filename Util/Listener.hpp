@@ -8,13 +8,13 @@
 #ifndef SERIALTOOLBOX_LISTENER_HPP
 #define SERIALTOOLBOX_LISTENER_HPP
 
-#include <list>
 #include <functional>
+#include <list>
 
 namespace util {
-    template<typename ...Args>
+    template<typename... Args>
     class Listener {
-    public:
+      public:
         Listener() = default;
 
         void operator()(std::function<void(Args...)> &listener) const;
@@ -24,7 +24,8 @@ namespace util {
         auto getSubscribed() const -> std::size_t;
 
         using type = std::function<void(Args...)>;
-    private:
+
+      private:
         mutable std::list<std::function<void(Args...)>> listeners;
     };
 
@@ -44,6 +45,6 @@ namespace util {
     auto Listener<Args...>::getSubscribed() const -> std::size_t {
         return this->listeners.size();
     }
-}
+} // namespace util
 
-#endif //SERIALTOOLBOX_LISTENER_HPP
+#endif // SERIALTOOLBOX_LISTENER_HPP

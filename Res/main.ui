@@ -1,508 +1,508 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>863</width>
-    <height>618</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>SerialToolbox</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QTableView" name="receiveView">
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::SolidLine</enum>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>64</number>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>16</number>
-      </attribute>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>16</number>
-      </attribute>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QComboBox" name="encodingSendCombo">
-        <item>
-         <property name="text">
-          <string>ASCII</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>HEX</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>DEC</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>BIN</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="toSendEntry"/>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>863</width>
+                <height>618</height>
+            </rect>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
+        <property name="windowTitle">
+            <string>SerialToolbox</string>
         </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Repetitions:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="repetitionsSpin">
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>10000</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Period:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="periodSpin">
-        <property name="maximum">
-         <number>86400000</number>
-        </property>
-        <property name="value">
-         <number>1000</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="sendButton">
-        <property name="text">
-         <string>Send</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QTableView" name="sendView">
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>64</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>16</number>
-      </attribute>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>16</number>
-      </attribute>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QDockWidget" name="dockWidget_4">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>4</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_4">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="spacing">
-      <number>4</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="portLabel">
-         <property name="text">
-          <string>Port:</string>
-         </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                    <widget class="QTableView" name="receiveView">
+                        <property name="showGrid">
+                            <bool>false</bool>
+                        </property>
+                        <property name="gridStyle">
+                            <enum>Qt::SolidLine</enum>
+                        </property>
+                        <attribute name="horizontalHeaderVisible">
+                            <bool>false</bool>
+                        </attribute>
+                        <attribute name="horizontalHeaderDefaultSectionSize">
+                            <number>64</number>
+                        </attribute>
+                        <attribute name="verticalHeaderVisible">
+                            <bool>false</bool>
+                        </attribute>
+                        <attribute name="verticalHeaderDefaultSectionSize">
+                            <number>16</number>
+                        </attribute>
+                        <attribute name="verticalHeaderMinimumSectionSize">
+                            <number>16</number>
+                        </attribute>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="Line" name="line">
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_3">
+                        <item>
+                            <widget class="QComboBox" name="encodingSendCombo">
+                                <item>
+                                    <property name="text">
+                                        <string>ASCII</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>HEX</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>DEC</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>BIN</string>
+                                    </property>
+                                </item>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QLineEdit" name="toSendEntry"/>
+                        </item>
+                        <item>
+                            <spacer name="horizontalSpacer_2">
+                                <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                    <size>
+                                        <width>40</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </item>
+                        <item>
+                            <widget class="QLabel" name="label_7">
+                                <property name="text">
+                                    <string>Repetitions:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QSpinBox" name="repetitionsSpin">
+                                <property name="minimum">
+                                    <number>0</number>
+                                </property>
+                                <property name="maximum">
+                                    <number>10000</number>
+                                </property>
+                                <property name="value">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QLabel" name="label_6">
+                                <property name="text">
+                                    <string>Period:</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QSpinBox" name="periodSpin">
+                                <property name="maximum">
+                                    <number>86400000</number>
+                                </property>
+                                <property name="value">
+                                    <number>1000</number>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="sendButton">
+                                <property name="text">
+                                    <string>Send</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+                <item>
+                    <widget class="QTableView" name="sendView">
+                        <property name="showGrid">
+                            <bool>false</bool>
+                        </property>
+                        <attribute name="horizontalHeaderVisible">
+                            <bool>false</bool>
+                        </attribute>
+                        <attribute name="horizontalHeaderDefaultSectionSize">
+                            <number>64</number>
+                        </attribute>
+                        <attribute name="horizontalHeaderHighlightSections">
+                            <bool>true</bool>
+                        </attribute>
+                        <attribute name="verticalHeaderVisible">
+                            <bool>false</bool>
+                        </attribute>
+                        <attribute name="verticalHeaderDefaultSectionSize">
+                            <number>16</number>
+                        </attribute>
+                        <attribute name="verticalHeaderMinimumSectionSize">
+                            <number>16</number>
+                        </attribute>
+                    </widget>
+                </item>
+            </layout>
         </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="portCombo"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="refreshButton">
-         <property name="text">
-          <string>Refresh</string>
-         </property>
+        <widget class="QDockWidget" name="dockWidget_4">
+            <property name="features">
+                <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+            </property>
+            <property name="allowedAreas">
+                <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
+            </property>
+            <attribute name="dockWidgetArea">
+                <number>4</number>
+            </attribute>
+            <widget class="QWidget" name="dockWidgetContents_4">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <property name="spacing">
+                        <number>4</number>
+                    </property>
+                    <property name="topMargin">
+                        <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                        <number>0</number>
+                    </property>
+                    <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout">
+                            <item>
+                                <widget class="QLabel" name="portLabel">
+                                    <property name="text">
+                                        <string>Port:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QComboBox" name="portCombo"/>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="refreshButton">
+                                    <property name="text">
+                                        <string>Refresh</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="connectButton">
+                                    <property name="text">
+                                        <string>Connect</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="baudLabel">
+                                    <property name="text">
+                                        <string>Baud:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QSpinBox" name="baudSpin">
+                                    <property name="minimum">
+                                        <number>50</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>4000000</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>9600</number>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <spacer name="horizontalSpacer">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="sizeHint" stdset="0">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="parityLabel">
+                                    <property name="text">
+                                        <string>Parity:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QComboBox" name="parityCombo">
+                                    <item>
+                                        <property name="text">
+                                            <string>No Parity</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Even</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Odd</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Space</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Mark</string>
+                                        </property>
+                                    </item>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="stopBitsLabel">
+                                    <property name="text">
+                                        <string>Stop-Bits:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QSpinBox" name="stopBitsSpin">
+                                    <property name="minimum">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>2</number>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="dataBitsLabel">
+                                    <property name="text">
+                                        <string>Data-Bits:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QSpinBox" name="dataBitsSpin">
+                                    <property name="minimum">
+                                        <number>5</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>8</number>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </widget>
         </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="connectButton">
-         <property name="text">
-          <string>Connect</string>
-         </property>
+        <widget class="QDockWidget" name="dockWidget_5">
+            <property name="features">
+                <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+            </property>
+            <property name="allowedAreas">
+                <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+            </property>
+            <attribute name="dockWidgetArea">
+                <number>1</number>
+            </attribute>
+            <widget class="QWidget" name="dockWidgetContents_5">
+                <layout class="QVBoxLayout" name="verticalLayout">
+                    <item>
+                        <widget class="QLabel" name="label_2">
+                            <property name="text">
+                                <string>Show:</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkAscii">
+                            <property name="text">
+                                <string>ASCII</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkDec">
+                            <property name="text">
+                                <string>DEC</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkBin">
+                            <property name="text">
+                                <string>BIN</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkHex">
+                            <property name="text">
+                                <string>HEX</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="Line" name="line_2">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLabel" name="label">
+                            <property name="text">
+                                <string>Linebreak:</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QComboBox" name="comboLinebreak">
+                            <item>
+                                <property name="text">
+                                    <string>NONE</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>LF</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>CRLF</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>CR</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>LFCR</string>
+                                </property>
+                            </item>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="Line" name="line_3">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_5">
+                            <item>
+                                <widget class="QLabel" name="labelRxCount">
+                                    <property name="text">
+                                        <string>RX: 0</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="buttonResetRx">
+                                    <property name="text">
+                                        <string>Reset</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_4">
+                            <item>
+                                <widget class="QLabel" name="labelTxCount">
+                                    <property name="text">
+                                        <string>TX: 0</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="buttonResetTx">
+                                    <property name="text">
+                                        <string>Reset</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <widget class="Line" name="line_4">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="buttonClearReceived">
+                            <property name="text">
+                                <string>Clear Received</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="buttonClearSent">
+                            <property name="text">
+                                <string>Clear Sent</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer name="verticalSpacer">
+                            <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                                <size>
+                                    <width>20</width>
+                                    <height>40</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                </layout>
+            </widget>
         </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="baudLabel">
-         <property name="text">
-          <string>Baud:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="baudSpin">
-         <property name="minimum">
-          <number>50</number>
-         </property>
-         <property name="maximum">
-          <number>4000000</number>
-         </property>
-         <property name="value">
-          <number>9600</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="parityLabel">
-         <property name="text">
-          <string>Parity:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="parityCombo">
-         <item>
-          <property name="text">
-           <string>No Parity</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Even</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Odd</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Space</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Mark</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="stopBitsLabel">
-         <property name="text">
-          <string>Stop-Bits:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="stopBitsSpin">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>2</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="dataBitsLabel">
-         <property name="text">
-          <string>Data-Bits:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="dataBitsSpin">
-         <property name="minimum">
-          <number>5</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>8</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockWidget_5">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_5">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Show:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkAscii">
-       <property name="text">
-        <string>ASCII</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkDec">
-       <property name="text">
-        <string>DEC</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBin">
-       <property name="text">
-        <string>BIN</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkHex">
-       <property name="text">
-        <string>HEX</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Linebreak:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboLinebreak">
-       <item>
-        <property name="text">
-         <string>NONE</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>LF</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>CRLF</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>CR</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>LFCR</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLabel" name="labelRxCount">
-         <property name="text">
-          <string>RX: 0</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonResetRx">
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="labelTxCount">
-         <property name="text">
-          <string>TX: 0</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonResetTx">
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="Line" name="line_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonClearReceived">
-       <property name="text">
-        <string>Clear Received</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonClearSent">
-       <property name="text">
-        <string>Clear Sent</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
- </widget>
- <resources/>
- <connections/>
+    </widget>
+    <resources/>
+    <connections/>
 </ui>
