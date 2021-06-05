@@ -18,7 +18,7 @@ jobs:
           submodules: true
       - name: Install dependencies
         run: |
-          sudo apt install qt5-default qtbase5-dev
+          sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
       - name: Set up Build
         run: |
           mkdir build
