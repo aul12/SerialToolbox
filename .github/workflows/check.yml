@@ -11,6 +11,9 @@ jobs:
       - name: Install Clang-Tidy
         run: |
           sudo apt install clang-tidy
+      - name: Install dependencies
+        run: |
+          sudo apt install qtbase5-dev-tools
       - name: Set up Build
         run: |
           mkdir build
@@ -33,6 +36,9 @@ jobs:
       - name: Install CppCheck
         run: |
           sudo apt install cppcheck
+      - name: Install dependencies
+        run: |
+          sudo apt install qtbase5-dev-tools
       - name: Set up Build
         run: |
           mkdir build
