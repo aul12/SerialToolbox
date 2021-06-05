@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
+          sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev ${{ matrix.cxx }}
       - name: Set up Build
         run: |
           mkdir build
