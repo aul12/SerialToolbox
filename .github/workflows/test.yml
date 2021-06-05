@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - name: Install dependencies
         run: |
           sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev

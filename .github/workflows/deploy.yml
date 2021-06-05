@@ -16,9 +16,6 @@ jobs:
     steps:
       - name: Checkout️
         uses: actions/checkout@v2.3.1
-        with:
-          persist-credentials: false
-          submodules: true
       - name: Setup .deb Directory
         run: |
           mkdir -p ${dirname}/usr/local/bin

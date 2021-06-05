@@ -6,8 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - name: Install Clang-Tidy
         run: |
           sudo apt install clang-tidy
@@ -31,8 +29,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - name: Install CppCheck
         run: |
           sudo apt install cppcheck
@@ -48,3 +44,17 @@ jobs:
       - name: Run CppCheck
         run: |
           cppcheck --project=compile_commands.json --error-exitcode=1
+
+  Clang-Format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt install clang-tools python3
+          wget 'https://github.com/Sarcasm/run-clang-format/raw/39081c9c42768ab5e8321127a7494ad1647c6a2f/run-clang-format.py'
+      - name: Run Clang-Format
+        run: python3 run-clang-format.py --recursive --exclude './cmake-build*' --exclude ./external --exclude ./.idea --color always .
+
+
+
