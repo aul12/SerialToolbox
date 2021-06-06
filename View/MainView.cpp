@@ -170,16 +170,16 @@ namespace view {
     }
 
     void MainView::setRxCount(std::size_t count) {
-        listLock.lock();
+        std::unique_lock guard{listLock};
         toCall.emplace_back([this, count] { setRxCountImpl(count); });
-        listLock.unlock();
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::setTxCount(std::size_t count) {
-        listLock.lock();
+        std::unique_lock guard{listLock};
         toCall.emplace_back([this, count] { setTxCountImpl(count); });
-        listLock.unlock();
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
@@ -224,26 +224,26 @@ namespace view {
 
     void MainView::addReceived(const std::string &ascii, const std::string &dec, const std::string &hex,
                                const std::string &bin, bool addNewLine) {
-        listLock.lock();
+        std::unique_lock guard{listLock};
         toCall.emplace_back(
                 [this, ascii, dec, hex, bin, addNewLine] { addReceivedImpl(ascii, dec, hex, bin, addNewLine); });
-        listLock.unlock();
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::addSend(const std::string &ascii, const std::string &dec, const std::string &hex,
                            const std::string &bin, bool addNewLine) {
-        listLock.lock();
+        std::unique_lock guard{listLock};
         toCall.emplace_back(
                 [this, ascii, dec, hex, bin, addNewLine] { addSendImpl(ascii, dec, hex, bin, addNewLine); });
-        listLock.unlock();
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::showError(const std::string &title, const std::string &message) {
-        listLock.lock();
+        std::unique_lock guard{listLock};
         toCall.emplace_back([this, title, message] { showErrorImpl(title, message); });
-        listLock.unlock();
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
