@@ -15,7 +15,7 @@ namespace controller {
     SerialProxy::SerialProxy(const std::shared_ptr<util::serial::Interface> &interface) :
         receiveListener{},
         interface{interface} {
-        interface->registerReceiveCallback(std::bind(&SerialProxy::readCallback, this, std::placeholders::_1));
+        interface->registerReceiveCallback([this](const std::vector<uint8_t> &data) { readCallback(data); });
 
         specialAsciiCharacters.emplace(0, "NUL");
         specialAsciiCharacters.emplace(1, "SOH");
@@ -106,7 +106,7 @@ namespace controller {
             throw std::runtime_error(e.what());
         }
 
-        if (val < 0 || val > 255) {
+        if (val < std::numeric_limits<uint8_t>::min() || val > std::numeric_limits<uint8_t>::max()) {
             throw std::runtime_error("Not one byte");
         }
 

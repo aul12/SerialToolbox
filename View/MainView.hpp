@@ -81,6 +81,9 @@ namespace view {
         void showError(const std::string &title, const std::string &message);
 
       private:
+        template<typename QThing>
+        auto setWidget(const char *name) -> std::unique_ptr<QThing>;
+
         void addReceivedImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
                              const std::string &bin, bool addNewLine);
         void addSendImpl(const std::string &ascii, const std::string &dec, const std::string &hex,
