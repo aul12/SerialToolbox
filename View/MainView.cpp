@@ -14,6 +14,7 @@
 #include <QUiLoader>
 #include <cassert>
 
+// NOLINTNEXTLINE
 #define FIND_WIDGET(widget) widget = this->setWidget<decltype(widget)::element_type>(#widget)
 
 namespace view {

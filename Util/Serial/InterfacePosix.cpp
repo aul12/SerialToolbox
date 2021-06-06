@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <vector>
 
+// NOLINTNEXTLINE
 #define BAUD_TO_BITS(baud)                                                                                             \
     case baud:                                                                                                         \
         baudBits = B##baud;                                                                                            \
@@ -157,7 +158,7 @@ namespace util::serial {
             close(this->fd);
         }
 
-        fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
+        fd = open(port.c_str(), (unsigned) O_RDWR | (unsigned) O_NOCTTY | (unsigned) O_SYNC);
         if (fd < 0) {
             throw std::runtime_error(strerror(errno));
         }
