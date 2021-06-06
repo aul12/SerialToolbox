@@ -18,7 +18,7 @@ namespace controller {
     class LineBreakStateMachine {
       public:
         explicit LineBreakStateMachine(LinebreakType linebreak);
-        auto addAscii(const std::string& ascii) -> bool;
+        auto addAscii(const std::string &ascii) -> bool;
         void setLinebreak(LinebreakType linebreak);
         void reset();
 

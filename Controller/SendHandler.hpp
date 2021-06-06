@@ -22,13 +22,13 @@ namespace controller {
       public:
         SendHandler(std::shared_ptr<view::MainView> mainView, std::shared_ptr<controller::SerialProxy> serialProxy);
 
-        SendHandler(const SendHandler&) = delete;
+        SendHandler(const SendHandler &) = delete;
 
-        auto operator=(const SendHandler&) = delete;
+        auto operator=(const SendHandler &) = delete;
 
-        SendHandler(SendHandler&&) = delete;
+        SendHandler(SendHandler &&) = delete;
 
-        auto operator=(SendHandler&&) = delete;
+        auto operator=(SendHandler &&) = delete;
 
         void run();
 
