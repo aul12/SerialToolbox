@@ -2,6 +2,9 @@
 
 A serial port terminal and debugger, inspired by HTerm
 
+# Prebuild Debian/Ubuntu Package
+[Download from Github Pages](http://aul12.github.io/SerialToolbox/serialtoolbox.deb)
+
 # Development
 
 ## Compiling SerialToolbox
