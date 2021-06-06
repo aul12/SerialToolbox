@@ -26,11 +26,11 @@
 namespace util::serial {
 
     InterfacePosix::InterfacePosix(const std::string &port, int baud) : fd{0}, finished{false} {
-        this->setPort(port);
-        this->setBaud(baud);
-        this->setParity(Parity::NONE);
-        this->setDataBits(8);
-        this->setStopBits(1);
+        InterfacePosix::setPort(port);
+        InterfacePosix::setBaud(baud);
+        InterfacePosix::setParity(Parity::NONE);
+        InterfacePosix::setDataBits(8);
+        InterfacePosix::setStopBits(1);
 
         termios tty{};
         memset(&tty, 0, sizeof tty);
@@ -158,6 +158,7 @@ namespace util::serial {
             close(this->fd);
         }
 
+        // NOLINTNEXTLINE
         fd = open(port.c_str(), (unsigned) O_RDWR | (unsigned) O_NOCTTY | (unsigned) O_SYNC);
         if (fd < 0) {
             throw std::runtime_error(strerror(errno));
