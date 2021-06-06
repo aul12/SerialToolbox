@@ -3,6 +3,6 @@ Version: PACKAGE_VERSION
 Section: base
 Priority: optional
 Architecture: amd64
-Depends: qt5-default
+Pre-Depends: qt5-default
 Maintainer: Paul Nykiel
 Description: A serial port terminal and debugger, inspired by HTerm
