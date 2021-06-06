@@ -22,4 +22,4 @@ namespace util::serial {
 #endif
 } // namespace util::serial
 
-#endif // SERIALTOOLBOX_INTERFACEIMPL_HPP
+#endif

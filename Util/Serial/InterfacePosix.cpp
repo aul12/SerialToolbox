@@ -17,14 +17,20 @@
 #include <unistd.h>
 #include <vector>
 
+// NOLINTNEXTLINE
+#define BAUD_TO_BITS(baud)                                                                                             \
+    case baud:                                                                                                         \
+        baudBits = B##baud;                                                                                            \
+        break;
+
 namespace util::serial {
 
-    InterfacePosix::InterfacePosix(const std::string &port, int baud) : finished{false} {
-        this->setPort(port);
-        this->setBaud(baud);
-        this->setParity(Parity::NONE);
-        this->setDataBits(8);
-        this->setStopBits(1);
+    InterfacePosix::InterfacePosix(const std::string &port, int baud) : fd{0}, finished{false} {
+        InterfacePosix::setPort(port);
+        InterfacePosix::setBaud(baud);
+        InterfacePosix::setParity(Parity::NONE);
+        InterfacePosix::setDataBits(8);
+        InterfacePosix::setStopBits(1);
 
         termios tty{};
         memset(&tty, 0, sizeof tty);
@@ -34,16 +40,16 @@ namespace util::serial {
 
         // disable IGNBRK for mismatched speed tests; otherwise receive break
         // as \000 chars
-        tty.c_iflag &= ~IGNBRK;                 // disable break processing
-        tty.c_lflag = 0;                        // no signaling chars, no echo, no canonical processing
-        tty.c_oflag = 0;                        // no remapping, no delays
-        tty.c_cc[VMIN] = 0;                     // read requires at least one character
-        tty.c_cc[VTIME] = 0;                    // read is  blocking
-        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
-        tty.c_cflag |= (CLOCAL | CREAD);        // ignore modem controls, enable reading
+        tty.c_iflag &= ~(tcflag_t) IGNBRK; // disable break processing
+        tty.c_lflag = 0;                   // no signaling chars, no echo, no canonical processing
+        tty.c_oflag = 0;                   // no remapping, no delays
+        tty.c_cc[VMIN] = 0;                // read requires at least one character
+        tty.c_cc[VTIME] = 0;               // read is  blocking
+        tty.c_iflag &= ~((tcflag_t) IXON | (tcflag_t) IXOFF | (tcflag_t) IXANY); // shut off xon/xoff ctrl
+        tty.c_cflag |= ((tcflag_t) CLOCAL | (tcflag_t) CREAD); // ignore modem controls, enable reading
 
 #ifdef CRTSCTS
-        tty.c_cflag &= ~CRTSCTS; // Disable hardware flow control if possible (not Posix, only Linux)
+        tty.c_cflag &= ~(tcflag_t) CRTSCTS; // Disable hardware flow control if possible (not Posix, only Linux)
 #endif
 
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
@@ -70,7 +76,9 @@ namespace util::serial {
              */
             if (readed < 0 && errno != EAGAIN) {
                 throw std::runtime_error(strerror(errno));
-            } else if (readed > 0) {
+            }
+
+            if (readed > 0) {
                 this->callbackIfAvailable({buffer.data(), buffer.data() + readed});
             }
         }
@@ -85,7 +93,7 @@ namespace util::serial {
     void InterfacePosix::sendBuff(const std::vector<uint8_t> &buffer) const {
         std::size_t written = 0;
         do {
-            auto result = write(this->fd, buffer.data() + written, buffer.size() - written);
+            auto result = write(this->fd, &buffer[written], buffer.size() - written);
             if (result < 0) {
                 throw std::runtime_error(strerror(errno));
             }
@@ -95,99 +103,39 @@ namespace util::serial {
 
 
     void InterfacePosix::setBaud(int baud) {
-        speed_t baudBits;
+        speed_t baudBits = B9600;
         switch (baud) {
-            case 50:
-                baudBits = B50;
-                break;
-            case 75:
-                baudBits = B75;
-                break;
-            case 110:
-                baudBits = B110;
-                break;
-            case 134:
-                baudBits = B134;
-                break;
-            case 150:
-                baudBits = B150;
-                break;
-            case 200:
-                baudBits = B200;
-                break;
-            case 300:
-                baudBits = B300;
-                break;
-            case 600:
-                baudBits = B600;
-                break;
-            case 1200:
-                baudBits = B1200;
-                break;
-            case 1800:
-                baudBits = B1800;
-                break;
-            case 2400:
-                baudBits = B2400;
-                break;
-            case 4800:
-                baudBits = B4800;
-                break;
-            case 9600:
-                baudBits = B9600;
-                break;
-            case 19200:
-                baudBits = B19200;
-                break;
-            case 38400:
-                baudBits = B38400;
-                break;
+            BAUD_TO_BITS(50)
+            BAUD_TO_BITS(75)
+            BAUD_TO_BITS(110)
+            BAUD_TO_BITS(134)
+            BAUD_TO_BITS(150)
+            BAUD_TO_BITS(200)
+            BAUD_TO_BITS(300)
+            BAUD_TO_BITS(600)
+            BAUD_TO_BITS(1200)
+            BAUD_TO_BITS(1800)
+            BAUD_TO_BITS(2400)
+            BAUD_TO_BITS(4800)
+            BAUD_TO_BITS(9600)
+            BAUD_TO_BITS(19200)
+            BAUD_TO_BITS(38400)
 #ifdef B57600 // Not a part of POSIX.1, but supported by Linux 4.15
-            case 57600:
-                baudBits = B57600;
-                break;
-            case 115200:
-                baudBits = B115200;
-                break;
-            case 230400:
-                baudBits = B230400;
-                break;
-            case 460800:
-                baudBits = B460800;
-                break;
-            case 500000:
-                baudBits = B500000;
-                break;
-            case 576000:
-                baudBits = B576000;
-                break;
-            case 921600:
-                baudBits = B921600;
-                break;
-            case 1000000:
-                baudBits = B1000000;
-                break;
-            case 1152000:
-                baudBits = B1152000;
-                break;
-            case 1500000:
-                baudBits = B1500000;
-                break;
-            case 2000000:
-                baudBits = B2000000;
-                break;
-            case 2500000:
-                baudBits = B2500000;
-                break;
-            case 3000000:
-                baudBits = B3000000;
-                break;
-            case 3500000:
-                baudBits = B3500000;
-                break;
-            case 4000000:
-                baudBits = B4000000;
-                break;
+            BAUD_TO_BITS(57600)
+            BAUD_TO_BITS(115200)
+            BAUD_TO_BITS(230400)
+            BAUD_TO_BITS(460800)
+            BAUD_TO_BITS(500000)
+            BAUD_TO_BITS(576000)
+            BAUD_TO_BITS(921600)
+            BAUD_TO_BITS(1000000)
+            BAUD_TO_BITS(1152000)
+            BAUD_TO_BITS(1500000)
+            BAUD_TO_BITS(2000000)
+            BAUD_TO_BITS(2500000)
+            BAUD_TO_BITS(3000000)
+            BAUD_TO_BITS(3500000)
+            BAUD_TO_BITS(4000000)
 #endif
             default:
                 throw std::runtime_error("Not a valid baud");
@@ -210,7 +158,8 @@ namespace util::serial {
             close(this->fd);
         }
 
-        fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
+        // NOLINTNEXTLINE
+        fd = open(port.c_str(), (unsigned) O_RDWR | (unsigned) O_NOCTTY | (unsigned) O_SYNC);
         if (fd < 0) {
             throw std::runtime_error(strerror(errno));
         }
@@ -223,7 +172,7 @@ namespace util::serial {
             throw std::runtime_error(strerror(errno));
         }
 
-        tty.c_cflag &= ~(PARENB | PARODD); // shut off parity
+        tty.c_cflag &= ~((tcflag_t) PARENB | (tcflag_t) PARODD); // shut off parity
 
         tcflag_t parityFlag = 0;
         switch (parity) {
@@ -231,16 +180,16 @@ namespace util::serial {
                 parityFlag = 0;
                 break;
             case Parity::ODD:
-                parityFlag = PARENB | PARODD;
+                parityFlag = (tcflag_t) PARENB | (tcflag_t) PARODD;
                 break;
             case Parity::EVEN:
                 parityFlag = PARENB;
                 break;
             case Parity::MARK:
-                parityFlag = PARENB | PARODD | CMSPAR;
+                parityFlag = (tcflag_t) PARENB | (tcflag_t) PARODD | (tcflag_t) CMSPAR;
                 break;
             case Parity::SPACE:
-                parityFlag = PARENB | CMSPAR;
+                parityFlag = (tcflag_t) PARENB | (tcflag_t) CMSPAR;
                 break;
         }
         tty.c_cflag |= parityFlag;
@@ -258,7 +207,7 @@ namespace util::serial {
             throw std::runtime_error(strerror(errno));
         }
 
-        tcflag_t charSize;
+        tcflag_t charSize = CS8;
         switch (dataBits) {
             case 5:
                 charSize = CS5;
@@ -275,7 +224,7 @@ namespace util::serial {
             default:
                 throw std::runtime_error("Invalid dataBits (needs to be \\in [5,8]");
         }
-        tty.c_cflag = (tty.c_cflag & ~CSIZE) | charSize; // 8-bit chars
+        tty.c_cflag = (tty.c_cflag & ~((tcflag_t) CSIZE)) | charSize; // 8-bit chars
 
         if (tcsetattr(fd, TCSANOW, &tty) != 0) {
             throw std::runtime_error(strerror(errno));
@@ -290,9 +239,9 @@ namespace util::serial {
         }
 
         if (stopBits == 1) {
-            tty.c_cflag &= ~CSTOPB;
+            tty.c_cflag &= ~((tcflag_t) CSTOPB);
         } else if (stopBits == 2) {
-            tty.c_cflag |= CSTOPB;
+            tty.c_cflag |= (tcflag_t) CSTOPB;
         } else {
             throw std::runtime_error("stopBits needs to be 1 or 2");
         }
@@ -310,7 +259,7 @@ namespace util::serial {
             if (entry.is_character_file()) {
                 std::string fileName = entry.path().filename();
                 if (std::regex_match(fileName, deviceRegex)) {
-                    results.push_back(entry.path());
+                    results.emplace_back(entry.path());
                 }
             }
         }

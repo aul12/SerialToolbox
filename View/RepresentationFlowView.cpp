@@ -71,7 +71,7 @@ void RepresentationFlowView::add(const std::string &ascii, const std::string &de
 
     this->view->update();
 
-    auto scrollbar = this->view->verticalScrollBar();
+    auto *scrollbar = this->view->verticalScrollBar();
     if (scrollbar->value() == scrollbar->maximum()) {
         this->view->scrollToBottom();
     }

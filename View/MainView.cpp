@@ -14,9 +14,8 @@
 #include <QUiLoader>
 #include <cassert>
 
-#define FIND_WIDGET(x)                                                                                                 \
-    x = std::unique_ptr<decltype(x)::element_type>(mainWindow->findChild<decltype(x)::element_type *>(#x));            \
-    assert(x != nullptr)
+// NOLINTNEXTLINE
+#define FIND_WIDGET(widget) widget = this->setWidget<decltype(widget)::element_type>(#widget)
 
 namespace view {
     MainView::MainView(const std::string &uiFile) {
@@ -66,9 +65,9 @@ namespace view {
                                 portComboListener(port.toLocal8Bit().data());
                             });
         mainWindow->connect(refreshButton.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { refreshListener(); });
+                            [this](bool /*clicked*/) { refreshListener(); });
         mainWindow->connect(connectButton.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { connectListener(); });
+                            [this](bool /*clicked*/) { connectListener(); });
         mainWindow->connect(baudSpin.get(), &QSpinBox::editingFinished, this, [this]() { baudSpinListener(); });
         mainWindow->connect(dataBitsSpin.get(), &QSpinBox::editingFinished, this, [this]() { dataBitsSpinListener(); });
         mainWindow->connect(stopBitsSpin.get(), &QSpinBox::editingFinished, this, [this]() { stopBitsSpinListener(); });
@@ -88,19 +87,19 @@ namespace view {
                             [this](int index) { linebreakListener(index); });
 
         mainWindow->connect(sendButton.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { sendHandler(); });
+                            [this](bool /*clicked*/) { sendHandler(); });
 
         mainWindow->connect(buttonResetRx.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { resetRxListener(); });
+                            [this](bool /*clicked*/) { resetRxListener(); });
 
         mainWindow->connect(buttonResetTx.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { resetTxListener(); });
+                            [this](bool /*clicked*/) { resetTxListener(); });
 
         mainWindow->connect(buttonClearSent.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { clearTxListener(); });
+                            [this](bool /*clicked*/) { clearTxListener(); });
 
         mainWindow->connect(buttonClearReceived.get(), QOverload<bool>::of(&QPushButton::clicked), this,
-                            [this](bool) { clearRxListener(); });
+                            [this](bool /*clicked*/) { clearRxListener(); });
 
         this->representationIds.insert({"ASCII", 0});
         this->representationIds.insert({"HEX", 1});
@@ -170,25 +169,25 @@ namespace view {
         return this->checkBin->isChecked();
     }
 
-    void MainView::setRxCount(int count) {
-        listLock.lock();
-        toCall.emplace_back(std::bind(&MainView::setRxCountImpl, this, count));
-        listLock.unlock();
+    void MainView::setRxCount(std::size_t count) {
+        std::unique_lock guard{listLock};
+        toCall.emplace_back([this, count] { setRxCountImpl(count); });
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::setTxCount(int count) {
-        listLock.lock();
-        toCall.emplace_back(std::bind(&MainView::setTxCountImpl, this, count));
-        listLock.unlock();
+    void MainView::setTxCount(std::size_t count) {
+        std::unique_lock guard{listLock};
+        toCall.emplace_back([this, count] { setTxCountImpl(count); });
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::setRxCountImpl(int count) {
+    void MainView::setRxCountImpl(std::size_t count) {
         this->labelRxCount->setText(QStringLiteral("RX: %1").arg(count));
     }
 
-    void MainView::setTxCountImpl(int count) {
+    void MainView::setTxCountImpl(std::size_t count) {
         this->labelTxCount->setText(QStringLiteral("TX: %1").arg(count));
     }
 
@@ -225,24 +224,26 @@ namespace view {
 
     void MainView::addReceived(const std::string &ascii, const std::string &dec, const std::string &hex,
                                const std::string &bin, bool addNewLine) {
-        listLock.lock();
-        toCall.emplace_back(std::bind(&MainView::addReceivedImpl, this, ascii, dec, hex, bin, addNewLine));
-        listLock.unlock();
+        std::unique_lock guard{listLock};
+        toCall.emplace_back(
+                [this, ascii, dec, hex, bin, addNewLine] { addReceivedImpl(ascii, dec, hex, bin, addNewLine); });
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::addSend(const std::string &ascii, const std::string &dec, const std::string &hex,
                            const std::string &bin, bool addNewLine) {
-        listLock.lock();
-        toCall.emplace_back(std::bind(&MainView::addSendImpl, this, ascii, dec, hex, bin, addNewLine));
-        listLock.unlock();
+        std::unique_lock guard{listLock};
+        toCall.emplace_back(
+                [this, ascii, dec, hex, bin, addNewLine] { addSendImpl(ascii, dec, hex, bin, addNewLine); });
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
     void MainView::showError(const std::string &title, const std::string &message) {
-        listLock.lock();
-        toCall.emplace_back(std::bind(&MainView::showErrorImpl, this, title, message));
-        listLock.unlock();
+        std::unique_lock guard{listLock};
+        toCall.emplace_back([this, title, message] { showErrorImpl(title, message); });
+        guard.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
@@ -254,5 +255,12 @@ namespace view {
             this->toCall.clear();
             listLock.unlock();
         }
+    }
+
+    template<typename QThing>
+    auto MainView::setWidget(const char *name) -> std::unique_ptr<QThing> {
+        auto widget = std::unique_ptr<QThing>(mainWindow->findChild<QThing *>(name));
+        assert(widget != nullptr);
+        return widget;
     }
 } // namespace view

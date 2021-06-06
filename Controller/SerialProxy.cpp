@@ -15,41 +15,41 @@ namespace controller {
     SerialProxy::SerialProxy(const std::shared_ptr<util::serial::Interface> &interface) :
         receiveListener{},
         interface{interface} {
-        interface->registerReceiveCallback(std::bind(&SerialProxy::readCallback, this, std::placeholders::_1));
+        interface->registerReceiveCallback([this](const std::vector<uint8_t> &data) { readCallback(data); });
 
-        specialAsciiCharacters.insert({0, "NUL"});
-        specialAsciiCharacters.insert({1, "SOH"});
-        specialAsciiCharacters.insert({2, "STX"});
-        specialAsciiCharacters.insert({3, "ETX"});
-        specialAsciiCharacters.insert({4, "EOT"});
-        specialAsciiCharacters.insert({5, "ENQ"});
-        specialAsciiCharacters.insert({6, "ACK"});
-        specialAsciiCharacters.insert({7, "BEL"});
-        specialAsciiCharacters.insert({8, "BS"});
-        specialAsciiCharacters.insert({9, "TAB"});
-        specialAsciiCharacters.insert({10, "LF"});
-        specialAsciiCharacters.insert({11, "VT"});
-        specialAsciiCharacters.insert({12, "FF"});
-        specialAsciiCharacters.insert({13, "CR"});
-        specialAsciiCharacters.insert({14, "SO"});
-        specialAsciiCharacters.insert({15, "SI"});
-        specialAsciiCharacters.insert({16, "DLE"});
-        specialAsciiCharacters.insert({17, "DC1"});
-        specialAsciiCharacters.insert({18, "DC2"});
-        specialAsciiCharacters.insert({19, "DC3"});
-        specialAsciiCharacters.insert({20, "DC4"});
-        specialAsciiCharacters.insert({21, "NAK"});
-        specialAsciiCharacters.insert({22, "SYN"});
-        specialAsciiCharacters.insert({23, "ETB"});
-        specialAsciiCharacters.insert({24, "CAN"});
-        specialAsciiCharacters.insert({25, "EM"});
-        specialAsciiCharacters.insert({26, "SUB"});
-        specialAsciiCharacters.insert({27, "ESC"});
-        specialAsciiCharacters.insert({28, "FS"});
-        specialAsciiCharacters.insert({29, "GS"});
-        specialAsciiCharacters.insert({30, "RS"});
-        specialAsciiCharacters.insert({31, "US"});
-        specialAsciiCharacters.insert({127, "DEL"});
+        specialAsciiCharacters.emplace(0, "NUL");
+        specialAsciiCharacters.emplace(1, "SOH");
+        specialAsciiCharacters.emplace(2, "STX");
+        specialAsciiCharacters.emplace(3, "ETX");
+        specialAsciiCharacters.emplace(4, "EOT");
+        specialAsciiCharacters.emplace(5, "ENQ");
+        specialAsciiCharacters.emplace(6, "ACK");
+        specialAsciiCharacters.emplace(7, "BEL");
+        specialAsciiCharacters.emplace(8, "BS");
+        specialAsciiCharacters.emplace(9, "TAB");
+        specialAsciiCharacters.emplace(10, "LF");
+        specialAsciiCharacters.emplace(11, "VT");
+        specialAsciiCharacters.emplace(12, "FF");
+        specialAsciiCharacters.emplace(13, "CR");
+        specialAsciiCharacters.emplace(14, "SO");
+        specialAsciiCharacters.emplace(15, "SI");
+        specialAsciiCharacters.emplace(16, "DLE");
+        specialAsciiCharacters.emplace(17, "DC1");
+        specialAsciiCharacters.emplace(18, "DC2");
+        specialAsciiCharacters.emplace(19, "DC3");
+        specialAsciiCharacters.emplace(20, "DC4");
+        specialAsciiCharacters.emplace(21, "NAK");
+        specialAsciiCharacters.emplace(22, "SYN");
+        specialAsciiCharacters.emplace(23, "ETB");
+        specialAsciiCharacters.emplace(24, "CAN");
+        specialAsciiCharacters.emplace(25, "EM");
+        specialAsciiCharacters.emplace(26, "SUB");
+        specialAsciiCharacters.emplace(27, "ESC");
+        specialAsciiCharacters.emplace(28, "FS");
+        specialAsciiCharacters.emplace(29, "GS");
+        specialAsciiCharacters.emplace(30, "RS");
+        specialAsciiCharacters.emplace(31, "US");
+        specialAsciiCharacters.emplace(127, "DEL");
     }
 
     auto SerialProxy::send(const std::vector<std::string> &bytes, const Representation representation)
@@ -57,13 +57,13 @@ namespace controller {
         std::vector<uint8_t> buf;
 
         std::transform(bytes.begin(), bytes.end(), std::back_inserter(buf),
-                       [&representation, this](const auto &b) { return convertToByte(b, representation); });
+                       [&representation, this](const std::string &b) { return convertToByte(b, representation); });
 
         interface->send(buf.begin(), buf.end());
 
         std::deque<Representations> representations;
         std::transform(buf.begin(), buf.end(), std::back_inserter(representations),
-                       std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
+                       [this](uint8_t data) { return convertToRepresentations(data); });
 
         return representations;
     }
@@ -71,7 +71,7 @@ namespace controller {
     void SerialProxy::readCallback(const std::vector<uint8_t> &data) {
         std::deque<Representations> ret;
         std::transform(data.begin(), data.end(), std::back_inserter(ret),
-                       std::bind(&SerialProxy::convertToRepresentations, this, std::placeholders::_1));
+                       [this](uint8_t data) { return convertToRepresentations(data); });
         receiveListener(ret);
     }
 
@@ -85,9 +85,8 @@ namespace controller {
                     auto opt = specialAsciiCharactersReverseLookup(string);
                     if (opt.has_value()) {
                         return opt.value();
-                    } else {
-                        throw std::runtime_error("Not valid ascii");
                     }
+                    throw std::runtime_error("Not valid ascii");
                 }
             case Representation::HEX:
                 base = 16;
@@ -107,7 +106,7 @@ namespace controller {
             throw std::runtime_error(e.what());
         }
 
-        if (val < 0 || val > 255) {
+        if (val < std::numeric_limits<uint8_t>::min() || val > std::numeric_limits<uint8_t>::max()) {
             throw std::runtime_error("Not one byte");
         }
 

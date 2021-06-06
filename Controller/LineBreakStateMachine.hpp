@@ -18,7 +18,7 @@ namespace controller {
     class LineBreakStateMachine {
       public:
         explicit LineBreakStateMachine(LinebreakType linebreak);
-        auto addAscii(std::string ascii) -> bool;
+        auto addAscii(const std::string &ascii) -> bool;
         void setLinebreak(LinebreakType linebreak);
         void reset();
 
@@ -29,4 +29,4 @@ namespace controller {
 } // namespace controller
 
 
-#endif // SERIALTOOLBOX_LINEFEEDSTATEMACHINE_HPP
+#endif
