@@ -22,20 +22,8 @@ jobs:
         run: mkdir -p ${dirname}/usr/local/bin
       - name: Install dependencies
         run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
-      - name: Build Application
-        run: |
-          mkdir build
-          cd build
-          cmake -DCMAKE_INSTALL_PREFIX=../${dirname}/usr/local -DBUILD_TEST=OFF ..
-          make -j$(nproc) install
-      - name: Install Package config
-        run: |
-          mkdir -p ${dirname}/DEBIAN
-          cp .github/workflows/debian_control ${dirname}/DEBIAN/control
-          sed -i "s/PACKAGE_NAME/$package_name/g" ${dirname}/DEBIAN/control
-          sed -i "s/PACKAGE_VERSION/$package_version/g" ${dirname}/DEBIAN/control
       - name: Build Package
-        run: dpkg-deb --build ${dirname}
+        run: ./.github/workflows/build_deb.sh ${package_name} ${package_version}
       - name: Test install
         run: sudo dpkg -i ${dirname}.deb
       - name: Move Package into deploy dir
