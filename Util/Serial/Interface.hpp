@@ -25,6 +25,16 @@ namespace util::serial {
      */
     class Interface {
       public:
+        Interface() = default;
+
+        Interface(const Interface &) = delete;
+
+        auto operator=(const Interface &) = delete;
+
+        Interface(Interface &&) = delete;
+
+        auto operator=(Interface &&) = delete;
+
         /**
          * Set the Baud rate.
          * @param baud the baud rate
@@ -107,9 +117,12 @@ namespace util::serial {
         auto size = std::distance(begin, end);
         if (size < 0) {
             throw std::runtime_error("Invalid size");
-        } else if (size == 0) {
+        }
+
+        if (size == 0) {
             return;
         }
+
         std::vector<uint8_t> buffer{};
         buffer.reserve(static_cast<unsigned long>(size));
 
@@ -117,15 +130,9 @@ namespace util::serial {
             buffer.push_back(static_cast<uint8_t>(*it));
         }
 
-        writeLock.lock();
-        try {
-            this->sendBuff(buffer);
-        } catch (std::runtime_error &e) {
-            writeLock.unlock();
-            throw e;
-        }
-        writeLock.unlock();
+        std::lock_guard guard{writeLock};
+        this->sendBuff(buffer);
     }
 } // namespace util::serial
 
-#endif // SERIALTOOLBOX_INTERFACE_HPP
+#endif

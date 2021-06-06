@@ -18,22 +18,22 @@ namespace controller {
 
         mainView->setPorts(util::serial::InterfaceImplementation::getAvailablePorts(), -1);
 
-        std::function<void()> refreshBind = std::bind(&UiController::refreshEvent, this);
-        std::function<void()> connectBind = std::bind(&UiController::connectEvent, this);
-        std::function<void()> baudBind = std::bind(&UiController::baudEvent, this);
-        std::function<void()> stopBitBind = std::bind(&UiController::stopBitsEvent, this);
-        std::function<void()> dataBitsBind = std::bind(&UiController::dataBitsEvent, this);
-        std::function<void(int)> parityBind = std::bind(&UiController::parityEvent, this, std::placeholders::_1);
-        std::function<void(int, const std::string &, int, int)> sendBind =
-                std::bind(&UiController::sendEvent, this, std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, std::placeholders::_4);
-        std::function<void(bool)> visibilityBind =
-                std::bind(&UiController::visibilityEvent, this, std::placeholders::_1);
-        std::function<void(int)> lineBreakBind = std::bind(&UiController::lineBreakEvent, this, std::placeholders::_1);
-        std::function<void()> rxResetBind = std::bind(&UiController::resetRxEvent, this);
-        std::function<void()> txResetBind = std::bind(&UiController::resetTxEvent, this);
-        std::function<void()> rxClearBind = std::bind(&UiController::clearRxEvent, this);
-        std::function<void()> txClearBind = std::bind(&UiController::clearTxEvent, this);
+        std::function<void()> refreshBind = [this] { refreshEvent(); };
+        std::function<void()> connectBind = [this] { connectEvent(); };
+        std::function<void()> baudBind = [this] { baudEvent(); };
+        std::function<void()> stopBitBind = [this] { stopBitsEvent(); };
+        std::function<void()> dataBitsBind = [this] { dataBitsEvent(); };
+        std::function<void(int)> parityBind = [this](int selection) { parityEvent(selection); };
+        std::function<void(int, const std::string &, int, int)> sendBind = [this](int repr, const std::string &data,
+                                                                                  int repetition, int period) {
+            sendEvent(repr, data, repetition, period);
+        };
+        std::function<void(bool)> visibilityBind = [this](bool vis) { visibilityEvent(vis); };
+        std::function<void(int)> lineBreakBind = [this](int sel) { lineBreakEvent(sel); };
+        std::function<void()> rxResetBind = [this] { resetRxEvent(); };
+        std::function<void()> txResetBind = [this] { resetTxEvent(); };
+        std::function<void()> rxClearBind = [this] { clearRxEvent(); };
+        std::function<void()> txClearBind = [this] { clearTxEvent(); };
 
         mainView->refreshListener(refreshBind);
         mainView->connectListener(connectBind);
@@ -79,7 +79,7 @@ namespace controller {
                 nConnHandler.sendThread = std::make_shared<SendHandler>(this->mainView, nConnHandler.serialProxy);
 
                 std::function<void(std::deque<Representations>)> receiveBind =
-                        std::bind(&UiController::receiveEvent, this, std::placeholders::_1);
+                        [this](const std::deque<Representations> &representations) { receiveEvent(representations); };
                 nConnHandler.serialProxy->receiveListener(receiveBind);
                 this->connectionHandler = nConnHandler;
 
@@ -152,7 +152,7 @@ namespace controller {
         }
     }
 
-    void UiController::visibilityEvent(bool) {
+    void UiController::visibilityEvent(bool /*vis*/) {
         this->mainView->setVisibility(mainView->getAsciiEnabled(), mainView->getDecEnabled(), mainView->getHexEnabled(),
                                       mainView->getBinEnabled());
     }

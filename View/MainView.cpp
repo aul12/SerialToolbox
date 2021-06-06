@@ -170,25 +170,25 @@ namespace view {
         return this->checkBin->isChecked();
     }
 
-    void MainView::setRxCount(int count) {
+    void MainView::setRxCount(std::size_t count) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::setRxCountImpl, this, count));
         listLock.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::setTxCount(int count) {
+    void MainView::setTxCount(std::size_t count) {
         listLock.lock();
         toCall.emplace_back(std::bind(&MainView::setTxCountImpl, this, count));
         listLock.unlock();
         QMetaObject::invokeMethod(this, "mainThreadHandler", Qt::QueuedConnection);
     }
 
-    void MainView::setRxCountImpl(int count) {
+    void MainView::setRxCountImpl(std::size_t count) {
         this->labelRxCount->setText(QStringLiteral("RX: %1").arg(count));
     }
 
-    void MainView::setTxCountImpl(int count) {
+    void MainView::setTxCountImpl(std::size_t count) {
         this->labelTxCount->setText(QStringLiteral("TX: %1").arg(count));
     }
 

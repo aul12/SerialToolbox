@@ -310,7 +310,7 @@ namespace util::serial {
             if (entry.is_character_file()) {
                 std::string fileName = entry.path().filename();
                 if (std::regex_match(fileName, deviceRegex)) {
-                    results.push_back(entry.path());
+                    results.emplace_back(entry.path());
                 }
             }
         }

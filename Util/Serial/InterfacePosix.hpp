@@ -44,4 +44,4 @@ namespace util::serial {
     };
 } // namespace util::serial
 
-#endif // HTERMCLONE_SERIALINTERFACE_HPP
+#endif

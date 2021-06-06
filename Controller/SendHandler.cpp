@@ -21,27 +21,28 @@ namespace controller {
 
     void SendHandler::run() {
         while (!finished) {
-            queueLock.lock();
+            std::unique_lock queueGuard{queueLock};
             if (queue.empty()) {
-                queueLock.unlock();
+                queueGuard.unlock();
                 dataNotify.lock();
             } else {
                 auto elem = queue.back();
                 queue.pop_back();
-                queueLock.unlock();
+                queueGuard.unlock();
 
                 for (auto c = 0; c < std::get<2>(elem); c++) {
                     try {
                         auto res = this->serialProxy->send(std::get<1>(elem),
                                                            static_cast<Representation>(std::get<0>(elem)));
-                        lineBreakMutex.lock();
-                        for (const auto &sent : res) {
-                            this->mainView->addSend(sent.ascii, sent.dec, sent.hex, sent.bin,
-                                                    lineBreakStateMachine.addAscii(res.front().ascii));
+                        {
+                            std::lock_guard lineBreakGuard{lineBreakMutex};
+                            for (const auto &sent : res) {
+                                this->mainView->addSend(sent.ascii, sent.dec, sent.hex, sent.bin,
+                                                        lineBreakStateMachine.addAscii(res.front().ascii));
+                            }
                         }
-                        lineBreakMutex.unlock();
 
-                        sendCount += res.size();
+                        sendCount += static_cast<decltype(sendCount)::value_type>(res.size());
                         this->mainView->setTxCount(sendCount);
                     } catch (std::runtime_error &e) {
                         this->mainView->showError("Error sending", e.what());
@@ -68,9 +69,8 @@ namespace controller {
     }
 
     void SendHandler::setLineBreak(LinebreakType linebreakType) {
-        lineBreakMutex.lock();
+        std::lock_guard guard{lineBreakMutex};
         this->lineBreakStateMachine.setLinebreak(linebreakType);
-        lineBreakMutex.unlock();
     }
 
     void SendHandler::resetCount() {

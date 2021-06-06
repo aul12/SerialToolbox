@@ -22,6 +22,14 @@ namespace controller {
       public:
         SendHandler(std::shared_ptr<view::MainView> mainView, std::shared_ptr<controller::SerialProxy> serialProxy);
 
+        SendHandler(const SendHandler&) = delete;
+
+        auto operator=(const SendHandler&) = delete;
+
+        SendHandler(SendHandler&&) = delete;
+
+        auto operator=(SendHandler&&) = delete;
+
         void run();
 
         void send(int repr, const std::vector<std::string> &data, int repetitions, int period);
@@ -46,4 +54,4 @@ namespace controller {
     };
 } // namespace controller
 
-#endif // SERIALTOOLBOX_SENDTHREAD_HPP
+#endif

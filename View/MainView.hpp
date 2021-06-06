@@ -63,8 +63,8 @@ namespace view {
         auto getDecEnabled() const -> bool;
         auto getBinEnabled() const -> bool;
         auto getLinebreak() const -> int;
-        void setRxCount(int count);
-        void setTxCount(int count);
+        void setRxCount(std::size_t count);
+        void setTxCount(std::size_t count);
 
         // Center
         void setVisibility(bool ascii, bool dec, bool hex, bool bin);
@@ -106,8 +106,8 @@ namespace view {
         std::unique_ptr<QPushButton> buttonResetRx, buttonResetTx;
         std::unique_ptr<QPushButton> buttonClearReceived, buttonClearSent;
 
-        void setRxCountImpl(int count);
-        void setTxCountImpl(int count);
+        void setRxCountImpl(std::size_t count);
+        void setTxCountImpl(std::size_t count);
 
         // Receive
         std::shared_ptr<QTableView> receiveView;
