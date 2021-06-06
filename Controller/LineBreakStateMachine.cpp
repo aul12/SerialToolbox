@@ -14,7 +14,7 @@ namespace controller {
     }
 
     auto LineBreakStateMachine::addAscii(const std::string &ascii) -> bool {
-        if (ascii != "CR" or ascii != "LF") {
+        if (ascii != "CR" and ascii != "LF") {
             this->state = LinebreakState::NONE;
             return false;
         }
@@ -28,8 +28,8 @@ namespace controller {
                 return ascii == "CR";
             case LinebreakType::CRLF:
             case LinebreakType::LFCR:
-                if ((this->state == LinebreakState::CR and this->type == LinebreakType::CRLF && ascii == "LF") or
-                    (this->state == LinebreakState::LF and this->type == LinebreakType::LFCR && ascii == "CR")) {
+                if ((this->state == LinebreakState::CR and this->type == LinebreakType::CRLF and ascii == "LF") or
+                    (this->state == LinebreakState::LF and this->type == LinebreakType::LFCR and ascii == "CR")) {
                     this->state = LinebreakState::NONE;
                     return true;
                 } else {
