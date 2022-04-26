@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y qttools5-dev qttools5-dev-tools qtdeclarative5-dev wget g++-*
+          sudo apt-get install -y qttools5-dev qttools5-dev-tools qtdeclarative5-dev wget g++-9 g++-10 g++-11
           # Taken from https://apt.llvm.org/
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
