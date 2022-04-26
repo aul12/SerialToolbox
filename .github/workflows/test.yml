@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cxx: [g++-9, g++-10, clang++-9, clang++-10]
+        cxx: [g++-9, g++-10, g++-11, clang++-9, clang++-10, clang++11, clang++12]
         build: [Release, Debug]
     env:
       CXX: ${{ matrix.cxx }}
@@ -15,7 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev clang-*
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qttools5-dev qttools5-dev-tools qtdeclarative5-dev clang-*
       - name: Set up Build
         run: |
           mkdir build

@@ -1,5 +1,5 @@
 .idea
-/cmake-build-debug/
+cmake-build*
 build
-.compilie_commands.json
+.compile_commands.json
 Deploy/

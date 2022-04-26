@@ -20,7 +20,9 @@ jobs:
       - name: Setup .deb Directory
         run: mkdir -p ${dirname}/usr/local/bin
       - name: Install dependencies
-        run: sudo apt install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install qttools5-dev qttools5-dev-tools qtdeclarative5-dev
       - name: Build Package
         run: ./.github/workflows/build_deb.sh ${package_name} ${package_version}
       - name: Test install
